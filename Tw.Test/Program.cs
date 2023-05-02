@@ -9,7 +9,7 @@ namespace Tw.Test
         static void Main(string[] args)
         {
             SpotifyService service = new SpotifyService();
-            service.Autorization();
+            service.AuthorizeAndGetTokenOLD();
         }
     }
 }

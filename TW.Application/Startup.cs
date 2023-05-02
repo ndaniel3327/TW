@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TW.Application.Services;
 
 namespace TW.Application
 {
@@ -28,6 +29,8 @@ namespace TW.Application
         {
 
             services.AddControllers();
+
+            services.AddTransient<ISpotifyService, SpotifyService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TW.Application", Version = "v1" });
