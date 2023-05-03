@@ -36,7 +36,7 @@ namespace TW.Application.Services
             // Redirect user to uri via your favorite web-server
            
         }
-        public async void AuthorizeAndGetTokenOLD()
+        public async Task AuthorizeAndGetTokenOld()
         {
             // Make sure "http://localhost:5000/callback" is in your spotify application as redirect uri!
 

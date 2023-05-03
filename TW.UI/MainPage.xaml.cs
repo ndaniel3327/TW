@@ -8,9 +8,10 @@ namespace TW.UI
 
         public MainPage(ISpotifyCService spotifyService)
         {
-            _spotifyService = spotifyService;
 
             InitializeComponent();
+
+            _spotifyService = spotifyService;
         }
 
         private void OnSpotifyButtonClicked(object sender, EventArgs e)

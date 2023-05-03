@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using TW.Application.Services;
 
 namespace TW.Application.Controllers
@@ -14,10 +16,13 @@ namespace TW.Application.Controllers
         {
             _spotifyService = spotifyService;
         }
+
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            _spotifyService.AuthorizeAndGetToken();
+            Debug.WriteLine("Application received a GET Request at /api/spotify");
+            await _spotifyService.AuthorizeAndGetTokenOld();
+
             return Ok();
         }
     }
