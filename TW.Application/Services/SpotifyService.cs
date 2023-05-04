@@ -1,69 +1,63 @@
 ﻿using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
+using SpotifyAPI.Web.Http;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace TW.Application.Services
 {
-    public class SpotifyService:ISpotifyService
+    public class SpotifyService : ISpotifyService
     {
         private readonly string _clientId = "2d84ad5eeb3f4b7c9fcc6cc479ab2d4a";
-        private readonly string _clientSecret = "7168a8fbddd94270a29a9ffdc3cdfc8e";
+        private string _verifier;
+        private string _challenge;
+        private SpotifyClient _spotifyClient;
         public SpotifyService()
         {
-            var config = SpotifyClientConfig
-       .CreateDefault()
-       .WithAuthenticator(new ClientCredentialsAuthenticator(_clientId, _clientSecret));
-
-            var spotify = new SpotifyClient(config);
+            var (verifier, challenge) = PKCEUtil.GenerateCodes();
+            _verifier = verifier;
+            _challenge = challenge;
+            Console.WriteLine(verifier);
+            Console.WriteLine(challenge);
         }
-        private EmbedIOAuthServer _server;
 
-
-
-        public void AuthorizeAndGetToken()
+        public async Task AuthorizeWithPKCE()
         {
+            // Make sure "http://localhost:5000/callback" is in your applications redirect URIs!
             var loginRequest = new LoginRequest(
-                 new Uri("http://localhost:5000"),
-                                _clientId,
-                    LoginRequest.ResponseType.Token
-)
+              new Uri("http://localhost:5000/api/Spotify/callback"),
+              _clientId,
+              LoginRequest.ResponseType.Code
+            )
             {
+                CodeChallengeMethod = "S256",
+                CodeChallenge = _challenge,
                 Scope = new[] { Scopes.PlaylistReadPrivate, Scopes.PlaylistReadCollaborative }
             };
             var uri = loginRequest.ToUri();
-            // Redirect user to uri via your favorite web-server
-           
-        }
-        public async Task AuthorizeAndGetTokenOld()
-        {
-            // Make sure "http://localhost:5000/callback" is in your spotify application as redirect uri!
+            Console.WriteLine(_challenge);
+            // Redirect user to uri via your favorite web-server or open a local browser window
+            BrowserUtil.Open(uri);
 
-            _server = new EmbedIOAuthServer(new Uri("http://localhost:5000/callback"), 5000);
-            await _server.Start();
-
-            _server.ImplictGrantReceived += OnImplicitGrantReceived;
-            _server.ErrorReceived += OnErrorReceived;
-
-            var request = new LoginRequest(_server.BaseUri, _clientId, LoginRequest.ResponseType.Token)
-            {
-                Scope = new List<string> { Scopes.UserReadEmail }
-            };
-            BrowserUtil.Open(request.ToUri());
         }
 
-        private async Task OnImplicitGrantReceived(object sender, ImplictGrantResponse response)
+        // This method should be called from your web-server when the user visits "http://localhost:5000/callback"
+        public async Task GetCallback(string code)
         {
-            await _server.Stop();
-            var spotify = new SpotifyClient(response.AccessToken);
-            // do calls with Spotify
-        }
+            Console.WriteLine(_verifier);
+            var initialResponse = await new OAuthClient().RequestToken(
+              new PKCETokenRequest(_clientId, code, new Uri("http://localhost:5000"), _verifier)
+            );
+            //Automatically refresh tokens with PKCEAuthenticator
+            var authenticator = new PKCEAuthenticator(_clientId, initialResponse);
 
-        private async Task OnErrorReceived(object sender, string error, string state)
-        {
-            Console.WriteLine($"Aborting authorization, error received: {error}");
-            await _server.Stop();
+            var config = SpotifyClientConfig.CreateDefault()
+              .WithAuthenticator(authenticator);
+
+            _spotifyClient = new SpotifyClient(config);
+
+            var playlist = _spotifyClient.Playlists;
         }
 
     }

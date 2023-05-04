@@ -21,9 +21,18 @@ namespace TW.Application.Controllers
         public async Task<ActionResult> Get()
         {
             Debug.WriteLine("Application received a GET Request at /api/spotify");
-            await _spotifyService.AuthorizeAndGetTokenOld();
+            await _spotifyService.AuthorizeWithPKCE();
 
             return Ok();
         }
+
+        [HttpGet("callback")]
+        public async Task<ActionResult> GetCallback([FromQuery]string code)
+        {
+            await _spotifyService.GetCallback(code);
+
+            return Ok();
+        }
+
     }
 }

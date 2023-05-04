@@ -34,7 +34,8 @@ namespace TW.Application
 
             services.AddControllers();
 
-            services.AddTransient<ISpotifyService, SpotifyService>();
+            services.AddSingleton<ISpotifyService, SpotifyService>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TW.Application", Version = "v1" });

@@ -25,11 +25,8 @@ namespace TW.UI.Services
 
         public  async void AuthorizeSpotify()
         {
-            string[] androidUrl = new string[] { "http://10.0.2.2:5000", "http://10.0.2.2:57975", "http://10.0.2.2:5001", "http://10.0.2.2:44325" };
-            //string[] localHostUrl = new string[] { "http://10.0.2.2:5000", "http://10.0.2.2:57975", "https://10.0.2.2:5001", "https://10.0.2.2:44325" }
             Debug.WriteLine("MAUI is Authorizing Spotify. Sending Request to Application...");
-            
-            var aaa =await _httpClient.GetAsync(_url);
+            await _httpClient.GetAsync(_url);
 
         }
     }
