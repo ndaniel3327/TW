@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.Devices;
+using System.ComponentModel;
 
 namespace TW.UI.ViewModels
 {
@@ -7,6 +9,15 @@ namespace TW.UI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Uri _loginUri;
+        private Size _screenSize;
+
+        public Size ScreenSize
+        {
+            get
+            {
+                return _screenSize;
+            }
+        }
         public string LoginUri
         {
             get
@@ -18,6 +29,9 @@ namespace TW.UI.ViewModels
         public SpotifyAuthorizationPopupViewModel(Uri loginUri)
         {
             _loginUri = loginUri;
+            var screeenWidth = DeviceDisplay.MainDisplayInfo.Width;
+            var screeenHeight = DeviceDisplay.MainDisplayInfo.Height;
+            _screenSize = new Size((screeenWidth - 400) / 2, (screeenHeight-800)/2);
         }
         public void OnPropertyChanged(string propertyName)
         {

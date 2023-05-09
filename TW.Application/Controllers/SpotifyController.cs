@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SpotifyAPI.Web;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using TW.Application.Services;
@@ -32,6 +34,14 @@ namespace TW.Application.Controllers
             await _spotifyService.GetCallback(code);
 
             return Ok();
+        }
+
+        [HttpGet("playlists")]
+        public async Task<ActionResult<List<SimplePlaylist>>> GetPlaylists()
+        {
+            var playlists = await _spotifyService.GetPlaylists();
+
+            return Ok(playlists);
         }
 
     }

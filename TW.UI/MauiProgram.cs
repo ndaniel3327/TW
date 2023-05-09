@@ -21,8 +21,9 @@ namespace TW.UI
                 });
             builder.Services.AddScoped<ISpotifyCService,SpotifyCService>();
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<SpotifyAuthorizationPopup>();
-            builder.Services.AddSingleton<SpotifyAuthorizationPopupViewModel>();
+            builder.Services.AddTransient<SpotifyPlaylistsPage>();
+            //builder.Services.AddSingleton<SpotifyAuthorizationPopup>();
+            //builder.Services.AddSingleton<SpotifyAuthorizationPopupViewModel>();
 
             return builder.Build();
         }

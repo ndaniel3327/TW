@@ -37,6 +37,7 @@ namespace TW.Application.Services
             var uri = loginRequest.ToUri();
             Console.WriteLine(_challenge);
             // Redirect user to uri via your favorite web-server or open a local browser window
+
             return uri;
 
         }
@@ -57,6 +58,11 @@ namespace TW.Application.Services
             _spotifyClient = new SpotifyClient(config);
 
             var playlist =await _spotifyClient.Playlists.CurrentUsers();
+        }
+        public async Task<List<SimplePlaylist>> GetPlaylists()
+        {
+            var result = await _spotifyClient.Playlists.CurrentUsers();
+            return result.Items;
         }
 
     }

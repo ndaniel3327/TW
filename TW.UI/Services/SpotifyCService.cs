@@ -11,7 +11,6 @@ namespace TW.UI.Services
         private readonly HttpClient _httpClient;
         private readonly string _baseAddress;
         private readonly string _url;
-        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
         public SpotifyCService()
         {
@@ -30,15 +29,27 @@ namespace TW.UI.Services
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
-                Uri loginUri=JsonSerializer.Deserialize<Uri>(content);
+                Uri loginUri = JsonSerializer.Deserialize<Uri>(content);
                 return loginUri;
             }
             else
             {
-                return null;    
+                return null;
             }
-
-
+        }
+        public async Task<List<string>> GetPlaylists()
+        {
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_url+"/playlists");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string content = await responseMessage.Content.ReadAsStringAsync();
+                List<string> playlists = JsonSerializer.Deserialize<List<string>>(content);
+                return playlists;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
