@@ -1,4 +1,6 @@
-﻿using TW.UI.Services;
+﻿using CommunityToolkit.Maui.Views;
+using TW.UI.Pages;
+using TW.UI.Services;
 
 namespace TW.UI
 {
@@ -14,9 +16,11 @@ namespace TW.UI
             _spotifyService = spotifyService;
         }
 
-        private void OnSpotifyButtonClicked(object sender, EventArgs e)
+        private async void OnSpotifyButtonClicked(object sender, EventArgs e)
         {
-            _spotifyService.AuthorizeSpotify();
+           
+            Uri loginUri = await _spotifyService.AuthorizeSpotify();
+            this.ShowPopup(new SpotifyAuthorizationPopup(loginUri));
         }
     }
 }

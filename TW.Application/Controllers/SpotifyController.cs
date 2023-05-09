@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using TW.Application.Services;
@@ -18,12 +19,11 @@ namespace TW.Application.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult<Uri>> Get()
         {
-            Debug.WriteLine("Application received a GET Request at /api/spotify");
-            await _spotifyService.AuthorizeWithPKCE();
+            Uri loginUri = await _spotifyService.AuthorizeWithPKCE();
 
-            return Ok();
+            return Ok(loginUri);
         }
 
         [HttpGet("callback")]

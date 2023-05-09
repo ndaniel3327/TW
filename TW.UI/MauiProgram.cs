@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.DependencyInjection;
+using TW.UI.Pages;
 using TW.UI.Services;
+using TW.UI.ViewModels;
 
 namespace TW.UI
 {
@@ -10,6 +13,7 @@ namespace TW.UI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -17,6 +21,8 @@ namespace TW.UI
                 });
             builder.Services.AddScoped<ISpotifyCService,SpotifyCService>();
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<SpotifyAuthorizationPopup>();
+            builder.Services.AddSingleton<SpotifyAuthorizationPopupViewModel>();
 
             return builder.Build();
         }

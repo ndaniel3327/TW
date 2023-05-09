@@ -9,6 +9,6 @@ namespace TW.UI.Services
     public interface ISpotifyCService
 
     {
-        void AuthorizeSpotify();
+        Task<Uri> AuthorizeSpotify();
     }
 }

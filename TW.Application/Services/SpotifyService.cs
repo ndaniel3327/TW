@@ -22,9 +22,8 @@ namespace TW.Application.Services
             Console.WriteLine(challenge);
         }
 
-        public async Task AuthorizeWithPKCE()
+        public async Task<Uri> AuthorizeWithPKCE()
         {
-            // Make sure "http://localhost:5000/callback" is in your applications redirect URIs!
             var loginRequest = new LoginRequest(
               new Uri("http://localhost:5000/api/Spotify/callback"),
               _clientId,
@@ -38,16 +37,16 @@ namespace TW.Application.Services
             var uri = loginRequest.ToUri();
             Console.WriteLine(_challenge);
             // Redirect user to uri via your favorite web-server or open a local browser window
-            BrowserUtil.Open(uri);
+            return uri;
 
         }
 
-        // This method should be called from your web-server when the user visits "http://localhost:5000/callback"
+        // This method should be called from your web-server when the user visits "http://localhost:5000/api/Spotify/callback"
         public async Task GetCallback(string code)
         {
             Console.WriteLine(_verifier);
             var initialResponse = await new OAuthClient().RequestToken(
-              new PKCETokenRequest(_clientId, code, new Uri("http://localhost:5000"), _verifier)
+              new PKCETokenRequest(_clientId, code, new Uri("http://localhost:5000/api/Spotify/callback"), _verifier)
             );
             //Automatically refresh tokens with PKCEAuthenticator
             var authenticator = new PKCEAuthenticator(_clientId, initialResponse);
@@ -57,7 +56,7 @@ namespace TW.Application.Services
 
             _spotifyClient = new SpotifyClient(config);
 
-            var playlist = _spotifyClient.Playlists;
+            var playlist =await _spotifyClient.Playlists.CurrentUsers();
         }
 
     }

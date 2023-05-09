@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace TW.Application.Services
 {
     public interface ISpotifyService
     {
-        Task AuthorizeWithPKCE();
+        Task<Uri> AuthorizeWithPKCE();
         Task GetCallback(string code);
     }
 }

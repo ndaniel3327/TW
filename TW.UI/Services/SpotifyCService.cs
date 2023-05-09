@@ -1,6 +1,6 @@
 ﻿
 using System.Diagnostics;
-using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace TW.UI.Services
 {
@@ -11,22 +11,33 @@ namespace TW.UI.Services
         private readonly HttpClient _httpClient;
         private readonly string _baseAddress;
         private readonly string _url;
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
         public SpotifyCService()
         {
             _httpClient = new HttpClient();
             //_httpClient = httpClient;
 
-            _baseAddress = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "https://localhost:44325";
+            _baseAddress = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "https://localhost:5001";
 
             _url = $"{_baseAddress}/api/Spotify";
 
         }
 
-        public  async void AuthorizeSpotify()
+        public  async Task<Uri> AuthorizeSpotify()
         {
-            Debug.WriteLine("MAUI is Authorizing Spotify. Sending Request to Application...");
-            await _httpClient.GetAsync(_url);
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_url);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string content = await responseMessage.Content.ReadAsStringAsync();
+                Uri loginUri=JsonSerializer.Deserialize<Uri>(content);
+                return loginUri;
+            }
+            else
+            {
+                return null;    
+            }
+
 
         }
     }
