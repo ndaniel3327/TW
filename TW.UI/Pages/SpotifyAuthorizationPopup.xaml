@@ -7,5 +7,5 @@
            xmlns:viewmodel="clr-namespace:TW.UI.ViewModels"
            x:DataType="viewmodel:SpotifyAuthorizationPopupViewModel"
            Size="{Binding ScreenSize}">
-     <WebView Source="{Binding LoginUri}" android:WebView.EnableZoomControls="True"  ></WebView>
+     <WebView x:Name="webView" Source="{Binding LoginUri}" android:WebView.EnableZoomControls="True"  ></WebView>
 </mct:Popup>
