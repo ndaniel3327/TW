@@ -8,7 +8,7 @@ namespace TW.UI.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private Uri _loginUri;
+        private string _loginUri;
         private Size _screenSize;
 
         public Size ScreenSize
@@ -22,16 +22,16 @@ namespace TW.UI.ViewModels
         {
             get
             {
-                return _loginUri.ToString();
+                return _loginUri;
             }
         }
 
         public SpotifyAuthorizationPopupViewModel(Uri loginUri)
         {
-            _loginUri = loginUri;
+            _loginUri = loginUri.ToString();
             var screeenWidth = DeviceDisplay.MainDisplayInfo.Width;
             var screeenHeight = DeviceDisplay.MainDisplayInfo.Height;
-            _screenSize = new Size((screeenWidth - 400) / 2, (screeenHeight-800)/2);
+            _screenSize = new Size((screeenWidth - 400) / 2, (screeenHeight - 800) / 2);
         }
         public void OnPropertyChanged(string propertyName)
         {

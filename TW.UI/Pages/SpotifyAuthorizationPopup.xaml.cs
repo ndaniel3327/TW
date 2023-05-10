@@ -7,11 +7,10 @@ public partial class SpotifyAuthorizationPopup : Popup
 {
 
     public SpotifyAuthorizationPopup(Uri loginUri)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
         BindingContext = new SpotifyAuthorizationPopupViewModel(loginUri);
-        
-    }
 
+    }
 }

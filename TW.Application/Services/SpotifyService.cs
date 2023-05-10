@@ -3,6 +3,8 @@ using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Http;
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace TW.Application.Services
@@ -18,14 +20,12 @@ namespace TW.Application.Services
             var (verifier, challenge) = PKCEUtil.GenerateCodes();
             _verifier = verifier;
             _challenge = challenge;
-            Console.WriteLine(verifier);
-            Console.WriteLine(challenge);
         }
 
         public async Task<Uri> AuthorizeWithPKCE()
         {
             var loginRequest = new LoginRequest(
-              new Uri("http://localhost:5000/api/Spotify/callback"),
+              new Uri($"https://localhost:5001/api/Spotify/callback"),
               _clientId,
               LoginRequest.ResponseType.Code
             )
@@ -35,19 +35,14 @@ namespace TW.Application.Services
                 Scope = new[] { Scopes.PlaylistReadPrivate, Scopes.PlaylistReadCollaborative }
             };
             var uri = loginRequest.ToUri();
-            Console.WriteLine(_challenge);
-            // Redirect user to uri via your favorite web-server or open a local browser window
-
             return uri;
-
         }
 
         // This method should be called from your web-server when the user visits "http://localhost:5000/api/Spotify/callback"
         public async Task GetCallback(string code)
         {
-            Console.WriteLine(_verifier);
             var initialResponse = await new OAuthClient().RequestToken(
-              new PKCETokenRequest(_clientId, code, new Uri("http://localhost:5000/api/Spotify/callback"), _verifier)
+              new PKCETokenRequest(_clientId, code, new Uri("https://localhost:5001/api/Spotify/callback"), _verifier)
             );
             //Automatically refresh tokens with PKCEAuthenticator
             var authenticator = new PKCEAuthenticator(_clientId, initialResponse);
@@ -56,14 +51,11 @@ namespace TW.Application.Services
               .WithAuthenticator(authenticator);
 
             _spotifyClient = new SpotifyClient(config);
-
-            var playlist =await _spotifyClient.Playlists.CurrentUsers();
         }
         public async Task<List<SimplePlaylist>> GetPlaylists()
         {
             var result = await _spotifyClient.Playlists.CurrentUsers();
             return result.Items;
         }
-
     }
 }
