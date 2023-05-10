@@ -15,6 +15,8 @@ namespace TW.Application.Services
         private string _verifier;
         private string _challenge;
         private SpotifyClient _spotifyClient;
+        private bool _IsLoggedIn = false;
+
         public SpotifyService()
         {
             var (verifier, challenge) = PKCEUtil.GenerateCodes();
@@ -51,11 +53,17 @@ namespace TW.Application.Services
               .WithAuthenticator(authenticator);
 
             _spotifyClient = new SpotifyClient(config);
+
+            _IsLoggedIn = true;
         }
         public async Task<List<SimplePlaylist>> GetPlaylists()
         {
             var result = await _spotifyClient.Playlists.CurrentUsers();
             return result.Items;
+        }
+        public async Task<bool> IsLoggedIn()
+        {
+            return _IsLoggedIn;
         }
     }
 }

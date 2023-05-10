@@ -20,6 +20,11 @@ namespace TW.UI.ViewModels
         }
         public string LoginUri
         {
+            set
+            {
+                _loginUri = value;
+                OnPropertyChanged(nameof(LoginUri));
+            }
             get
             {
                 return _loginUri;

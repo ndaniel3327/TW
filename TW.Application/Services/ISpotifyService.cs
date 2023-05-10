@@ -10,5 +10,6 @@ namespace TW.Application.Services
         Task<Uri> AuthorizeWithPKCE();
         Task GetCallback(string code);
         Task<List<SimplePlaylist>> GetPlaylists();
+        Task<bool> IsLoggedIn();
     }
 }

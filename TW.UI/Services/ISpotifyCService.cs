@@ -10,5 +10,7 @@ namespace TW.UI.Services
 
     {
         Task<Uri> AuthorizeSpotify();
+        Task<List<string>> GetPlaylists();
+        Task<bool> IsLoggedIn();
     }
 }

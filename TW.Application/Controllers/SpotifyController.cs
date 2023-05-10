@@ -43,6 +43,12 @@ namespace TW.Application.Controllers
 
             return Ok(playlists);
         }
+        [HttpGet("isloggedin")]
+        public async Task<ActionResult<bool>> IsLoggedIn()
+        {
+
+            return Ok(_spotifyService.IsLoggedIn());
+        }
 
     }
 }

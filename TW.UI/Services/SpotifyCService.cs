@@ -26,7 +26,7 @@ namespace TW.UI.Services
 
         }
 
-        public  async Task<Uri> AuthorizeSpotify()
+        public async Task<Uri> AuthorizeSpotify()
         {
             HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/Spotify");
             if (responseMessage.IsSuccessStatusCode)
@@ -56,6 +56,20 @@ namespace TW.UI.Services
             else
             {
                 return null;
+            }
+        }
+        public async Task<bool> IsLoggedIn()
+        {
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/IsLoggedIn");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string content = await responseMessage.Content.ReadAsStringAsync();
+                bool result = JsonSerializer.Deserialize<bool>(content);
+                return result;
+            }
+            else
+            {
+                return false;
             }
         }
     }
