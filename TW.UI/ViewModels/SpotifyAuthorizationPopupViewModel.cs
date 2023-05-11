@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Maui.Views;
-using Microsoft.Maui.Devices;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace TW.UI.ViewModels
 {
@@ -9,22 +7,17 @@ namespace TW.UI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _loginUri;
-        private Size _screenSize;
+        private Size _popupSize;
 
-        public Size ScreenSize
+        public Size PopupSize
         {
             get
             {
-                return _screenSize;
+                return _popupSize;
             }
         }
         public string LoginUri
         {
-            set
-            {
-                _loginUri = value;
-                OnPropertyChanged(nameof(LoginUri));
-            }
             get
             {
                 return _loginUri;
@@ -36,7 +29,7 @@ namespace TW.UI.ViewModels
             _loginUri = loginUri.ToString();
             var screeenWidth = DeviceDisplay.MainDisplayInfo.Width;
             var screeenHeight = DeviceDisplay.MainDisplayInfo.Height;
-            _screenSize = new Size((screeenWidth - 400) / 2, (screeenHeight - 800) / 2);
+            _popupSize = new Size((screeenWidth - 400) / 2, (screeenHeight - 800) / 2);
         }
         public void OnPropertyChanged(string propertyName)
         {
