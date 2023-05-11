@@ -40,13 +40,9 @@ namespace TW.UI.Services
                 return null;
             }
         }
-        public async void GetCallback()
-        {
-            await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/callback");
-        }
         public async Task<List<string>> GetPlaylists()
         {
-            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/playlists");
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/Spotify/playlists");
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
@@ -60,7 +56,7 @@ namespace TW.UI.Services
         }
         public async Task<bool> IsLoggedIn()
         {
-            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/IsLoggedIn");
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/Spotify/IsLoggedIn");
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();

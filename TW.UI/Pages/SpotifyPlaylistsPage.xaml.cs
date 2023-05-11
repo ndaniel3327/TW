@@ -1,13 +1,13 @@
-using System.ComponentModel;
+using System.Collections;
 using TW.UI.Services;
 
 namespace TW.UI.Pages;
 
-public partial class SpotifyPlaylistsPage : ContentPage , INotifyPropertyChanged
+public partial class SpotifyPlaylistsPage : ContentPage
 {
     private readonly ISpotifyCService _spotifyCService;
-    private IEnumerable<string> _playlists;   
-    public IEnumerable<string> Playlists
+    private List<PlaylistModel> _playlists;   
+    public List<PlaylistModel> Playlists
     {
         get
         {
@@ -18,6 +18,7 @@ public partial class SpotifyPlaylistsPage : ContentPage , INotifyPropertyChanged
             if (_playlists != value)
             {
                 _playlists = value;
+                OnPropertyChanged(nameof(Playlists));
             }
         }
     }
@@ -28,14 +29,20 @@ public partial class SpotifyPlaylistsPage : ContentPage , INotifyPropertyChanged
         BindingContext = this;
         _spotifyCService = spotifyCService;
     }
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        _playlists = await GetPlaylists();
+        GetPlaylists();
 
     }
-    private async Task<List<string>> GetPlaylists()
+    private async void GetPlaylists()
     {
-        return await _spotifyCService.GetPlaylists();
+        List<string> playlists = await _spotifyCService.GetPlaylists();
+        _playlists = new List<PlaylistModel>();
+        foreach (string playlistName in playlists)
+        {
+            _playlists.Add(new PlaylistModel { Name = playlistName});
+        }
+
     }
 }

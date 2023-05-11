@@ -7,5 +7,5 @@
            xmlns:viewmodel="clr-namespace:TW.UI.ViewModels"
            x:DataType="viewmodel:SpotifyAuthorizationPopupViewModel"
            Size="{Binding ScreenSize}" Closed="Popup_Closed">
-     <WebView x:Name="webView" Source="{Binding LoginUri}"  PropertyChanged="WebViewSourceChanged" Navigating="webView_Navigating" BindingContextChanged="webView_BindingContextChanged" Navigated="webView_Navigated"></WebView>
+     <WebView x:Name="webView" Source="{Binding LoginUri}" Navigating="webView_Navigating"></WebView>
 </mct:Popup>

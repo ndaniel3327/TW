@@ -8,7 +8,7 @@ namespace TW.UI
         {
             InitializeComponent();
 
-            Routing.RegisterRoute("SpotifyPlaylists", typeof(SpotifyPlaylistsPage));
+            Routing.RegisterRoute(nameof(SpotifyPlaylistsPage), typeof(SpotifyPlaylistsPage));
         }
     }
 }

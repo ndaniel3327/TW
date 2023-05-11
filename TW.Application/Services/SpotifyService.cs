@@ -56,10 +56,15 @@ namespace TW.Application.Services
 
             _IsLoggedIn = true;
         }
-        public async Task<List<SimplePlaylist>> GetPlaylists()
+        public async Task<List<string>> GetPlaylists()
         {
             var result = await _spotifyClient.Playlists.CurrentUsers();
-            return result.Items;
+            List<string> playlistNames = new List<string>();
+            foreach ( var item in result.Items ) 
+            {
+                playlistNames.Add( item.Name );
+            }
+            return playlistNames;
         }
         public async Task<bool> IsLoggedIn()
         {

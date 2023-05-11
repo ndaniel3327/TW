@@ -1,6 +1,5 @@
 ﻿
 using CommunityToolkit.Maui.Views;
-using System.Diagnostics;
 using TW.UI.Pages;
 using TW.UI.Services;
 
@@ -10,6 +9,7 @@ namespace TW.UI
     {
         private readonly ISpotifyCService _spotifyService;
 
+        public delegate void PopupDelegate();
         public MainPage(ISpotifyCService spotifyService)
         {
 
@@ -17,39 +17,19 @@ namespace TW.UI
 
             _spotifyService = spotifyService;
         }
-        protected async override void OnAppearing()
+        private async void PopupClosed()
         {
-            base.OnAppearing();
-
+            await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
         }
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)
         {
-           
-            Uri loginUri = await _spotifyService.AuthorizeSpotify();
-            this.ShowPopup(new SpotifyAuthorizationPopup(loginUri));
-
-
-        }
-
-
-
-        private async void ContentPage_Focused(object sender, FocusEventArgs e)
-        {
-
-            if (await _spotifyService.IsLoggedIn())
-            {
-                await Shell.Current.GoToAsync("SpotifyPlaylists");
-            }
-        }
-
-        private async void ContentPage_Loaded(object sender, EventArgs e)
-        {
-
-            if (await _spotifyService.IsLoggedIn())
-            {
-                await Shell.Current.GoToAsync("SpotifyPlaylists");
-            }
+            Device.InvokeOnMainThreadAsync(async() => {
+                Uri loginUri = await _spotifyService.AuthorizeSpotify();
+                PopupDelegate popupDelegate = PopupClosed;
+                this.ShowPopup(new SpotifyAuthorizationPopup(loginUri, popupDelegate));
+            });
+            
         }
     }
 }

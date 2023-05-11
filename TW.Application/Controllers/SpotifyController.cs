@@ -37,11 +37,11 @@ namespace TW.Application.Controllers
         }
 
         [HttpGet("playlists")]
-        public async Task<ActionResult<List<SimplePlaylist>>> GetPlaylists()
+        public async Task<ActionResult<List<string>>> GetPlaylists()
         {
-            var playlists = await _spotifyService.GetPlaylists();
+            var playlistNames = await _spotifyService.GetPlaylists();
 
-            return Ok(playlists);
+            return Ok(playlistNames);
         }
         [HttpGet("isloggedin")]
         public async Task<ActionResult<bool>> IsLoggedIn()
