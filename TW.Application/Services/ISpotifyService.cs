@@ -9,7 +9,7 @@ namespace TW.Application.Services
     {
         Task<Uri> AuthorizeWithPKCE();
         Task GetCallback(string code);
-        Task<List<SimplePlaylist>> GetPlaylists();
+        Task<List<string>> GetPlaylists();
         Task<bool> IsLoggedIn();
     }
 }

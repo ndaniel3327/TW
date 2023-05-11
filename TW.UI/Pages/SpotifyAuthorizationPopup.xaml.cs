@@ -6,11 +6,13 @@ namespace TW.UI.Pages;
 
 public partial class SpotifyAuthorizationPopup : Popup
 {
-    public SpotifyAuthorizationPopup(Uri loginUri)
+    private readonly Delegate _myDelegate;
+
+    public SpotifyAuthorizationPopup(Uri loginUri , Delegate myDelegate)
     {
         InitializeComponent();
         BindingContext = new SpotifyAuthorizationPopupViewModel(loginUri);
-
+        _myDelegate = myDelegate;
     }
     private void webView_Navigating(object sender, WebNavigatingEventArgs e)
     {
@@ -31,8 +33,9 @@ public partial class SpotifyAuthorizationPopup : Popup
             });
         }
     }
-    private async void Popup_Closed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
+    private void Popup_Closed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
     {
-        await Shell.Current.GoToAsync("SpotyfyPlaylists");
+        Device.InvokeOnMainThreadAsync(()=>  _myDelegate.DynamicInvoke()) ;
+      
     }
 }

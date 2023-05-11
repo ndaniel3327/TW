@@ -1,6 +1,5 @@
 ﻿
 using CommunityToolkit.Maui.Views;
-using System.Diagnostics;
 using TW.UI.Pages;
 using TW.UI.Services;
 
@@ -10,6 +9,7 @@ namespace TW.UI
     {
         private readonly ISpotifyCService _spotifyService;
 
+        public delegate void PopupDelegate();
         public MainPage(ISpotifyCService spotifyService)
         {
 
@@ -17,11 +17,19 @@ namespace TW.UI
 
             _spotifyService = spotifyService;
         }
+        private async void PopupClosed()
+        {
+            await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
+        }
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)
         {
-            Uri loginUri = await _spotifyService.AuthorizeSpotify();
-            this.ShowPopup(new SpotifyAuthorizationPopup(loginUri));
+            Device.InvokeOnMainThreadAsync(async() => {
+                Uri loginUri = await _spotifyService.AuthorizeSpotify();
+                PopupDelegate popupDelegate = PopupClosed;
+                this.ShowPopup(new SpotifyAuthorizationPopup(loginUri, popupDelegate));
+            });
+            
         }
     }
 }
