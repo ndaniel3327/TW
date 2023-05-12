@@ -1,4 +1,3 @@
-using System.Collections;
 using TW.UI.Services;
 
 namespace TW.UI.Pages;
@@ -24,25 +23,20 @@ public partial class SpotifyPlaylistsPage : ContentPage
     }
 
     public SpotifyPlaylistsPage(ISpotifyCService spotifyCService)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         BindingContext = this;
         _spotifyCService = spotifyCService;
-    }
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
         GetPlaylists();
-
     }
     private async void GetPlaylists()
     {
-        List<string> playlists = await _spotifyCService.GetPlaylists();
-        _playlists = new List<PlaylistModel>();
-        foreach (string playlistName in playlists)
+        List<string> playlistsAsListString = await _spotifyCService.GetPlaylists();
+        List<PlaylistModel>playlistsAsPlaylistModels = new List<PlaylistModel>();
+        foreach (string playlistName in playlistsAsListString)
         {
-            _playlists.Add(new PlaylistModel { Name = playlistName});
+            playlistsAsPlaylistModels.Add(new PlaylistModel { Name = playlistName});
         }
-
+        Playlists=playlistsAsPlaylistModels;
     }
 }

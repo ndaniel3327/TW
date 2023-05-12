@@ -2,22 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TW.UI.Pages.SpotifyPlaylistsPage"
-             Title="SpotifyPlaylistsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Playlists Page!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <ListView ItemsSource="{Binding }">
+             Title="SpotifyPlaylistsPage"
+             xmlns:viewmodel="clr-namespace:TW.UI.Pages"
+             x:DataType="viewmodel:SpotifyPlaylistsPage">
+    <StackLayout>
+        <ListView x:Name="listView" ItemsSource="{Binding Playlists}">
             <ListView.ItemTemplate>
-                <DataTemplate >
-                    <ViewCell>
-                        <Grid>
-                            <Label Text="{Binding Name} " TextColor="Red" HorizontalOptions="Center" FontSize="Large"/>
-                        </Grid>
-                    </ViewCell>
+                <DataTemplate x:DataType="viewmodel:PlaylistModel">
+                    <TextCell Text="{Binding Name}"></TextCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </VerticalStackLayout>
+    </StackLayout>
+
 </ContentPage>

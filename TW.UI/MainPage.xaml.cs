@@ -24,12 +24,9 @@ namespace TW.UI
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)
         {
-            Device.InvokeOnMainThreadAsync(async() => {
                 Uri loginUri = await _spotifyService.AuthorizeSpotify();
                 PopupDelegate popupDelegate = PopupClosed;
                 this.ShowPopup(new SpotifyAuthorizationPopup(loginUri, popupDelegate));
-            });
-            
         }
     }
 }

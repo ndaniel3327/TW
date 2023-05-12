@@ -19,7 +19,7 @@ namespace TW.UI
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            builder.Services.AddScoped<ISpotifyCService,SpotifyCService>();
+            builder.Services.AddTransient<ISpotifyCService,SpotifyCService>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<SpotifyPlaylistsPage>();
             //builder.Services.AddSingleton<SpotifyAuthorizationPopup>();
