@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using TW.Application.Models;
 using TW.Application.Services;
 
 namespace TW.Application.Controllers
@@ -37,11 +38,11 @@ namespace TW.Application.Controllers
         }
 
         [HttpGet("playlists")]
-        public async Task<ActionResult<List<string>>> GetPlaylists()
+        public async Task<ActionResult<List<Playlist>>> GetPlaylists()
         {
-            var playlistNames = await _spotifyService.GetPlaylists();
+            var playlists = await _spotifyService.GetPlaylists();
 
-            return Ok(playlistNames);
+            return Ok(playlists);
         }
         [HttpGet("isloggedin")]
         public async Task<ActionResult<bool>> IsLoggedIn()

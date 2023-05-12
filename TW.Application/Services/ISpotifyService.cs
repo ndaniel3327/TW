@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TW.Application.Models;
 
 namespace TW.Application.Services
 {
@@ -9,7 +10,7 @@ namespace TW.Application.Services
     {
         Task<Uri> AuthorizeWithPKCE();
         Task GetCallback(string code);
-        Task<List<string>> GetPlaylists();
+        Task<List<Playlist>> GetPlaylists();
         Task<bool> IsLoggedIn();
     }
 }

@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Reflection;
 using TW.Application.Services;
 
 namespace TW.Application
@@ -33,9 +35,8 @@ namespace TW.Application
             });
 
             services.AddControllers();
-
             services.AddSingleton<ISpotifyService, SpotifyService>();
-
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TW.Application", Version = "v1" });
