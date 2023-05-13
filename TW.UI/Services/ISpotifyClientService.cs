@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TW.UI.Services
 {
-    public interface ISpotifyCService
+    public interface ISpotifyClientService
 
     {
         Task<Uri> AuthorizeSpotify();
@@ -14,3 +14,5 @@ namespace TW.UI.Services
         Task<bool> IsLoggedIn();
     }
 }
+
+

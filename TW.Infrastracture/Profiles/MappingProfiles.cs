@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Routing.Constraints;
 using SpotifyAPI.Web;
-using TW.Application.Models;
+using TW.Infrastructure.Models;
 
-namespace TW.Application.Profiles
+namespace TW.Infrastructure.Profiles
 {
     public class MappingProfiles : Profile
     {

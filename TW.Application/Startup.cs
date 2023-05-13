@@ -6,7 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
-using TW.Application.Services;
+using TW.Infrastracture.AppSettings;
+using TW.Infrastructure.Services;
 
 namespace TW.Application
 {
@@ -34,8 +35,12 @@ namespace TW.Application
                                   });
             });
 
+            var spotifyCallbackEndpoint = Configuration.GetValue<string>("Endpoints:SpotifyCallbackEndpoint");
+
             services.AddControllers();
-            services.AddSingleton<ISpotifyService, SpotifyService>();
+
+            services.AddSingleton<IAppSettings>(x => new AppSettings { SpotifyCallbackEndpoint = spotifyCallbackEndpoint });
+            services.AddSingleton<ISpotifyServerService, SpotifyService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {

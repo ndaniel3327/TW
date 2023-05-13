@@ -1,4 +1,4 @@
-﻿namespace TW.Application.Models
+﻿namespace TW.Infrastructure.Models
 {
     public class Artist
     {

@@ -1,10 +1,12 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using TW.UI.Helpers;
+using TW.UI.Services.Contracts;
 
 namespace TW.UI.Services
 {
-    public class SpotifyCService
-        : ISpotifyCService
+    public class SpotifyClientService
+        : ISpotifyClientService
 
     {
         private readonly HttpsConnectionHelper _httpsHelper;
@@ -12,9 +14,11 @@ namespace TW.UI.Services
         //private readonly string _baseAddress;
         //private readonly string _url;
 
-        public SpotifyCService()
+        //TODO: Extract all strings like "/api/Spotify" in a SpotifyConstants class
+
+        public SpotifyClientService()
         {
-            _httpsHelper = new HttpsConnectionHelper(port: 5001);
+            _httpsHelper = new HttpsConnectionHelper(port: 5001);//TODO: Port to SpotifyConstants
             _httpClient = _httpsHelper.HttpClient;
 
             //_httpClient = new HttpClient();
@@ -25,6 +29,8 @@ namespace TW.UI.Services
             //_url = $"{_baseAddress}/api/Spotify";
 
         }
+
+
 
         public async Task<Uri> AuthorizeSpotify()
         {
@@ -46,7 +52,16 @@ namespace TW.UI.Services
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
-                List<string> playlists = JsonSerializer.Deserialize<List<string>>(content);
+
+                //TODO:  Extract this code to Helpers.JsonSerializerHelper as DeserializeJson
+                //var options = new JsonSerializerOptions();
+                //options.PropertyNameCaseInsensitive = true;
+                //options.Converters.Add(new JsonStringEnumConverter());
+
+                //TODO: use newly created method in Helpers.JsonSerializerHelper as JsonSerializer.DeserializeJson
+                //use it like this
+                //var playlits = JsonSerializer.Deserialize<List<SpotifyPlaylistContract>>(content);
+                var playlists = JsonSerializer.Deserialize<List<string>>(content);
                 return playlists;
             }
             else
@@ -70,3 +85,4 @@ namespace TW.UI.Services
         }
     }
 }
+

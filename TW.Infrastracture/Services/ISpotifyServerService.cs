@@ -2,15 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TW.Application.Models;
+using TW.Infrastructure.Models;
 
-namespace TW.Application.Services
+namespace TW.Infrastructure.Services
 {
-    public interface ISpotifyService
+    public interface ISpotifyServerService
     {
+        bool IsLoggedIn { get; set; }
+
         Task<Uri> AuthorizeWithPKCE();
         Task GetCallback(string code);
         Task<List<Playlist>> GetPlaylists();
-        Task<bool> IsLoggedIn();
     }
 }

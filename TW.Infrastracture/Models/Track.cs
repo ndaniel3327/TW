@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TW.Application.Models
+namespace TW.Infrastructure.Models
 {
     public class Track
     {

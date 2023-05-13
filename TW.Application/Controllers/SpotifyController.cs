@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using TW.Application.Models;
-using TW.Application.Services;
+using TW.Infrastructure.Models;
+using TW.Infrastructure.Services;
 
 namespace TW.Application.Controllers
 {
@@ -14,9 +14,9 @@ namespace TW.Application.Controllers
     [ApiController]
     public class SpotifyController : ControllerBase
     {
-        private readonly ISpotifyService _spotifyService;
+        private readonly ISpotifyServerService _spotifyService;
 
-        public SpotifyController(ISpotifyService spotifyService)
+        public SpotifyController(ISpotifyServerService spotifyService)
         {
             _spotifyService = spotifyService;
         }
@@ -24,7 +24,7 @@ namespace TW.Application.Controllers
         [HttpGet]
         public async Task<ActionResult<Uri>> Get()
         {
-            Uri loginUri = await _spotifyService.AuthorizeWithPKCE();
+            var loginUri = await Task.Run(() => _spotifyService.AuthorizeWithPKCE());
 
             return Ok(loginUri);
         }
@@ -47,9 +47,12 @@ namespace TW.Application.Controllers
         [HttpGet("isloggedin")]
         public async Task<ActionResult<bool>> IsLoggedIn()
         {
-
-            return Ok(_spotifyService.IsLoggedIn());
+            var isLoggedId = await Task.Run(() => _spotifyService.IsLoggedIn); 
+            return Ok();
         }
+
+        // TODO: Add Middleware to forward exceptions
+
 
     }
 }

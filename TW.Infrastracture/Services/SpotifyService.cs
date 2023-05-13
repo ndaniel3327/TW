@@ -8,36 +8,47 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper;
-using TW.Application.Models;
+using TW.Infrastructure.Models;
+using TW.Infrastracture.AppSettings;
 
-namespace TW.Application.Services
+namespace TW.Infrastructure.Services
 {
-    public class SpotifyService : ISpotifyService
+    public class SpotifyService : ISpotifyServerService
     {
-        private readonly string _clientId = "2d84ad5eeb3f4b7c9fcc6cc479ab2d4a";
-        private readonly IMapper _mapper;
-        private string _verifier;
-        private string _challenge;
-        private SpotifyClient _spotifyClient;
-        private bool _IsLoggedIn = false;
+        public bool IsLoggedIn { get; set; }
+        //TODO private bool IsLoggedIn = false; - bool default value is 0
 
-        public SpotifyService(IMapper mapper)
+        private SpotifyClient _spotifyClient;
+        private IPlaylistsClient _spotifyClientPlaylists => _spotifyClient.Playlists;
+        private readonly string _codeChallengeMethod = "S256";
+        private readonly string _clientId = "2d84ad5eeb3f4b7c9fcc6cc479ab2d4a";
+        private readonly string _verifier;
+        private readonly string _challenge;
+
+        private readonly IMapper _mapper;
+        private readonly IAppSettings _appSettings;
+
+        public SpotifyService(IMapper mapper, IAppSettings appSettings)
         {
             var (verifier, challenge) = PKCEUtil.GenerateCodes();
             _verifier = verifier;
             _challenge = challenge;
             _mapper = mapper;
+            _appSettings = appSettings;
+            //TODO: Add Null verifier where neccesary
         }
 
         public async Task<Uri> AuthorizeWithPKCE()
         {
+            //TODO Invoke an awaitable method that is showing the loading screen
+            //TODO: Add Null verifier where neccesary
             var loginRequest = new LoginRequest(
-              new Uri($"https://localhost:5001/api/Spotify/callback"),
+              new Uri(_appSettings.SpotifyCallbackEndpoint),
               _clientId,
               LoginRequest.ResponseType.Code
             )
             {
-                CodeChallengeMethod = "S256",
+                CodeChallengeMethod = _codeChallengeMethod,
                 CodeChallenge = _challenge,
                 Scope = new[] { Scopes.PlaylistReadPrivate, Scopes.PlaylistReadCollaborative }
             };
@@ -48,8 +59,9 @@ namespace TW.Application.Services
         // This method should be called from your web-server when the user visits "http://localhost:5000/api/Spotify/callback"
         public async Task GetCallback(string code)
         {
+            //TODO: Forward exception for every possible null
             var initialResponse = await new OAuthClient().RequestToken(
-              new PKCETokenRequest(_clientId, code, new Uri("https://localhost:5001/api/Spotify/callback"), _verifier)
+              new PKCETokenRequest(_clientId, code, new Uri(_appSettings.SpotifyCallbackEndpoint), _verifier)
             );
             //Automatically refresh tokens with PKCEAuthenticator
             var authenticator = new PKCEAuthenticator(_clientId, initialResponse);
@@ -59,11 +71,11 @@ namespace TW.Application.Services
 
             _spotifyClient = new SpotifyClient(config);
 
-            _IsLoggedIn = true;
+            IsLoggedIn = true;
         }
         public async Task<List<Playlist>> GetPlaylists()
         {
-            var result = await _spotifyClient.Playlists.CurrentUsers();
+            var result = await _spotifyClientPlaylists.CurrentUsers();
 
             var playlists = result.Items.Select(x => new Playlist() 
             { 
@@ -73,9 +85,9 @@ namespace TW.Application.Services
 
             foreach (var playlist in playlists)
             {
-                var playlistTracks = _spotifyClient.Playlists.GetItems(playlist.Id);
+                var playlistTracks = _spotifyClientPlaylists.GetItems(playlist.Id);
                 var myTracks = playlistTracks.Result.Items;
-                playlist.Tracks = _mapper.Map<List<Track>>(playlistTracks.Result.Items);
+                //playlist.Tracks = _mapper.Map<List<Track>>(playlistTracks.Result.Items);
 
             }
             //List<Paging<PlaylistTrack<IPlayableItem>>> listOfPagingPlaylistsWithTracks = new();
@@ -98,10 +110,6 @@ namespace TW.Application.Services
 
             return playlists;
 
-        }
-        public async Task<bool> IsLoggedIn()
-        {
-            return await Task.Run(() => _IsLoggedIn);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace TW.UI.ViewModels
             _loginUri = loginUri.ToString();
             var screeenWidth = DeviceDisplay.MainDisplayInfo.Width;
             var screeenHeight = DeviceDisplay.MainDisplayInfo.Height;
+            //TODO: consider different screen sizes
             _popupSize = new Size((screeenWidth - 400) / 2, (screeenHeight - 800) / 2);
         }
         public void OnPropertyChanged(string propertyName)

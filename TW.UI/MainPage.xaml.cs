@@ -7,10 +7,10 @@ namespace TW.UI
 {
     public partial class MainPage : ContentPage
     {
-        private readonly ISpotifyCService _spotifyService;
+        private readonly ISpotifyClientService _spotifyService;
 
         public delegate void PopupDelegate();
-        public MainPage(ISpotifyCService spotifyService)
+        public MainPage(ISpotifyClientService spotifyService)
         {
 
             InitializeComponent();
