@@ -1,10 +1,6 @@
 ﻿using SpotifyAPI.Web;
-using SpotifyAPI.Web.Auth;
-using SpotifyAPI.Web.Http;
 using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Net;
 using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper;
@@ -15,8 +11,20 @@ namespace TW.Infrastructure.Services
 {
     public class SpotifyService : ISpotifyServerService
     {
-        public bool IsLoggedIn { get; set; }
-        //TODO private bool IsLoggedIn = false; - bool default value is 0
+        private bool _isLoggedIn = false;
+        public bool IsLoggedIn
+        {
+            get 
+            {
+                return _isLoggedIn; 
+
+            } 
+            set 
+            {
+                _isLoggedIn = value; 
+            }
+        }
+        //TODO (why property instead of field ?)private bool IsLoggedIn = false; - bool default value is 0
 
         private SpotifyClient _spotifyClient;
         private IPlaylistsClient _spotifyClientPlaylists => _spotifyClient.Playlists;

@@ -4,11 +4,12 @@
              x:Class="TW.UI.Pages.SpotifyPlaylistsPage"
              Title="SpotifyPlaylistsPage"
              xmlns:viewmodel="clr-namespace:TW.UI.Pages"
-             x:DataType="viewmodel:SpotifyPlaylistsPage">
+             x:DataType="viewmodel:SpotifyPlaylistsPage"
+             xmlns:model="clr-namespace:TW.UI.Models">
     <StackLayout>
         <ListView x:Name="listView" ItemsSource="{Binding Playlists}">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="viewmodel:PlaylistModel">
+                <DataTemplate x:DataType="model:PlaylistModel">
                     <TextCell Text="{Binding Name}"></TextCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

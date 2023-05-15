@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Reflection;
+using TW.Application.Middlewares;
 using TW.Infrastracture.AppSettings;
 using TW.Infrastructure.Services;
 
@@ -57,7 +57,7 @@ namespace TW.Application
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TW.Application v1"));
             }
-
+            app.UseMiddleware<ExceptionMiddleware>();
             //app.UseHttpsRedirection();
 
             app.UseRouting();

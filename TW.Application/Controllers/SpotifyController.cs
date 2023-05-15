@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SpotifyAPI.Web;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using TW.Infrastructure.Models;
 using TW.Infrastructure.Services;
@@ -44,6 +41,7 @@ namespace TW.Application.Controllers
 
             return Ok(playlists);
         }
+
         [HttpGet("isloggedin")]
         public async Task<ActionResult<bool>> IsLoggedIn()
         {
@@ -51,7 +49,7 @@ namespace TW.Application.Controllers
             return Ok();
         }
 
-        // TODO: Add Middleware to forward exceptions
+        // TODO:(partially) Add Middleware to forward exceptions
 
 
     }

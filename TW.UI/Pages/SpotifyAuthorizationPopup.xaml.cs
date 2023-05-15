@@ -1,5 +1,7 @@
 using CommunityToolkit.Maui.Views;
 using System.ComponentModel;
+using TW.Infrastracture.Constants;
+using TW.UI.Helpers;
 using TW.UI.ViewModels;
 
 namespace TW.UI.Pages;
@@ -16,16 +18,17 @@ public partial class SpotifyAuthorizationPopup : Popup
     }
     private void webView_Navigating(object sender, WebNavigatingEventArgs e)
     {
-        //TODO: refactor this to use https
+        //TODO: (done) refactor this to use https
         if (e.Url.StartsWith("https://localhost"))
         {
             e.Cancel = true;
             Task.Run(async () =>
             {
-                HttpClient hc = new HttpClient();
+                var _httpsHelper = new HttpsConnectionHelper(port: SpotifyConstants.HTTPSPort);
+                var _httpClient = _httpsHelper.HttpClient;
 
-                var url = e.Url.Replace("localhost", "10.0.2.2").Replace("https", "http").Replace("5001", "5000");
-                var result = await hc.GetAsync(url);
+                var url = e.Url.Replace("localhost", "10.0.2.2");
+                var result = await _httpClient.GetAsync(url);
                 if (result.IsSuccessStatusCode)
                 {
                     Close();

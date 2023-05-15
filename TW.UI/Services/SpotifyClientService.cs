@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using TW.Infrastracture.Constants;
 using TW.UI.Helpers;
 using TW.UI.Services.Contracts;
 
@@ -11,30 +12,16 @@ namespace TW.UI.Services
     {
         private readonly HttpsConnectionHelper _httpsHelper;
         private readonly HttpClient _httpClient;
-        //private readonly string _baseAddress;
-        //private readonly string _url;
-
-        //TODO: Extract all strings like "/api/Spotify" in a SpotifyConstants class
-
+        //TODO: (Static or not?,constants uppercase or lowercase?) Extract all strings like "/api/Spotify" in a SpotifyConstants class
         public SpotifyClientService()
         {
-            _httpsHelper = new HttpsConnectionHelper(port: 5001);//TODO: Port to SpotifyConstants
+            _httpsHelper = new HttpsConnectionHelper(port: SpotifyConstants.HTTPSPort);
             _httpClient = _httpsHelper.HttpClient;
-
-            //_httpClient = new HttpClient();
-            //_httpClient = httpClient;
-
-            //_baseAddress = DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:5001" : "https://localhost:5001";
-
-            //_url = $"{_baseAddress}/api/Spotify";
-
         }
-
-
 
         public async Task<Uri> AuthorizeSpotify()
         {
-            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/Spotify");
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.AuthorizationEndpoint);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
@@ -48,20 +35,24 @@ namespace TW.UI.Services
         }
         public async Task<List<string>> GetPlaylists()
         {
-            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/Spotify/playlists");
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.PlaylistsEndpoint);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
 
-                //TODO:  Extract this code to Helpers.JsonSerializerHelper as DeserializeJson
+                //TODO: (I tried)  Extract this code to Helpers.JsonSerializerHelper as DeserializeJson
                 //var options = new JsonSerializerOptions();
                 //options.PropertyNameCaseInsensitive = true;
                 //options.Converters.Add(new JsonStringEnumConverter());
 
-                //TODO: use newly created method in Helpers.JsonSerializerHelper as JsonSerializer.DeserializeJson
+                //Use newly created method in Helpers.JsonSerializerHelper as JsonSerializer.DeserializeJson
                 //use it like this
                 //var playlits = JsonSerializer.Deserialize<List<SpotifyPlaylistContract>>(content);
-                var playlists = JsonSerializer.Deserialize<List<string>>(content);
+
+
+                //Added by DanJR
+                var playlists = JsonSerializerHelper.DeserializeJson<List<string>>(content);
+                //var playlists = JsonSerializer.Deserialize<List<string>>(content);
                 return playlists;
             }
             else
@@ -71,7 +62,7 @@ namespace TW.UI.Services
         }
         public async Task<bool> IsLoggedIn()
         {
-            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + "/api/Spotify/IsLoggedIn");
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.IsLoggedInEndpoint);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
