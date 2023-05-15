@@ -7,13 +7,23 @@
              x:DataType="viewmodel:SpotifyPlaylistsPage"
              xmlns:model="clr-namespace:TW.UI.Models">
     <StackLayout>
-        <ListView x:Name="listView" ItemsSource="{Binding Playlists}">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:PlaylistModel">
-                    <TextCell Text="{Binding Name}"></TextCell>
+        <CollectionView x:Name="playlistList" 
+                  VerticalOptions="FillAndExpand"
+                  IsGrouped="True"
+                  ItemsSource="{Binding Playlists}">
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="model:SpotifyPlaylistModel">
+                    <Label Text="{Binding Name}"></Label>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:SpotifyTrackModel">
+                    <Frame Padding="10" Margin="0,5,0,5">
+                        <Label Text="{Binding Name}"></Label>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </StackLayout>
 
 </ContentPage>

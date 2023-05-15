@@ -12,7 +12,6 @@ namespace TW.UI.Helpers
             options.Converters.Add(new JsonStringEnumConverter());
 
             return JsonSerializer.Deserialize<T>(JSONValue,options);
-       
         }
 
     }

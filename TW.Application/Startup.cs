@@ -58,7 +58,7 @@ namespace TW.Application
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TW.Application v1"));
             }
             app.UseMiddleware<ExceptionMiddleware>();
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

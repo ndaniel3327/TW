@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using TW.UI.Models;
 
 namespace TW.UI.Services
 {
@@ -10,7 +7,7 @@ namespace TW.UI.Services
 
     {
         Task<Uri> AuthorizeSpotify();
-        Task<List<string>> GetPlaylists();
+        Task<List<SpotifyPlaylistModel>> GetPlaylists();
         Task<bool> IsLoggedIn();
     }
 }

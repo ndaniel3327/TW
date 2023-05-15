@@ -2,7 +2,7 @@
 {
     public static class SpotifyConstants
     {
-        private const string baseApiEndpoint = "api/Spotify";
+        private const string baseApiEndpoint = "/api/Spotify";
 
         public const int HTTPSPort = 5001;
         public const string AuthorizationEndpoint = baseApiEndpoint;

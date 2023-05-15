@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using TW.Infrastracture.Constants;
 using TW.UI.Helpers;
-using TW.UI.Services.Contracts;
+using TW.UI.Models;
 
 namespace TW.UI.Services
 {
@@ -12,7 +11,7 @@ namespace TW.UI.Services
     {
         private readonly HttpsConnectionHelper _httpsHelper;
         private readonly HttpClient _httpClient;
-        //TODO: (Static or not?,constants uppercase or lowercase?) Extract all strings like "/api/Spotify" in a SpotifyConstants class
+
         public SpotifyClientService()
         {
             _httpsHelper = new HttpsConnectionHelper(port: SpotifyConstants.HTTPSPort);
@@ -33,26 +32,13 @@ namespace TW.UI.Services
                 return null;
             }
         }
-        public async Task<List<string>> GetPlaylists()
+        public async Task<List<SpotifyPlaylistModel>> GetPlaylists()
         {
             HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.PlaylistsEndpoint);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
-
-                //TODO: (I tried)  Extract this code to Helpers.JsonSerializerHelper as DeserializeJson
-                //var options = new JsonSerializerOptions();
-                //options.PropertyNameCaseInsensitive = true;
-                //options.Converters.Add(new JsonStringEnumConverter());
-
-                //Use newly created method in Helpers.JsonSerializerHelper as JsonSerializer.DeserializeJson
-                //use it like this
-                //var playlits = JsonSerializer.Deserialize<List<SpotifyPlaylistContract>>(content);
-
-
-                //Added by DanJR
-                var playlists = JsonSerializerHelper.DeserializeJson<List<string>>(content);
-                //var playlists = JsonSerializer.Deserialize<List<string>>(content);
+                var playlists = JsonSerializerHelper.DeserializeJson<List<SpotifyPlaylistModel>>(content);
                 return playlists;
             }
             else

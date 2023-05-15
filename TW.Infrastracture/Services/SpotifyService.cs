@@ -11,20 +11,7 @@ namespace TW.Infrastructure.Services
 {
     public class SpotifyService : ISpotifyServerService
     {
-        private bool _isLoggedIn = false;
-        public bool IsLoggedIn
-        {
-            get 
-            {
-                return _isLoggedIn; 
-
-            } 
-            set 
-            {
-                _isLoggedIn = value; 
-            }
-        }
-        //TODO (why property instead of field ?)private bool IsLoggedIn = false; - bool default value is 0
+        public bool IsLoggedIn { get; set; }
 
         private SpotifyClient _spotifyClient;
         private IPlaylistsClient _spotifyClientPlaylists => _spotifyClient.Playlists;
@@ -94,8 +81,8 @@ namespace TW.Infrastructure.Services
             foreach (var playlist in playlists)
             {
                 var playlistTracks = _spotifyClientPlaylists.GetItems(playlist.Id);
-                var myTracks = playlistTracks.Result.Items;
-                //playlist.Tracks = _mapper.Map<List<Track>>(playlistTracks.Result.Items);
+                var myTracks = playlistTracks.Result.Items.Select(c => c.Track);
+                playlist.Tracks = _mapper.Map<List<Track>>(myTracks);
 
             }
             //List<Paging<PlaylistTrack<IPlayableItem>>> listOfPagingPlaylistsWithTracks = new();

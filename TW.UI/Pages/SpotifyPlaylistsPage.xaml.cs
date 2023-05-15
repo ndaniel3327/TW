@@ -6,8 +6,8 @@ namespace TW.UI.Pages;
 public partial class SpotifyPlaylistsPage : ContentPage
 {
     private readonly ISpotifyClientService _spotifyCService;
-    private List<PlaylistModel> _playlists;   
-    public List<PlaylistModel> Playlists
+    private List<SpotifyPlaylistModel> _playlists;   
+    public List<SpotifyPlaylistModel> Playlists
     {
         get
         {
@@ -35,14 +35,6 @@ public partial class SpotifyPlaylistsPage : ContentPage
     }
     private async void GetPlaylists()
     {
-        var playlistsAsListString = await _spotifyCService.GetPlaylists();
-        var playlistsAsPlaylistModels = new List<PlaylistModel>();
-
-        foreach (string playlistName in playlistsAsListString)
-        {
-            playlistsAsPlaylistModels.Add(new PlaylistModel { Name = playlistName });
-        }
-
-        Playlists =playlistsAsPlaylistModels;
+        Playlists = await _spotifyCService.GetPlaylists();
     }
 }

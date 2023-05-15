@@ -18,7 +18,6 @@ public partial class SpotifyAuthorizationPopup : Popup
     }
     private void webView_Navigating(object sender, WebNavigatingEventArgs e)
     {
-        //TODO: (done) refactor this to use https
         if (e.Url.StartsWith("https://localhost"))
         {
             e.Cancel = true;
