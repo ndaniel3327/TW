@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using TW.Infrastracture.Services.Youtube;
 
 namespace TW.Tester
 {
@@ -7,29 +8,9 @@ namespace TW.Tester
     {
         static void Main(string[] args)
         {
-            HttpClient client = new HttpClient();
+            var youtubeService = new YoutubeServerService();
 
-
-            string[] localHostUrl = new string[] { "http://localhost:5000/api/Spotify", "http://localhost:57975/api/Spotify", "http://localhost:5001/api/Spotify",
-                "http://localhost:44325/api/Spotify" };
-
-            foreach(var url in localHostUrl)
-            {
-               
-
-                try 
-                {
-                    var response = client.GetAsync(url);
-                    Console.WriteLine(response.Result.StatusCode);
-                }
-                catch(AggregateException)
-                {
-                    Console.WriteLine("Agregate Exception");
-                }
-
-               
-            }   
-            
+            youtubeService.YoutubeAuthorization();
         }
     }
 }

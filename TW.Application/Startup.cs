@@ -40,7 +40,7 @@ namespace TW.Application
             services.AddControllers();
 
             services.AddSingleton<IAppSettings>(x => new AppSettings { SpotifyCallbackEndpoint = spotifyCallbackEndpoint });
-            services.AddSingleton<ISpotifyServerService, SpotifyService>();
+            services.AddSingleton<ISpotifyServerService, SpotifyServerService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {

@@ -9,7 +9,7 @@ using TW.Infrastracture.AppSettings;
 
 namespace TW.Infrastracture.Services.Spotify
 {
-    public class SpotifyService : ISpotifyServerService
+    public class SpotifyServerService : ISpotifyServerService
     {
         public bool IsLoggedIn { get; set; }
 
@@ -23,7 +23,7 @@ namespace TW.Infrastracture.Services.Spotify
         private readonly IMapper _mapper;
         private readonly IAppSettings _appSettings;
 
-        public SpotifyService(IMapper mapper, IAppSettings appSettings)
+        public SpotifyServerService(IMapper mapper, IAppSettings appSettings)
         {
             var (verifier, challenge) = PKCEUtil.GenerateCodes();
             _verifier = verifier;
