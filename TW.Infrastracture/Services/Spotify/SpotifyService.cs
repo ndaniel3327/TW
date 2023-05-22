@@ -7,7 +7,7 @@ using AutoMapper;
 using TW.Infrastructure.Models;
 using TW.Infrastracture.AppSettings;
 
-namespace TW.Infrastructure.Services
+namespace TW.Infrastracture.Services.Spotify
 {
     public class SpotifyService : ISpotifyServerService
     {
@@ -72,11 +72,11 @@ namespace TW.Infrastructure.Services
         {
             var result = await _spotifyClientPlaylists.CurrentUsers();
 
-            var playlists = result.Items.Select(x => new Playlist() 
-            { 
-                Id = x.Id, 
+            var playlists = result.Items.Select(x => new Playlist()
+            {
+                Id = x.Id,
                 Name = x.Name
-            }).ToList<Playlist>();
+            }).ToList();
 
             foreach (var playlist in playlists)
             {

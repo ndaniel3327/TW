@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TW.Infrastructure.Models;
 
-namespace TW.Infrastructure.Services
+namespace TW.Infrastracture.Services.Spotify
 {
     public interface ISpotifyServerService
     {

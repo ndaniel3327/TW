@@ -7,7 +7,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using TW.Application.Middlewares;
 using TW.Infrastracture.AppSettings;
-using TW.Infrastructure.Services;
+using TW.Infrastracture.Services.Spotify;
 
 namespace TW.Application
 {

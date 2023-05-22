@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TW.Infrastracture.Services.Spotify;
 using TW.Infrastructure.Models;
-using TW.Infrastructure.Services;
 
 namespace TW.Application.Controllers
 {

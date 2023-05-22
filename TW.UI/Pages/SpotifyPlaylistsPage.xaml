@@ -1,29 +1,64 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TW.UI.Pages.SpotifyPlaylistsPage"
              Title="SpotifyPlaylistsPage"
              xmlns:viewmodel="clr-namespace:TW.UI.Pages"
              x:DataType="viewmodel:SpotifyPlaylistsPage"
              xmlns:model="clr-namespace:TW.UI.Models">
-    <StackLayout>
-        <CollectionView x:Name="playlistList" 
+    <!--<StackLayout Margin="10,0,10,0" VerticalOptions="FillAndExpand">
+        <ListView x:Name="listView"
                   VerticalOptions="FillAndExpand"
-                  IsGrouped="True"
+                  IsGroupingEnabled="True"
                   ItemsSource="{Binding Playlists}">
-            <CollectionView.GroupHeaderTemplate>
-                <DataTemplate x:DataType="model:SpotifyPlaylistModel">
-                    <Label Text="{Binding Name}"></Label>
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:SpotifyTrackModel">
-                    <Frame Padding="10" Margin="0,5,0,5">
-                        <Label Text="{Binding Name}"></Label>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
-
+        <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <TextCell x:DataType="model:SpotifyPlaylistGroup" Text="{Binding Name}" Height="100"></TextCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+        <ListView.ItemTemplate >
+            <DataTemplate  x:DataType="model:SpotifyTrackModel">
+                <TextCell Text="{Binding Name}"
+                          Detail="{Binding Artist}"></TextCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+    </StackLayout>-->
+    <VerticalStackLayout Margin="10" BindableLayout.ItemsSource="{Binding Playlists}">
+        <BindableLayout.ItemTemplate>
+            <DataTemplate x:DataType="model:SpotifyPlaylistModel">
+                <mct:Expander x:Name="thisExpander" VerticalOptions="StartAndExpand">
+                    <mct:Expander.Header>
+                        <Grid ColumnDefinitions="Auto" BackgroundColor="LightGray" >
+                            <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold"></Label>
+                            <Image Grid.Column="3" x:Name="headerImage" HeightRequest="30" WidthRequest="30" Source="arrowdown.svg">
+                                <Image.Triggers>
+                                    <DataTrigger TargetType="Image"
+                                                 Binding="{Binding Source={x:Reference thisExpander}, Path=IsExpanded}"
+                                                 Value="True">
+                                        <Setter Property="Rotation" Value="180"></Setter>
+                                    </DataTrigger>
+                                </Image.Triggers>
+                            </Image>
+                        </Grid>
+                    </mct:Expander.Header>
+                    <mct:Expander.Content>
+                        <Grid x:DataType="model:SpotifyTrackModel">
+                            <Label Text="{Binding Name}"></Label>
+                            <Label Text="{Binding Artist}"></Label>
+                        </Grid>
+                    </mct:Expander.Content>
+                    <!--<VerticalStackLayout Margin="5" x:DataType="viewmodel:SpotifyPlaylistsPage" BindableLayout.ItemsSource="{Binding Playlists}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="model:SpotifyTrackModel">
+                                <Label Text="{Binding Name}" TextColor="Black" FontSize="18" ></Label>
+                                --><!--<TextCell Text="{Binding Name}" Detail="{Binding Artist}"></TextCell>--><!--
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>-->
+                </mct:Expander>
+            </DataTemplate>
+        </BindableLayout.ItemTemplate>
+    </VerticalStackLayout>
 </ContentPage>

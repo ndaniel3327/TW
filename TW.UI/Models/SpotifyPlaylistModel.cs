@@ -1,4 +1,6 @@
-﻿namespace TW.UI.Models
+﻿using System.Collections.ObjectModel;
+
+namespace TW.UI.Models
 {
     public class SpotifyPlaylistModel
     {
