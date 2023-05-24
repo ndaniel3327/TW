@@ -20,7 +20,12 @@
                 Text="LogIn with Spotify"
                 Clicked="OnSpotifyButtonClicked"
                 HorizontalOptions="Center" />
-    </VerticalStackLayout>
+            <Button
+                x:Name="YoutubeButton"
+                Text="LogIn with Youtube"
+                Clicked="OnYoutubeButtonClicked"
+                HorizontalOptions="Center" />
+        </VerticalStackLayout>
     </ScrollView>
 
 </ContentPage>

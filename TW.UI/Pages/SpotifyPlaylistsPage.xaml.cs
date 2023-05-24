@@ -1,7 +1,7 @@
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Runtime.CompilerServices;
 using TW.UI.Models;
-using TW.UI.Services;
+using TW.UI.Services.Spotify;
 
 namespace TW.UI.Pages;
 

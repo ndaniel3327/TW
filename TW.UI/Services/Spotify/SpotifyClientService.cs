@@ -3,7 +3,7 @@ using TW.Infrastracture.Constants;
 using TW.UI.Helpers;
 using TW.UI.Models;
 
-namespace TW.UI.Services
+namespace TW.UI.Services.Spotify
 {
     public class SpotifyClientService
         : ISpotifyClientService

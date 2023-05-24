@@ -1,7 +1,6 @@
-﻿
-using TW.UI.Models;
+﻿using TW.UI.Models;
 
-namespace TW.UI.Services
+namespace TW.UI.Services.Spotify
 {
     public interface ISpotifyClientService
 

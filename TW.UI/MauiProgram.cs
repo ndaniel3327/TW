@@ -3,7 +3,8 @@ using CommunityToolkit.Maui.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TW.UI.Pages;
-using TW.UI.Services;
+using TW.UI.Services.Spotify;
+using TW.UI.Services.Youtube;
 using TW.UI.ViewModels;
 
 namespace TW.UI
@@ -22,7 +23,8 @@ namespace TW.UI
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            builder.Services.AddScoped<ISpotifyClientService, SpotifyClientService>();
+            builder.Services.AddTransient<ISpotifyClientService, SpotifyClientService>();
+            builder.Services.AddTransient<IYoutubeClientService, YoutubeClientService>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<SpotifyPlaylistsPage>();
             //builder.Services.AddSingleton<SpotifyAuthorizationPopup>();

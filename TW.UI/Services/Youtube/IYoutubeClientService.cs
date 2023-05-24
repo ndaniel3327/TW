@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TW.Infrastracture.Services.Youtube
+namespace TW.UI.Services.Youtube
 {
-    public interface IYoutubeServerService
+    public interface IYoutubeClientService
     {
+        Uri AuthorizeYoutube();
     }
 }
