@@ -39,7 +39,7 @@ namespace TW.UI
                 LaunchMode=BrowserLaunchMode.SystemPreferred,
 
             };
-            await Browser.Default.OpenAsync(loginUri, options);
+            await Browser.Default.OpenAsync(loginUri,options);
         }
     }
 }

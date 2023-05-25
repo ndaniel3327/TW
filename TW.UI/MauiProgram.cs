@@ -18,6 +18,10 @@ namespace TW.UI
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitCore()
+                //.ConfigureEssentials(e =>
+                //{
+                //    e.AddAppAction(new AppAction("id1", "Messages", icon: "messages"));
+                //})
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
