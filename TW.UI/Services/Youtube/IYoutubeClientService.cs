@@ -9,5 +9,6 @@ namespace TW.UI.Services.Youtube
     public interface IYoutubeClientService
     {
         Uri AuthorizeYoutube();
+        void GetAuthorizationToken(string authorizationCode);
     }
 }

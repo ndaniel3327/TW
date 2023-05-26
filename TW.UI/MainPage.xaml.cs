@@ -32,14 +32,18 @@ namespace TW.UI
         }
         private async void OnYoutubeButtonClicked(object sender, EventArgs e)
         {
+            await GetAuthorizationCode();
+        }
+        public async Task GetAuthorizationCode()
+        {
             Uri loginUri = _youtubeService.AuthorizeYoutube();
             //this.ShowPopup(new YoutubeAuthorizationPopup(loginUri));
             BrowserLaunchOptions options = new BrowserLaunchOptions()
             {
-                LaunchMode=BrowserLaunchMode.SystemPreferred,
+                LaunchMode = BrowserLaunchMode.SystemPreferred,
 
             };
-            await Browser.Default.OpenAsync(loginUri,options);
+            await Browser.Default.OpenAsync(loginUri, options);
         }
     }
 }

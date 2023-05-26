@@ -31,6 +31,7 @@ namespace TW.UI
             builder.Services.AddTransient<IYoutubeClientService, YoutubeClientService>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<SpotifyPlaylistsPage>();
+
             //builder.Services.AddSingleton<SpotifyAuthorizationPopup>();
             //builder.Services.AddSingleton<SpotifyAuthorizationPopupViewModel>();
 
