@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using TW.UI.Constants;
+using TW.UI.Helpers;
 using TW.UI.Services.Youtube;
 
 namespace TW.UI
@@ -35,6 +36,10 @@ namespace TW.UI
                 var codeIndex = uriString.IndexOf("code");
                 var uriSubstring = uriString.Substring(codeIndex).Split("&");
                 var code = uriSubstring[0].Substring(uriSubstring[0].IndexOf("=") + 1);
+
+                var youtubeService = ServiceHelper.GetService<IYoutubeClientService>();
+
+                youtubeService.GetAuthorizationToken(code);
             }
         }
     }
