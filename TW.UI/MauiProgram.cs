@@ -27,10 +27,11 @@ namespace TW.UI
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            builder.Services.AddTransient<ISpotifyClientService, SpotifyClientService>();
-            builder.Services.AddTransient<IYoutubeClientService, YoutubeClientService>();
+            builder.Services.AddSingleton<ISpotifyClientService, SpotifyClientService>();
+            builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<SpotifyPlaylistsPage>();
+            builder.Services.AddSingleton<YoutubePlaylistsPage>();
 
             //builder.Services.AddSingleton<SpotifyAuthorizationPopup>();
             //builder.Services.AddSingleton<SpotifyAuthorizationPopupViewModel>();

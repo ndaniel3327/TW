@@ -32,10 +32,6 @@ namespace TW.UI
         }
         private async void OnYoutubeButtonClicked(object sender, EventArgs e)
         {
-            await GetAuthorizationCode();
-        }
-        public async Task GetAuthorizationCode()
-        {
             Uri loginUri = _youtubeService.AuthorizeYoutube();
             //this.ShowPopup(new YoutubeAuthorizationPopup(loginUri));
             BrowserLaunchOptions options = new BrowserLaunchOptions()
@@ -44,6 +40,11 @@ namespace TW.UI
 
             };
             await Browser.Default.OpenAsync(loginUri, options);
+        }
+
+        private async void SwipeGestureRecognizer_Swiped(object sender, SwipedEventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
         }
     }
 }

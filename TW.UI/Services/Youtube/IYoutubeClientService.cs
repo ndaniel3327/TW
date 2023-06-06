@@ -8,6 +8,8 @@ namespace TW.UI.Services.Youtube
 {
     public interface IYoutubeClientService
     {
+        //public YoutubePlaylistGroup PlaylistGroup { get; }
+        Task<YoutubePlaylistGroup> GetYoutubePlaylists();
         Uri AuthorizeYoutube();
         void GetAuthorizationToken(string authorizationCode);
     }

@@ -40,6 +40,7 @@ namespace TW.UI
                 var youtubeService = ServiceHelper.GetService<IYoutubeClientService>();
 
                 youtubeService.GetAuthorizationToken(code);
+
             }
         }
     }
