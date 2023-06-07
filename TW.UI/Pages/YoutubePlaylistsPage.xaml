@@ -9,11 +9,23 @@
     <StackLayout>
         <ListView x:Name="listView"
                   VerticalOptions="FillAndExpand"
-                  IsGroupingEnabled="True"
-                  ItemsSource="{Binding YoutubePlaylists}">
-            <ListView.ItemTemplate >
-                <DataTemplate  x:DataType="model:YoutubePlaylistModel">
-                    <TextCell Text="{Binding Name}" Height="100"></TextCell>
+                  ItemsSource="{Binding YoutubePlaylists}"
+                  IsGroupingEnabled="True">
+             
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="model:YoutubePlaylistModel">
+                    <ViewCell>
+                        <Label Text="{Binding Name}"
+                               BackgroundColor="LightGray"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               Padding="10"></Label>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:YoutubeTrackModel">
+                    <TextCell Text="{Binding Name}"></TextCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

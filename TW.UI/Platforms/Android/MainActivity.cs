@@ -4,6 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using TW.UI.Constants;
 using TW.UI.Helpers;
+using TW.UI.Pages;
 using TW.UI.Services.Youtube;
 
 namespace TW.UI
@@ -24,9 +25,16 @@ namespace TW.UI
             
         }
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+
+            var expirationDate = await SecureStorage.Default.GetAsync("ExpirationDate");
+            var addingDate = await SecureStorage.Default.GetAsync("AddingDate");
+            if (expirationDate != null && addingDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
+            {
+                await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
+            }
 
             var uri = Intent?.Data;   
         

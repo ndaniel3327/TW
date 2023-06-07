@@ -8,12 +8,11 @@ namespace TW.UI.Services.Youtube
     public class YoutubeClientService : IYoutubeClientService
     {   
         private readonly string _clientId = "829868223814-gn9dbtit6si40k2vd7thblkfi4a1lv4i.apps.googleusercontent.com";
-        private  string _tokenType;
-        private  string _accessToken;
-        //public YoutubePlaylistGroup PlaylistGroup { get; private set; } = new YoutubePlaylistGroup() { Playlists=new ()};
 
         public Uri AuthorizeYoutube()
         {
+
+
             string myUri = "https://accounts.google.com/o/oauth2/v2/auth?" +
               "scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly&" +
               "response_type=code&" +
@@ -37,20 +36,28 @@ namespace TW.UI.Services.Youtube
 
             var responseJson = await response.Content.ReadAsStringAsync();
             var token = JsonSerializerHelper.DeserializeJson<YoutubeAccessToken>(responseJson);
+            token.AddingDate= DateTime.Now;
+            token.ExpirationDate = token.AddingDate.AddSeconds(token.ExpiresInSeconds);
 
-            //httpClient.DefaultRequestHeaders.Authorization
-            //             = new AuthenticationHeaderValue(token.TokenType, token.AccessToken);
-            _accessToken = token.AccessToken;
-            _tokenType = token.TokenType;
+            await SecureStorage.Default.SetAsync(nameof(token.AccessToken),token.AccessToken );
+            await SecureStorage.Default.SetAsync(nameof(token.RefreshToken), token.RefreshToken);
+            await SecureStorage.Default.SetAsync(nameof(token.TokenType), token.TokenType);
+            await SecureStorage.Default.SetAsync(nameof(token.ExpiresInSeconds), token.ExpiresInSeconds.ToString());
+            await SecureStorage.Default.SetAsync(nameof(token.AddingDate),token.AddingDate.ToString());
+            await SecureStorage.Default.SetAsync(nameof(token.ExpirationDate), token.ExpirationDate.ToString());
+
 
             await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
         }
 
         public async Task<YoutubePlaylistGroup> GetYoutubePlaylists()
         {
+            string accessToken = await SecureStorage.Default.GetAsync("AccessToken");
+            string tokenType = await SecureStorage.Default.GetAsync("TokenType");
+
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization
-                         = new AuthenticationHeaderValue(_tokenType, _accessToken);
+                         = new AuthenticationHeaderValue(tokenType, accessToken);
 
             var responseMessage = await httpClient.GetAsync("https://www.googleapis.com/youtube/v3/playlists?" +
                 "part=snippet&" +

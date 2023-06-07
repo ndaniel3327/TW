@@ -36,7 +36,13 @@ public partial class YoutubePlaylistsPage : ContentPage
         var playlistsModel = new List<YoutubePlaylistModel>(); 
         foreach (var playlist in playlistGroup.Playlists)
         {
-            var playlistModel = new YoutubePlaylistModel() { Name = playlist.PlaylistInfo.Name, };
+            var tracks = new List<YoutubeTrackModel>();
+            var trackNameList = playlist.Tracks.Select(q => q.TrackInfo.Name);
+            foreach (var trackName in trackNameList)
+            {
+                tracks.Add(new YoutubeTrackModel() { Name = trackName });
+            }
+            var playlistModel = new YoutubePlaylistModel(playlist.PlaylistInfo.Name, tracks);
             playlistsModel.Add(playlistModel);
         }
         YoutubePlaylists = playlistsModel;
