@@ -8,8 +8,8 @@ namespace TW.UI.Pages;
 public partial class SpotifyPlaylistsPage : ContentPage
 {
     private readonly ISpotifyClientService _spotifyCService;
-    private List<SpotifyPlaylistModel> _playlists;
-    public List<SpotifyPlaylistModel> Playlists
+    private List<SpotifyPlaylistGroup> _playlists;
+    public List<SpotifyPlaylistGroup> Playlists
     {
         get
         {
@@ -38,12 +38,12 @@ public partial class SpotifyPlaylistsPage : ContentPage
     private async void GetPlaylists()
     {
         var playlistModels = await _spotifyCService.GetPlaylists();
-        //var playlistGroups = new List<SpotifyPlaylistGroup>();
-        //foreach (var playlist in playlistModels)
-        //{
-        //    var playlistGroup = new SpotifyPlaylistGroup(playlist.Name, playlist.Playlists);
-        //    playlistGroups.Add(playlistGroup);
-        //}
-        Playlists =playlistModels;
+        var playlistGroups = new List<SpotifyPlaylistGroup>();
+        foreach (var playlist in playlistModels)
+        {
+            var playlistGroup = new SpotifyPlaylistGroup(playlist.Name, playlist.Tracks);
+            playlistGroups.Add(playlistGroup);
+        }
+        Playlists = playlistGroups;
     }
 }

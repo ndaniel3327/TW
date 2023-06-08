@@ -42,12 +42,12 @@ namespace TW.Application.Controllers
             return Ok(playlists);
         }
 
-        [HttpGet("isloggedin")]
-        public async Task<ActionResult<bool>> IsLoggedIn()
-        {
-            var isLoggedId = await Task.Run(() => _spotifyService.IsLoggedIn); 
-            return Ok();
-        }
+        //[HttpGet("isloggedin")]
+        //public async Task<ActionResult<bool>> IsLoggedIn()
+        //{
+        //    var isLoggedIn = await Task.Run(() => _spotifyService.IsLoggedIn);
+        //    return Ok(isLoggedIn);
+        //}
 
         // TODO:(partially) Add Middleware to forward exceptions
 

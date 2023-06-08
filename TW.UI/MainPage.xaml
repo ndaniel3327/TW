@@ -15,7 +15,7 @@
                 HeightRequest="200"
                 HorizontalOptions="Center" />
 
-        <Button
+            <Button
                 x:Name="SporifyButton"
                 Text="LogIn with Spotify"
                 Clicked="OnSpotifyButtonClicked"
@@ -25,6 +25,12 @@
                 Text="LogIn with Youtube"
                 Clicked="OnYoutubeButtonClicked"
                 HorizontalOptions="Center" />
+            <Button
+                x:Name="LogOutYoutube"
+                Text="LogOutYoutube"
+                Clicked="LogOutYoutube_Clicked"
+                HorizontalOptions="Center"
+                ></Button>
         </VerticalStackLayout>
     </ScrollView>
 

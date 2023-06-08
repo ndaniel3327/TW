@@ -7,15 +7,22 @@
              xmlns:viewmodel="clr-namespace:TW.UI.Pages"
              x:DataType="viewmodel:SpotifyPlaylistsPage"
              xmlns:model="clr-namespace:TW.UI.Models">
-    <!--<StackLayout Margin="10,0,10,0" VerticalOptions="FillAndExpand">
+    
+    <StackLayout VerticalOptions="FillAndExpand">
         <ListView x:Name="listView"
                   VerticalOptions="FillAndExpand"
                   IsGroupingEnabled="True"
                   ItemsSource="{Binding Playlists}">
         <ListView.GroupHeaderTemplate>
-                <DataTemplate>
-                    <TextCell x:DataType="model:SpotifyPlaylistGroup" Text="{Binding Name}" Height="100"></TextCell>
-            </DataTemplate>
+                <DataTemplate x:DataType="model:SpotifyPlaylistGroup">
+                    <ViewCell>
+                        <Label Text="{Binding Name}"
+                               BackgroundColor="LightGray"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               Padding="10"></Label>
+                    </ViewCell>
+                </DataTemplate>
         </ListView.GroupHeaderTemplate>
         <ListView.ItemTemplate >
             <DataTemplate  x:DataType="model:SpotifyTrackModel">
@@ -24,8 +31,10 @@
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>
-    </StackLayout>-->
-    <VerticalStackLayout Margin="10" BindableLayout.ItemsSource="{Binding Playlists}">
+    </StackLayout>
+    
+    
+    <!--<VerticalStackLayout Margin="10" BindableLayout.ItemsSource="{Binding Playlists}">
         <BindableLayout.ItemTemplate>
             <DataTemplate x:DataType="model:SpotifyPlaylistModel">
                 <mct:Expander x:Name="thisExpander" VerticalOptions="StartAndExpand">
@@ -49,16 +58,16 @@
                             <Label Text="{Binding Artist}"></Label>
                         </Grid>
                     </mct:Expander.Content>
-                    <!--<VerticalStackLayout Margin="5" x:DataType="viewmodel:SpotifyPlaylistsPage" BindableLayout.ItemsSource="{Binding Playlists}">
+                    --><!--<VerticalStackLayout Margin="5" x:DataType="viewmodel:SpotifyPlaylistsPage" BindableLayout.ItemsSource="{Binding Playlists}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="model:SpotifyTrackModel">
                                 <Label Text="{Binding Name}" TextColor="Black" FontSize="18" ></Label>
                                 --><!--<TextCell Text="{Binding Name}" Detail="{Binding Artist}"></TextCell>--><!--
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
-                    </VerticalStackLayout>-->
-                </mct:Expander>
-            </DataTemplate>
-        </BindableLayout.ItemTemplate>
-    </VerticalStackLayout>
+                    </VerticalStackLayout>--><!--
+                </mct:Expander>-->
+            <!--</DataTemplate>
+        </BindableLayout.ItemTemplate>-->
+    <!--</VerticalStackLayout>-->
 </ContentPage>

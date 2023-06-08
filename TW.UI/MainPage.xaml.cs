@@ -10,7 +10,8 @@ namespace TW.UI
         private readonly ISpotifyClientService _spotifyService;
         private readonly IYoutubeClientService _youtubeService;
 
-        private bool _isLoggedIn = false;
+        private bool _youtubeIsLoggedIn = false;
+        private bool _spotifyIsLoggedIn = false;
 
         public delegate void PopupDelegate();
         public MainPage(ISpotifyClientService spotifyService, IYoutubeClientService youtubeService)
@@ -18,9 +19,24 @@ namespace TW.UI
 
             InitializeComponent();
             CheckYoutubeLoginStatus();
+            CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
         }
+
+        private async void CheckSpotifyLoginStatus()
+        {
+            //_spotifyIsLoggedIn = await _spotifyService.IsLoggedIn();
+
+            if (_spotifyIsLoggedIn)
+            {
+                SporifyButton.BackgroundColor = Colors.AntiqueWhite;
+                SporifyButton.Text = "SpotifyPlaylists";
+                SporifyButton.TextColor = Colors.Gray;
+            }
+
+        }
+
         private async void PopupClosed()
         {
             await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
@@ -34,13 +50,13 @@ namespace TW.UI
         }
         private async void OnYoutubeButtonClicked(object sender, EventArgs e)
         {
-            if (_isLoggedIn == true)
+            if (_youtubeIsLoggedIn == true)
             {
                 await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
             }
             else
             {
-                Uri loginUri = _youtubeService.AuthorizeYoutube();
+                Uri loginUri = _youtubeService.GetAuthorizationLink();
                 //this.ShowPopup(new YoutubeAuthorizationPopup(loginUri));
                 BrowserLaunchOptions options = new BrowserLaunchOptions()
                 {
@@ -53,14 +69,29 @@ namespace TW.UI
         private async void CheckYoutubeLoginStatus()
         {
             var expirationDate = await SecureStorage.Default.GetAsync("ExpirationDate");
-            var addingDate = await SecureStorage.Default.GetAsync("AddingDate");
-            if (expirationDate != null && addingDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
+            var refreshToken = await SecureStorage.Default.GetAsync("RefreshToken");
+
+            if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
             {
-                _isLoggedIn=true;
+                _youtubeIsLoggedIn=true;
                 YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
                 YoutubeButton.Text = "PlaylistPage";
                 YoutubeButton.TextColor = Colors.Gray;
             }
+            else if(expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0 && refreshToken != null)
+            {
+                 _youtubeService.RefreshAccessToken();
+                _youtubeIsLoggedIn = true;
+                YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
+                YoutubeButton.Text = "PlaylistPage";
+                YoutubeButton.TextColor = Colors.Gray;
+            }
+        }
+
+        private void LogOutYoutube_Clicked(object sender, EventArgs e)
+        {
+            _youtubeIsLoggedIn = false;
+            SecureStorage.Default.RemoveAll();
         }
     }
 }

@@ -18,7 +18,5 @@ namespace TW.UI.Services.Youtube
         [JsonPropertyName("expires_in")]
         public int ExpiresInSeconds { get; set; }
         public DateTime ExpirationDate { get; set; }
-        public DateTime AddingDate { get; set; }
-
     }
 }

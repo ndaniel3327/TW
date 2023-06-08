@@ -11,8 +11,8 @@ namespace TW.Infrastracture.Services.Spotify
 {
     public class SpotifyServerService : ISpotifyServerService
     {
-        public bool IsLoggedIn { get; set; }
-
+       
+        private bool _isLoggedIn = false;
         private SpotifyClient _spotifyClient;
         private IPlaylistsClient _spotifyClientPlaylists => _spotifyClient.Playlists;
         private readonly string _codeChallengeMethod = "S256";
@@ -58,6 +58,9 @@ namespace TW.Infrastracture.Services.Spotify
             var initialResponse = await new OAuthClient().RequestToken(
               new PKCETokenRequest(_clientId, code, new Uri(_appSettings.SpotifyCallbackEndpoint), _verifier)
             );
+
+            var tResponse = new { AccessToken=initialResponse.AccessToken};
+
             //Automatically refresh tokens with PKCEAuthenticator
             var authenticator = new PKCEAuthenticator(_clientId, initialResponse);
 
@@ -65,8 +68,8 @@ namespace TW.Infrastracture.Services.Spotify
               .WithAuthenticator(authenticator);
 
             _spotifyClient = new SpotifyClient(config);
-
-            IsLoggedIn = true;
+            
+            _isLoggedIn = true;
         }
         public async Task<List<Playlist>> GetPlaylists()
         {
