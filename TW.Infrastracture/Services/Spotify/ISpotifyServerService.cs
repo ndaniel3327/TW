@@ -9,7 +9,7 @@ namespace TW.Infrastracture.Services.Spotify
     public interface ISpotifyServerService
     {
         Task<Uri> AuthorizeWithPKCE();
-        Task GetCallback(string code);
+        Task<PKCETokenResponse> GetCallback(string code);
         Task<List<Playlist>> GetPlaylists();
     }
 }

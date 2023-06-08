@@ -6,6 +6,7 @@ using System.Linq;
 using AutoMapper;
 using TW.Infrastructure.Models;
 using TW.Infrastracture.AppSettings;
+using System.Text.Json;
 
 namespace TW.Infrastracture.Services.Spotify
 {
@@ -52,14 +53,13 @@ namespace TW.Infrastracture.Services.Spotify
         }
 
         // This method should be called from your web-server when the user visits "http://localhost:5000/api/Spotify/callback"
-        public async Task GetCallback(string code)
+        public async Task<PKCETokenResponse> GetCallback(string code)
         {
             //TODO: Forward exception for every possible null
             var initialResponse = await new OAuthClient().RequestToken(
               new PKCETokenRequest(_clientId, code, new Uri(_appSettings.SpotifyCallbackEndpoint), _verifier)
             );
-
-            var tResponse = new { AccessToken=initialResponse.AccessToken};
+            return initialResponse;
 
             //Automatically refresh tokens with PKCEAuthenticator
             var authenticator = new PKCEAuthenticator(_clientId, initialResponse);

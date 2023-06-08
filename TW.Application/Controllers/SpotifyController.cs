@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swan.Formatters;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TW.Infrastracture.Services.Spotify;
 using TW.Infrastructure.Models;
@@ -29,9 +31,11 @@ namespace TW.Application.Controllers
         [HttpGet("callback")]
         public async Task<ActionResult> GetCallback([FromQuery]string code)
         {
-            await _spotifyService.GetCallback(code);
+            var result = await _spotifyService.GetCallback(code);
 
-            return Ok();
+            var response = new { AccessToken = result.AccessToken, ExpiresInSeconds = result.ExpiresIn, RefreshToken = result.RefreshToken, CreatedAt = result.CreatedAt };
+
+            return Ok(response);
         }
 
         [HttpGet("playlists")]
