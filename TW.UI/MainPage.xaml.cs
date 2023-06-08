@@ -10,12 +10,14 @@ namespace TW.UI
         private readonly ISpotifyClientService _spotifyService;
         private readonly IYoutubeClientService _youtubeService;
 
+        private bool _isLoggedIn = false;
+
         public delegate void PopupDelegate();
         public MainPage(ISpotifyClientService spotifyService, IYoutubeClientService youtubeService)
         {
 
             InitializeComponent();
-
+            CheckYoutubeLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
         }
@@ -32,19 +34,33 @@ namespace TW.UI
         }
         private async void OnYoutubeButtonClicked(object sender, EventArgs e)
         {
-            Uri loginUri = _youtubeService.AuthorizeYoutube();
-            //this.ShowPopup(new YoutubeAuthorizationPopup(loginUri));
-            BrowserLaunchOptions options = new BrowserLaunchOptions()
+            if (_isLoggedIn == true)
             {
-                LaunchMode = BrowserLaunchMode.SystemPreferred,
+                await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
+            }
+            else
+            {
+                Uri loginUri = _youtubeService.AuthorizeYoutube();
+                //this.ShowPopup(new YoutubeAuthorizationPopup(loginUri));
+                BrowserLaunchOptions options = new BrowserLaunchOptions()
+                {
+                    LaunchMode = BrowserLaunchMode.SystemPreferred,
 
-            };
-            await Browser.Default.OpenAsync(loginUri, options);
+                };
+                await Browser.Default.OpenAsync(loginUri, options);
+            }
         }
-
-        private async void SwipeGestureRecognizer_Swiped(object sender, SwipedEventArgs e)
+        private async void CheckYoutubeLoginStatus()
         {
-            await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
+            var expirationDate = await SecureStorage.Default.GetAsync("ExpirationDate");
+            var addingDate = await SecureStorage.Default.GetAsync("AddingDate");
+            if (expirationDate != null && addingDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
+            {
+                _isLoggedIn=true;
+                YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
+                YoutubeButton.Text = "PlaylistPage";
+                YoutubeButton.TextColor = Colors.Gray;
+            }
         }
     }
 }

@@ -4,9 +4,6 @@
              x:Class="TW.UI.MainPage">
 
     <ScrollView>
-        <ScrollView.GestureRecognizers>
-            <SwipeGestureRecognizer Direction="Left" Swiped="SwipeGestureRecognizer_Swiped"></SwipeGestureRecognizer>
-        </ScrollView.GestureRecognizers>
         <VerticalStackLayout
             Spacing="25"
             Padding="30,0"

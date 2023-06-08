@@ -29,13 +29,6 @@ namespace TW.UI
         {
             base.OnCreate(savedInstanceState);
 
-            var expirationDate = await SecureStorage.Default.GetAsync("ExpirationDate");
-            var addingDate = await SecureStorage.Default.GetAsync("AddingDate");
-            if (expirationDate != null && addingDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
-            {
-                await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
-            }
-
             var uri = Intent?.Data;   
         
             if ( uri != null && uri.ToString().StartsWith("com.googleusercontent.apps.829868223814-gn9dbtit6si40k2vd7thblkfi4a1lv4i"))

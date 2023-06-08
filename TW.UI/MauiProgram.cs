@@ -1,11 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using TW.UI.Pages;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
-using TW.UI.ViewModels;
 
 namespace TW.UI
 {
@@ -18,10 +15,6 @@ namespace TW.UI
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitCore()
-                //.ConfigureEssentials(e =>
-                //{
-                //    e.AddAppAction(new AppAction("id1", "Messages", icon: "messages"));
-                //})
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -29,12 +22,9 @@ namespace TW.UI
                 });
             builder.Services.AddSingleton<ISpotifyClientService, SpotifyClientService>();
             builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
-            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<SpotifyPlaylistsPage>();
-            builder.Services.AddSingleton<YoutubePlaylistsPage>();
-
-            //builder.Services.AddSingleton<SpotifyAuthorizationPopup>();
-            //builder.Services.AddSingleton<SpotifyAuthorizationPopupViewModel>();
+            builder.Services.AddTransient<YoutubePlaylistsPage>();
 
             return builder.Build();
         }
