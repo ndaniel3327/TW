@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Views;
 using System.ComponentModel;
 using TW.Infrastracture.Constants;
 using TW.UI.Helpers;
+using TW.UI.Services.Spotify;
 using TW.UI.ViewModels;
 
 namespace TW.UI.Pages;
@@ -30,8 +31,14 @@ public partial class SpotifyAuthorizationPopup : Popup
                 var result = await _httpClient.GetAsync(url);
                 if (result.IsSuccessStatusCode)
                 {
-                    Close();
+                    var content = await result.Content.ReadAsStringAsync();
+                    var tokenDetails = JsonSerializerHelper.DeserializeJson<SpotifyTokenDetails>(content);
 
+                    tokenDetails.SpotifyTokenExpiresInSeconds = 10;
+
+                    tokenDetails.SpotifyTokenExpirationDate = DateTime.Now.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
+                    await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyTokenExpirationDate), tokenDetails.SpotifyTokenExpirationDate.ToString());
+                    Close();
                 }
             });
         }

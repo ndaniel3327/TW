@@ -7,7 +7,7 @@ namespace TW.UI.Services.Spotify
     {
         Task<Uri> AuthorizeSpotify();
         Task<List<SpotifyPlaylistModel>> GetPlaylists();
-        Task<bool> IsLoggedIn();
+        Task<bool> RefreshAccessToken();
     }
 }
 

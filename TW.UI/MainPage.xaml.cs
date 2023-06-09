@@ -19,22 +19,8 @@ namespace TW.UI
 
             InitializeComponent();
             CheckYoutubeLoginStatus();
-            CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
-        }
-
-        private async void CheckSpotifyLoginStatus()
-        {
-            //_spotifyIsLoggedIn = await _spotifyService.IsLoggedIn();
-
-            if (_spotifyIsLoggedIn)
-            {
-                SporifyButton.BackgroundColor = Colors.AntiqueWhite;
-                SporifyButton.Text = "SpotifyPlaylists";
-                SporifyButton.TextColor = Colors.Gray;
-            }
-
         }
 
         private async void PopupClosed()
@@ -68,24 +54,47 @@ namespace TW.UI
         }
         private async void CheckYoutubeLoginStatus()
         {
-            var expirationDate = await SecureStorage.Default.GetAsync("ExpirationDate");
-            var refreshToken = await SecureStorage.Default.GetAsync("RefreshToken");
+            var expirationDate = await SecureStorage.Default.GetAsync("YoutubeTokenExpirationDate");
+            var refreshToken = await SecureStorage.Default.GetAsync("YoutubeRefreshToken");
 
             if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
             {
                 _youtubeIsLoggedIn=true;
-                YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
-                YoutubeButton.Text = "PlaylistPage";
-                YoutubeButton.TextColor = Colors.Gray;
+                ChangeButtonStyleForLoggedInUser("YoutubePlaylists");
             }
             else if(expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0 && refreshToken != null)
             {
                  _youtubeService.RefreshAccessToken();
                 _youtubeIsLoggedIn = true;
-                YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
-                YoutubeButton.Text = "PlaylistPage";
-                YoutubeButton.TextColor = Colors.Gray;
+                ChangeButtonStyleForLoggedInUser("YoutubePlaylists");
+
             }
+        }
+        private async void CheckSpotifyLoginStatus()
+        {
+            var expirationDate = await SecureStorage.Default.GetAsync("SpotifyTokenExpirationDate");
+            var refreshToken = await SecureStorage.Default.GetAsync("SpotifyRefreshToken");
+
+            if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
+            {
+                _spotifyIsLoggedIn = true;
+                ChangeButtonStyleForLoggedInUser("SpotifyPlaylists");
+            }
+            else if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0 && refreshToken != null)
+            {
+                var isSuccess = await _spotifyService.RefreshAccessToken();
+                if (isSuccess)
+                {
+                    _spotifyIsLoggedIn = true;
+                    ChangeButtonStyleForLoggedInUser("SpotifyPlaylists");
+                }
+            }
+        }
+        void ChangeButtonStyleForLoggedInUser(string text)
+        {
+            YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
+            YoutubeButton.Text = text;
+            YoutubeButton.TextColor = Colors.Gray;
         }
 
         private void LogOutYoutube_Clicked(object sender, EventArgs e)

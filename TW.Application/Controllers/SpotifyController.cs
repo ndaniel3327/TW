@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Swan.Formatters;
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using TW.Infrastracture.Services.Spotify;
 using TW.Infrastructure.Models;
@@ -33,7 +31,7 @@ namespace TW.Application.Controllers
         {
             var result = await _spotifyService.GetCallback(code);
 
-            var response = new { AccessToken = result.AccessToken, ExpiresInSeconds = result.ExpiresIn, RefreshToken = result.RefreshToken, CreatedAt = result.CreatedAt };
+            var response = new { AccessToken = result.AccessToken, ExpiresInSeconds = result.ExpiresIn, RefreshToken = result.RefreshToken, CreatedAt = result.CreatedAt , TokenType=result.TokenType};
 
             return Ok(response);
         }
@@ -46,15 +44,15 @@ namespace TW.Application.Controllers
             return Ok(playlists);
         }
 
-        //[HttpGet("isloggedin")]
-        //public async Task<ActionResult<bool>> IsLoggedIn()
-        //{
-        //    var isLoggedIn = await Task.Run(() => _spotifyService.IsLoggedIn);
-        //    return Ok(isLoggedIn);
-        //}
+        [HttpPost("refreshToken")]
+        public async Task<ActionResult<int>> RefrehToken([FromBody]string refreshToken)
+        {
+            var result = await _spotifyService.RefreshAccessToken(refreshToken);
 
+            var response = new {ExpiresInSeconds=result.ExpiresIn,CreatedAt=result.CreatedAt};
+
+            return Ok(response);
+        }
         // TODO:(partially) Add Middleware to forward exceptions
-
-
     }
 }

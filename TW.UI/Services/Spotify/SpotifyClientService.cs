@@ -32,6 +32,7 @@ namespace TW.UI.Services.Spotify
                 return null;
             }
         }
+
         public async Task<List<SpotifyPlaylistModel>> GetPlaylists()
         {
             HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.PlaylistsEndpoint);
@@ -46,19 +47,21 @@ namespace TW.UI.Services.Spotify
                 return null;
             }
         }
-        public async Task<bool> IsLoggedIn()
+
+        public async Task<bool> RefreshAccessToken()
         {
-            HttpResponseMessage responseMessage = await _httpClient.GetAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.IsLoggedInEndpoint);
+            HttpResponseMessage responseMessage = await _httpClient.PostAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.RefreshAccessTokenEndpoint, new StringContent( await SecureStorage.GetAsync("SpotifyRefreshToken")));
             if (responseMessage.IsSuccessStatusCode)
             {
-                string content = await responseMessage.Content.ReadAsStringAsync();
-                bool result = JsonSerializer.Deserialize<bool>(content);
-                return result;
+                var content = await responseMessage.Content.ReadAsStringAsync();
+                var tokenDetails = JsonSerializerHelper.DeserializeJson<SpotifyTokenDetails>(content);
+                tokenDetails.SpotifyTokenExpiresInSeconds = 10;
+                tokenDetails.SpotifyTokenExpirationDate=tokenDetails.SpotifyTokenCreatedAtDate.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
+                await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyTokenExpirationDate),
+                    tokenDetails.SpotifyTokenExpirationDate.ToString());
+                return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 }

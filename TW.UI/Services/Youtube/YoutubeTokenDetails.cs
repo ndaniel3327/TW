@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace TW.UI.Services.Youtube
 {
-    public class YoutubeAccessToken
+    public class YoutubeTokenDetails
+
     {
         [JsonPropertyName("access_token")]
-        public string AccessToken { get; set; }
+        public string YoutubeAccessToken { get; set; }
         [JsonPropertyName("refresh_token")]
-        public string RefreshToken { get; set; }
+        public string YoutubeRefreshToken { get; set; }
         [JsonPropertyName("token_type")]
-        public string TokenType { get; set; }
+        public string YoutubeTokenType { get; set; }
         [JsonPropertyName("expires_in")]
-        public int ExpiresInSeconds { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public int YoutubeExpiresInSeconds { get; set; }
+        public DateTime YoutubeTokenExpirationDate { get; set; }
     }
 }

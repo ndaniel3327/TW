@@ -32,15 +32,15 @@ namespace TW.UI.Services.Youtube
             var response = await httpClient.PostAsync(myUri, new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded"));
 
             var responseJson = await response.Content.ReadAsStringAsync();
-            var token = JsonSerializerHelper.DeserializeJson<YoutubeAccessToken>(responseJson);
-            token.ExpiresInSeconds = 10;
+            var token = JsonSerializerHelper.DeserializeJson<YoutubeTokenDetails>(responseJson);
+            token.YoutubeExpiresInSeconds = 10;
             var addingDate = DateTime.Now;
-            token.ExpirationDate = addingDate.AddSeconds(token.ExpiresInSeconds);
+            token.YoutubeTokenExpirationDate = addingDate.AddSeconds(token.YoutubeExpiresInSeconds);
 
-            await SecureStorage.Default.SetAsync(nameof(token.AccessToken), token.AccessToken);
-            await SecureStorage.Default.SetAsync(nameof(token.RefreshToken), token.RefreshToken);
-            await SecureStorage.Default.SetAsync(nameof(token.TokenType), token.TokenType);
-            await SecureStorage.Default.SetAsync(nameof(token.ExpirationDate), token.ExpirationDate.ToString());
+            await SecureStorage.Default.SetAsync(nameof(token.YoutubeAccessToken), token.YoutubeAccessToken);
+            await SecureStorage.Default.SetAsync(nameof(token.YoutubeRefreshToken), token.YoutubeRefreshToken);
+            await SecureStorage.Default.SetAsync(nameof(token.YoutubeTokenType), token.YoutubeTokenType);
+            await SecureStorage.Default.SetAsync(nameof(token.YoutubeTokenExpirationDate), token.YoutubeTokenExpirationDate.ToString());
 
 
             await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
@@ -48,8 +48,8 @@ namespace TW.UI.Services.Youtube
 
         public async Task<YoutubePlaylistGroup> GetYoutubePlaylists()
         {
-            string accessToken = await SecureStorage.Default.GetAsync("AccessToken");
-            string tokenType = await SecureStorage.Default.GetAsync("TokenType");
+            string accessToken = await SecureStorage.Default.GetAsync("YoutubeAccessToken");
+            string tokenType = await SecureStorage.Default.GetAsync("YoutubeTokenType");
 
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization
@@ -78,7 +78,7 @@ namespace TW.UI.Services.Youtube
 
         public async void RefreshAccessToken()
         {
-            string refreshToken = await SecureStorage.Default.GetAsync("RefreshToken");
+            string refreshToken = await SecureStorage.Default.GetAsync("YoutubeRefreshToken");
 
             var httpClient = new HttpClient();
 
@@ -90,14 +90,14 @@ namespace TW.UI.Services.Youtube
 
             var response = await httpClient.PostAsync(myUri, new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded"));
             var responseJson = await response.Content.ReadAsStringAsync();
-            var token = JsonSerializerHelper.DeserializeJson<YoutubeAccessToken>(responseJson);
-            token.ExpiresInSeconds = 10;
+            var token = JsonSerializerHelper.DeserializeJson<YoutubeTokenDetails>(responseJson);
+            token.YoutubeExpiresInSeconds = 10;
             var addingDate = DateTime.Now;
-            token.ExpirationDate = addingDate.AddSeconds(token.ExpiresInSeconds);
+            token.YoutubeTokenExpirationDate = addingDate.AddSeconds(token.YoutubeExpiresInSeconds);
 
-            await SecureStorage.Default.SetAsync(nameof(token.AccessToken), token.AccessToken);
-            await SecureStorage.Default.SetAsync(nameof(token.TokenType), token.TokenType);
-            await SecureStorage.Default.SetAsync(nameof(token.ExpirationDate), token.ExpirationDate.ToString());
+            await SecureStorage.Default.SetAsync(nameof(token.YoutubeAccessToken), token.YoutubeAccessToken);
+            await SecureStorage.Default.SetAsync(nameof(token.YoutubeTokenType), token.YoutubeTokenType);
+            await SecureStorage.Default.SetAsync(nameof(token.YoutubeTokenExpirationDate), token.YoutubeTokenExpirationDate.ToString());
         }
 
     }

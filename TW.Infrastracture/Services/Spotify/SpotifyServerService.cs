@@ -6,14 +6,11 @@ using System.Linq;
 using AutoMapper;
 using TW.Infrastructure.Models;
 using TW.Infrastracture.AppSettings;
-using System.Text.Json;
 
 namespace TW.Infrastracture.Services.Spotify
 {
     public class SpotifyServerService : ISpotifyServerService
     {
-       
-        private bool _isLoggedIn = false;
         private SpotifyClient _spotifyClient;
         private IPlaylistsClient _spotifyClientPlaylists => _spotifyClient.Playlists;
         private readonly string _codeChallengeMethod = "S256";
@@ -59,17 +56,10 @@ namespace TW.Infrastracture.Services.Spotify
             var initialResponse = await new OAuthClient().RequestToken(
               new PKCETokenRequest(_clientId, code, new Uri(_appSettings.SpotifyCallbackEndpoint), _verifier)
             );
+
+            _spotifyClient = new SpotifyClient(initialResponse.AccessToken);
+
             return initialResponse;
-
-            //Automatically refresh tokens with PKCEAuthenticator
-            var authenticator = new PKCEAuthenticator(_clientId, initialResponse);
-
-            var config = SpotifyClientConfig.CreateDefault()
-              .WithAuthenticator(authenticator);
-
-            _spotifyClient = new SpotifyClient(config);
-            
-            _isLoggedIn = true;
         }
         public async Task<List<Playlist>> GetPlaylists()
         {
@@ -88,26 +78,15 @@ namespace TW.Infrastracture.Services.Spotify
                 playlist.Tracks = _mapper.Map<List<Track>>(myTracks);
 
             }
-            //List<Paging<PlaylistTrack<IPlayableItem>>> listOfPagingPlaylistsWithTracks = new();
-            //foreach (var playlist in result.Items)
-            //{
-            //    listOfPagingPlaylistsWithTracks.Add(await _spotifyClient.Playlists.GetItems(playlist.Id));
-            //}
-
-            //List<Playlist> finalPlaylist = new ();
-            //foreach (var playlist in listOfPagingPlaylistsWithTracks)
-            //{
-            //    finalPlaylist.Where(e=>e.Tracks) = _mapper.Map<List<Track>>(playlist.Items);
-            //}
-            //List<Playlist> playlists = new();
-            //for (int i = 0; i < finalPlaylist.Count; i++)
-            //{
-            //    playlists[i].Name = playlistNames[i];
-            //    playlists[i].Tracks = finalPlaylist[i];
-            //}
-
             return playlists;
 
+        }
+
+        public async Task<PKCETokenResponse> RefreshAccessToken(string refreshToken)
+        {
+            var newResponse = await new OAuthClient().RequestToken( new PKCETokenRefreshRequest(_clientId, refreshToken));
+            _spotifyClient = new SpotifyClient(newResponse.AccessToken);
+            return newResponse;
         }
     }
 }
