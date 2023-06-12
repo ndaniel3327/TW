@@ -16,26 +16,38 @@ namespace TW.UI
         public delegate void PopupDelegate();
         public MainPage(ISpotifyClientService spotifyService, IYoutubeClientService youtubeService)
         {
-
             InitializeComponent();
             CheckYoutubeLoginStatus();
+            CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
         }
 
         private async void PopupClosed()
         {
+            _spotifyIsLoggedIn = true;
+            ChangeSpotifyButtonStyleForLoggedInUser();
             await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
         }
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)
         {
+            CheckSpotifyLoginStatus();
+            if (_spotifyIsLoggedIn)
+            {
+                await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
+            }
+            else
+            {
                 Uri loginUri = await _spotifyService.AuthorizeSpotify();
                 PopupDelegate popupDelegate = PopupClosed;
                 this.ShowPopup(new SpotifyAuthorizationPopup(loginUri, popupDelegate));
+            }
         }
+
         private async void OnYoutubeButtonClicked(object sender, EventArgs e)
         {
+            CheckYoutubeLoginStatus();
             if (_youtubeIsLoggedIn == true)
             {
                 await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
@@ -59,15 +71,18 @@ namespace TW.UI
 
             if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
             {
-                _youtubeIsLoggedIn=true;
-                ChangeButtonStyleForLoggedInUser("YoutubePlaylists");
-            }
-            else if(expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0 && refreshToken != null)
-            {
-                 _youtubeService.RefreshAccessToken();
                 _youtubeIsLoggedIn = true;
-                ChangeButtonStyleForLoggedInUser("YoutubePlaylists");
-
+                ChangeYoutubeButtonStyleForLoggedInUser();
+            }
+            else if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0 && refreshToken != null)
+            {
+                _youtubeService.RefreshAccessToken();
+                _youtubeIsLoggedIn = true;
+                ChangeYoutubeButtonStyleForLoggedInUser();
+            }
+            else
+            {
+                _youtubeIsLoggedIn = false;
             }
         }
         private async void CheckSpotifyLoginStatus()
@@ -78,7 +93,7 @@ namespace TW.UI
             if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
             {
                 _spotifyIsLoggedIn = true;
-                ChangeButtonStyleForLoggedInUser("SpotifyPlaylists");
+                ChangeSpotifyButtonStyleForLoggedInUser();
             }
             else if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0 && refreshToken != null)
             {
@@ -86,16 +101,27 @@ namespace TW.UI
                 if (isSuccess)
                 {
                     _spotifyIsLoggedIn = true;
-                    ChangeButtonStyleForLoggedInUser("SpotifyPlaylists");
+                    ChangeSpotifyButtonStyleForLoggedInUser();
                 }
             }
+            else
+            {
+                _spotifyIsLoggedIn=false;
+            }
         }
-        void ChangeButtonStyleForLoggedInUser(string text)
+        void ChangeSpotifyButtonStyleForLoggedInUser()
+        {
+            SpotifyButton.BackgroundColor = Colors.AntiqueWhite;
+            SpotifyButton.Text = "SpotifyPlaylists";
+            SpotifyButton.TextColor = Colors.Gray;
+        }
+        void ChangeYoutubeButtonStyleForLoggedInUser()
         {
             YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
-            YoutubeButton.Text = text;
+            YoutubeButton.Text = "YoutubePlaylists";
             YoutubeButton.TextColor = Colors.Gray;
         }
+
 
         private void LogOutYoutube_Clicked(object sender, EventArgs e)
         {

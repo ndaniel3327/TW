@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Headers;
+using System.Text.Json;
 using TW.Infrastracture.Constants;
 using TW.UI.Helpers;
 using TW.UI.Models;
@@ -50,7 +51,9 @@ namespace TW.UI.Services.Spotify
 
         public async Task<bool> RefreshAccessToken()
         {
-            HttpResponseMessage responseMessage = await _httpClient.PostAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.RefreshAccessTokenEndpoint, new StringContent( await SecureStorage.GetAsync("SpotifyRefreshToken")));
+            var postContent =new StringContent(JsonSerializer.Serialize(await SecureStorage.GetAsync("SpotifyRefreshToken")));
+            postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage responseMessage = await _httpClient.PostAsync(_httpsHelper.ServerRootUrl + SpotifyConstants.RefreshAccessTokenEndpoint,postContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 var content = await responseMessage.Content.ReadAsStringAsync();
@@ -59,6 +62,7 @@ namespace TW.UI.Services.Spotify
                 tokenDetails.SpotifyTokenExpirationDate=tokenDetails.SpotifyTokenCreatedAtDate.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
                 await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyTokenExpirationDate),
                     tokenDetails.SpotifyTokenExpirationDate.ToString());
+                await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyRefreshToken), tokenDetails.SpotifyRefreshToken);
                 return true;
             }
             return false;

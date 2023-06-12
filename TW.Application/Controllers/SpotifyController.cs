@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -45,13 +47,13 @@ namespace TW.Application.Controllers
         }
 
         [HttpPost("refreshToken")]
-        public async Task<ActionResult<int>> RefrehToken([FromBody]string refreshToken)
+        public async Task<ActionResult> RefrehToken([FromBody]string refreshToken)
         {
             var result = await _spotifyService.RefreshAccessToken(refreshToken);
 
-            var response = new {ExpiresInSeconds=result.ExpiresIn,CreatedAt=result.CreatedAt};
-
-            return Ok(response);
+            var response = new {RefreshToken=result.RefreshToken , ExpiresInSeconds=result.ExpiresIn , CreatedAt=result.CreatedAt};
+            var serializedResponse = JsonConvert.SerializeObject(response);
+            return Ok(serializedResponse);
         }
         // TODO:(partially) Add Middleware to forward exceptions
     }

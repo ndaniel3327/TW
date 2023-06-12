@@ -38,6 +38,7 @@ public partial class SpotifyAuthorizationPopup : Popup
 
                     tokenDetails.SpotifyTokenExpirationDate = DateTime.Now.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
                     await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyTokenExpirationDate), tokenDetails.SpotifyTokenExpirationDate.ToString());
+                    await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyRefreshToken), tokenDetails.SpotifyRefreshToken.ToString());
                     Close();
                 }
             });

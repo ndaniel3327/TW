@@ -16,7 +16,7 @@
                 HorizontalOptions="Center" />
 
             <Button
-                x:Name="SporifyButton"
+                x:Name="SpotifyButton"
                 Text="LogIn with Spotify"
                 Clicked="OnSpotifyButtonClicked"
                 HorizontalOptions="Center" />

@@ -84,9 +84,20 @@ namespace TW.Infrastracture.Services.Spotify
 
         public async Task<PKCETokenResponse> RefreshAccessToken(string refreshToken)
         {
-            var newResponse = await new OAuthClient().RequestToken( new PKCETokenRefreshRequest(_clientId, refreshToken));
-            _spotifyClient = new SpotifyClient(newResponse.AccessToken);
-            return newResponse;
+
+            try
+            {
+                var newResponse = await new OAuthClient().RequestToken(new PKCETokenRefreshRequest(_clientId, refreshToken));
+                _spotifyClient = new SpotifyClient(newResponse.AccessToken);
+                return newResponse;
+            }
+            catch (Exception ex)
+            {
+
+            }
+           
+            return new PKCETokenResponse();
+
         }
     }
 }
