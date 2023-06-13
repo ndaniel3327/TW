@@ -58,8 +58,10 @@ namespace TW.UI.Services.Spotify
             {
                 var content = await responseMessage.Content.ReadAsStringAsync();
                 var tokenDetails = JsonSerializerHelper.DeserializeJson<SpotifyTokenDetails>(content);
+
                 tokenDetails.SpotifyTokenExpiresInSeconds = 10;
                 tokenDetails.SpotifyTokenExpirationDate=tokenDetails.SpotifyTokenCreatedAtDate.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
+
                 await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyTokenExpirationDate),
                     tokenDetails.SpotifyTokenExpirationDate.ToString());
                 await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyRefreshToken), tokenDetails.SpotifyRefreshToken);

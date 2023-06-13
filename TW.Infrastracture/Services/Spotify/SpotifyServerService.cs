@@ -36,7 +36,7 @@ namespace TW.Infrastracture.Services.Spotify
             //TODO Invoke an awaitable method that is showing the loading screen
             //TODO: Add Null verifier where neccesary
             var loginRequest = new LoginRequest(
-              new Uri(_appSettings.SpotifyCallbackEndpoint),
+              new Uri("oauth://localhost:5001/api/Spotify/callback"),
               _clientId,
               LoginRequest.ResponseType.Code
             )
@@ -54,7 +54,7 @@ namespace TW.Infrastracture.Services.Spotify
         {
             //TODO: Forward exception for every possible null
             var initialResponse = await new OAuthClient().RequestToken(
-              new PKCETokenRequest(_clientId, code, new Uri(_appSettings.SpotifyCallbackEndpoint), _verifier)
+              new PKCETokenRequest(_clientId, code, new Uri("oauth://localhost:5001/api/Spotify/callback"), _verifier)
             );
 
             _spotifyClient = new SpotifyClient(initialResponse.AccessToken);

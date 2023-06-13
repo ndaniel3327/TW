@@ -17,18 +17,19 @@ public partial class SpotifyAuthorizationPopup : Popup
         BindingContext = new SpotifyAuthorizationPopupViewModel(loginUri);
         _myDelegate = myDelegate;
     }
-    private void webView_Navigating(object sender, WebNavigatingEventArgs e)
+    private async void webView_Navigating(object sender, WebNavigatingEventArgs e)
     {
-        if (e.Url.StartsWith("https://localhost"))
+        if (e.Url.StartsWith("oauth://localhost"))
         {
             e.Cancel = true;
-            Task.Run(async () =>
+            await Task.Run(async () =>
             {
                 var _httpsHelper = new HttpsConnectionHelper(port: SpotifyConstants.HTTPSPort);
                 var _httpClient = _httpsHelper.HttpClient;
 
-                var url = e.Url.Replace("localhost", "10.0.2.2");
-                var result = await _httpClient.GetAsync(url);
+                var androidUrl = e.Url.Replace("localhost", "10.0.2.2");
+                var httpsAndroidUrl = androidUrl.Replace("oauth", "https");
+                var result = await _httpClient.GetAsync(httpsAndroidUrl);
                 if (result.IsSuccessStatusCode)
                 {
                     var content = await result.Content.ReadAsStringAsync();
@@ -42,6 +43,11 @@ public partial class SpotifyAuthorizationPopup : Popup
                     Close();
                 }
             });
+        }
+        else if (e.Url.StartsWith("https://accounts.spotify.com/en/login/google?"))
+        {
+            e.Cancel = true;
+            await Browser.OpenAsync(e.Url);
         }
     }
     private void Popup_Closed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)

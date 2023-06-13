@@ -17,7 +17,7 @@ namespace TW.UI
         public MainPage(ISpotifyClientService spotifyService, IYoutubeClientService youtubeService)
         {
             InitializeComponent();
-            CheckYoutubeLoginStatus();
+            //CheckYoutubeLoginStatus();
             CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
@@ -25,14 +25,17 @@ namespace TW.UI
 
         private async void PopupClosed()
         {
-            _spotifyIsLoggedIn = true;
-            ChangeSpotifyButtonStyleForLoggedInUser();
-            await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
+            CheckSpotifyLoginStatus();
+            if(_spotifyIsLoggedIn)
+            {
+                await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
+            }
         }
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)
         {
             CheckSpotifyLoginStatus();
+            Thread.Sleep(1000);
             if (_spotifyIsLoggedIn)
             {
                 await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
@@ -69,12 +72,12 @@ namespace TW.UI
             var expirationDate = await SecureStorage.Default.GetAsync("YoutubeTokenExpirationDate");
             var refreshToken = await SecureStorage.Default.GetAsync("YoutubeRefreshToken");
 
-            if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
+            if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0)
             {
                 _youtubeIsLoggedIn = true;
                 ChangeYoutubeButtonStyleForLoggedInUser();
             }
-            else if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0 && refreshToken != null)
+            else if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0 && refreshToken != null)
             {
                 _youtubeService.RefreshAccessToken();
                 _youtubeIsLoggedIn = true;
@@ -90,12 +93,12 @@ namespace TW.UI
             var expirationDate = await SecureStorage.Default.GetAsync("SpotifyTokenExpirationDate");
             var refreshToken = await SecureStorage.Default.GetAsync("SpotifyRefreshToken");
 
-            if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
+            if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0)
             {
                 _spotifyIsLoggedIn = true;
                 ChangeSpotifyButtonStyleForLoggedInUser();
             }
-            else if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) < 0 && refreshToken != null)
+            else if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0 && refreshToken != null)
             {
                 var isSuccess = await _spotifyService.RefreshAccessToken();
                 if (isSuccess)
