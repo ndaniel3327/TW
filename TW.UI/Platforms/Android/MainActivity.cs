@@ -2,10 +2,8 @@
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using TW.Infrastracture.Constants;
-using TW.UI.Constants;
+using System.Web;
 using TW.UI.Helpers;
-using TW.UI.Pages;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 
@@ -46,31 +44,18 @@ namespace TW.UI
                 var code = uriSubstring[0].Substring(uriSubstring[0].IndexOf("=") + 1);
 
                 var youtubeService = ServiceHelper.GetService<IYoutubeClientService>();
-
                 youtubeService.GetAuthorizationToken(code);
 
             }
             else if (uri != null && uri.ToString().StartsWith("oauth://localhost:5001/api/Spotify/callback?code"))
             {
-                var _httpsHelper = new HttpsConnectionHelper(port: SpotifyConstants.HTTPSPort);
-                var _httpClient = _httpsHelper.HttpClient;
+                string code = HttpUtility.ParseQueryString(uri.Query).Get("code");
 
-                var androidurl = uri.ToString().Replace("localhost", "10.0.2.2");
-                var httpsAndroidUrl = androidurl.Replace("oauth", "https");
-                var result = await _httpClient.GetAsync(httpsAndroidUrl);
-                if (result.IsSuccessStatusCode)
-                {
-                    var content = await result.Content.ReadAsStringAsync();
-                    var tokenDetails = JsonSerializerHelper.DeserializeJson<SpotifyTokenDetails>(content);
+                var spotifyService = ServiceHelper.GetService<ISpotifyService>();
+                await spotifyService.ExchangeCodeForToken(code);
 
-                    tokenDetails.SpotifyTokenExpiresInSeconds = 10;
-
-                    tokenDetails.SpotifyTokenExpirationDate = DateTime.Now.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
-                    await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyTokenExpirationDate), tokenDetails.SpotifyTokenExpirationDate.ToString());
-                    await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyRefreshToken), tokenDetails.SpotifyRefreshToken.ToString());
-
-                    await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
-                }
+                var mainPage = ServiceHelper.GetService<MainPage>();
+                mainPage.SpotifyIsLoggedIn= true;
             }
         }
     }

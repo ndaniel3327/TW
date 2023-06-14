@@ -54,8 +54,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 	  <PackageReference Include="CommunityToolkit.Maui" Version="2.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+	  <PackageReference Include="SpotifyAPI.Web" Version="7.0.0" />
+	  <PackageReference Include="SpotifyAPI.Web.Auth" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -65,12 +68,13 @@
 	  <MauiXaml Update="Pages\SpotifyPlaylistsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\Popups\YoutubeAuthorizationPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Pages\YoutubePlaylistsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\Youtube\" />
 	</ItemGroup>
 
 </Project>

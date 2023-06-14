@@ -1,13 +1,13 @@
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Runtime.CompilerServices;
-using TW.UI.Models;
+using TW.UI.Models.Spotify.View;
 using TW.UI.Services.Spotify;
 
 namespace TW.UI.Pages;
 
 public partial class SpotifyPlaylistsPage : ContentPage
 {
-    private readonly ISpotifyClientService _spotifyCService;
+    private readonly ISpotifyService _spotifyCService;
     private List<SpotifyPlaylistGroup> _playlists;
     public List<SpotifyPlaylistGroup> Playlists
     {
@@ -25,7 +25,7 @@ public partial class SpotifyPlaylistsPage : ContentPage
         }
     }
 
-    public SpotifyPlaylistsPage(ISpotifyClientService spotifyCService)
+    public SpotifyPlaylistsPage(ISpotifyService spotifyCService)
     {
         InitializeComponent();
 

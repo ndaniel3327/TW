@@ -2,9 +2,9 @@
 
 namespace TW.Infrastructure.Models
 {
-    public class Track
+    public class SpotifyTrack
     {
-        public List<Artist> Artists { get; set; }
+        public List<SpotifyArtist> Artists { get; set; }
 
         public string Artist => string.Join(" and ",Artists);
 

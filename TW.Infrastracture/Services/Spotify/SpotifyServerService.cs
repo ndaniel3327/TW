@@ -61,11 +61,11 @@ namespace TW.Infrastracture.Services.Spotify
 
             return initialResponse;
         }
-        public async Task<List<Playlist>> GetPlaylists()
+        public async Task<List<SpotifyPlaylist>> GetPlaylists()
         {
             var result = await _spotifyClientPlaylists.CurrentUsers();
 
-            var playlists = result.Items.Select(x => new Playlist()
+            var playlists = result.Items.Select(x => new SpotifyPlaylist()
             {
                 Id = x.Id,
                 Name = x.Name
@@ -75,7 +75,7 @@ namespace TW.Infrastracture.Services.Spotify
             {
                 var playlistTracks = _spotifyClientPlaylists.GetItems(playlist.Id);
                 var myTracks = playlistTracks.Result.Items.Select(c => c.Track);
-                playlist.Tracks = _mapper.Map<List<Track>>(myTracks);
+                playlist.Tracks = _mapper.Map<List<SpotifyTrack>>(myTracks);
 
             }
             return playlists;

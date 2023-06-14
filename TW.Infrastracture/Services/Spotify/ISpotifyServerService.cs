@@ -10,7 +10,7 @@ namespace TW.Infrastracture.Services.Spotify
     {
         Task<Uri> AuthorizeWithPKCE();
         Task<PKCETokenResponse> GetCallback(string code);
-        Task<List<Playlist>> GetPlaylists();
+        Task<List<SpotifyPlaylist>> GetPlaylists();
         Task<PKCETokenResponse> RefreshAccessToken(string refreshToken);
     }
 }

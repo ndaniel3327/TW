@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Routing.Constraints;
 using SpotifyAPI.Web;
-using TW.Infrastructure.Models;
+using TW.UI.Models.Spotify.Data;
 
 namespace TW.Infrastructure.Profiles
 {
@@ -9,9 +8,9 @@ namespace TW.Infrastructure.Profiles
     {
         public MappingProfiles()
         {
-            CreateMap<SimpleArtist, Artist>()
+            CreateMap<SimpleArtist, SpotifyArtist>()
                 .ForMember(dst => dst.Name, act => act.MapFrom(src => src.Name));
-            CreateMap<FullTrack, Track>()
+            CreateMap<FullTrack, SpotifyTrack>()
                 .ForMember(dst=>dst.Artists,act=>act.MapFrom(src=>src.Artists))
                 .ForMember(dst=>dst.Name,act=>act.MapFrom(src=>src.Name));
             //CreateMap<PlaylistTrack<FullTrack>, Playlist>()

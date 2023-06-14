@@ -1,6 +1,6 @@
 ﻿namespace TW.Infrastructure.Models
 {
-    public class Artist
+    public class SpotifyArtist
     {
         public string Name { get; set; }
     }

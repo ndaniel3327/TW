@@ -2,10 +2,10 @@
 
 namespace TW.Infrastructure.Models
 {
-    public class Playlist
+    public class SpotifyPlaylist
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public List<Track> Tracks { get; set; }
+        public List<SpotifyTrack> Tracks { get; set; }
     }
 }

@@ -6,7 +6,8 @@
              Title="SpotifyPlaylistsPage"
              xmlns:viewmodel="clr-namespace:TW.UI.Pages"
              x:DataType="viewmodel:SpotifyPlaylistsPage"
-             xmlns:model="clr-namespace:TW.UI.Models">
+             xmlns:model="clr-namespace:TW.UI.Models.Spotify.Data"
+             xmlns:group="clr-namespace:TW.UI.Models.Spotify.View">
     
     <StackLayout VerticalOptions="FillAndExpand">
         <ListView x:Name="listView"
@@ -14,7 +15,7 @@
                   IsGroupingEnabled="True"
                   ItemsSource="{Binding Playlists}">
         <ListView.GroupHeaderTemplate>
-                <DataTemplate x:DataType="model:SpotifyPlaylistGroup">
+                <DataTemplate x:DataType="group:SpotifyPlaylistGroup">
                     <ViewCell>
                         <Label Text="{Binding Name}"
                                BackgroundColor="LightGray"
@@ -25,7 +26,7 @@
                 </DataTemplate>
         </ListView.GroupHeaderTemplate>
         <ListView.ItemTemplate >
-            <DataTemplate  x:DataType="model:SpotifyTrackModel">
+            <DataTemplate  x:DataType="model:SpotifyTrack">
                 <TextCell Text="{Binding Name}"
                           Detail="{Binding Artist}"></TextCell>
             </DataTemplate>

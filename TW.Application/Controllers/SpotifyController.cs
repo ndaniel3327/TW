@@ -39,7 +39,7 @@ namespace TW.Application.Controllers
         }
 
         [HttpGet("playlists")]
-        public async Task<ActionResult<List<Playlist>>> GetPlaylists()
+        public async Task<ActionResult<List<SpotifyPlaylist>>> GetPlaylists()
         {
             var playlists = await _spotifyService.GetPlaylists();
 
