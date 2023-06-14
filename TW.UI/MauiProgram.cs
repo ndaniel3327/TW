@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
+using System.Reflection;
 using TW.UI.Pages;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
@@ -20,13 +21,16 @@ namespace TW.UI
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-
-            builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
-            builder.Services.AddTransient<ISpotifyService, SpotifyService>();
+            //Main page should be singleton for the code to work
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddTransient<SpotifyPlaylistsPage>();
+            builder.Services.AddSingleton<SpotifyPlaylistsPage>();
             builder.Services.AddTransient<YoutubePlaylistsPage>();
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
+
+            //Adding spotify service as transient will result in Invalid grant exception ( challange and verifier wont match )
+            builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
+
 
             return builder.Build();
         }

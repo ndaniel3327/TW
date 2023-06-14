@@ -1,13 +1,9 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Apis.Util.Store;
-using Google.Apis.YouTube.v3;
-using SpotifyAPI.Web;
+﻿using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
-using System.Threading;
 
 namespace TW.Infrastracture.Services.Youtube
 {

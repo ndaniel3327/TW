@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TW.UI", "TW.UI\TW.UI.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TW.Tester", "TW.Tester\TW.Tester.csproj", "{66CA9790-8497-4CCD-B1F5-9D7F55AFEC8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TW.Infrastracture", "TW.Infrastracture\TW.Infrastracture.csproj", "{C68C5C0E-D5EA-40AB-A05A-AED869A907F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TW.Infrastracture", "TW.Infrastracture\TW.Infrastracture.csproj", "{C68C5C0E-D5EA-40AB-A05A-AED869A907F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

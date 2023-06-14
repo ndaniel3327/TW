@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Views;
+using System.Diagnostics;
 using TW.Infrastracture.Constants;
 using TW.UI.Pages;
 using TW.UI.Services.Spotify;
@@ -47,8 +48,8 @@ namespace TW.UI
         public MainPage(ISpotifyService spotifyService, IYoutubeClientService youtubeService)
         {
             InitializeComponent();
-            CheckYoutubeLoginStatus();
-            CheckSpotifyLoginStatus();
+          //  CheckYoutubeLoginStatus();
+             CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
         }
@@ -57,7 +58,14 @@ namespace TW.UI
         {
             if (SpotifyIsLoggedIn == true)
             {
-                await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
+                try
+                {
+                    await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
+                }
+                catch(Exception ex) 
+                {
+                    Debug.WriteLine("//////// "+ex.Message);
+                }
             }
             else
             {
@@ -111,19 +119,22 @@ namespace TW.UI
         }
         private async void CheckSpotifyLoginStatus()
         {
-            var authorizationToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameAccessToken);
-            var refreshToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameRefreshToken);
+            await Task.Run(async ()=>
+            {
+                var authorizationToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameAccessToken);
+                var refreshToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameRefreshToken);
 
-            if (authorizationToken != null && refreshToken != null)
-            {
-                SpotifyIsLoggedIn = true;
-            }
-            else
-            {
-                SpotifyIsLoggedIn =false;
-            }
+                if (authorizationToken != null && refreshToken != null)
+                {
+                    SpotifyIsLoggedIn = true;
+                }
+                else
+                {
+                    SpotifyIsLoggedIn = false;
+                }
+            });
         }
-        void ChangeSpotifyButtonStyle()
+        private async void ChangeSpotifyButtonStyle()
         {
             if (SpotifyIsLoggedIn == true)
             {
@@ -131,13 +142,12 @@ namespace TW.UI
                 SpotifyButton.Text = "SpotifyPlaylists";
                 SpotifyButton.TextColor = Colors.Gray;
             }
-            else if(SpotifyIsLoggedIn == false)
+            else if (SpotifyIsLoggedIn == false)
             {
-                SpotifyButton.BackgroundColor = Colors.Violet;
+                SpotifyButton.BackgroundColor = Colors.Purple;
                 SpotifyButton.Text = "Login with Spotify";
-                SpotifyButton.TextColor= Colors.White;
+                SpotifyButton.TextColor = Colors.White;
             }
-
         }
         void ChangeYoutubeButtonStyleForLoggedInUser()
         {

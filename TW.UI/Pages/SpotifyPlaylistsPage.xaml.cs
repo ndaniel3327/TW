@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Core.Extensions;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using TW.UI.Models.Spotify.View;
 using TW.UI.Services.Spotify;
@@ -33,7 +34,14 @@ public partial class SpotifyPlaylistsPage : ContentPage
 
         BindingContext = this;
 
-        GetPlaylists();
+        try
+        {
+            GetPlaylists();
+        }
+        catch(Exception ex)
+        {
+            Debug.WriteLine("//////////" + ex.Message);
+        }
     }
     private async void GetPlaylists()
     {
