@@ -21,15 +21,17 @@ namespace TW.UI
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+            builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
+            builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
             //Main page should be singleton for the code to work
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<SpotifyPlaylistsPage>();
             builder.Services.AddTransient<YoutubePlaylistsPage>();
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
+
 
             //Adding spotify service as transient will result in Invalid grant exception ( challange and verifier wont match )
-            builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
+
 
 
             return builder.Build();
