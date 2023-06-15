@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SpotifyAPI.Web;
 using System.Diagnostics;
+using System.Text;
 using TW.Infrastracture.Constants;
 using TW.UI.Models.Spotify.Data;
 using TW.UI.Pages;
@@ -30,45 +31,69 @@ namespace TW.UI.Services.Spotify
 
         private async Task SetUpSpotifyClient()
         {
-            var tokenExpirationDate = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameSpotifyTokenExpirationDate);
-            var refreshToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameRefreshToken);
 
-            if (tokenExpirationDate != null && DateTime.Compare(DateTime.Parse(tokenExpirationDate), DateTime.UtcNow) > 0)
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine();
+            sb.AppendLine(DateTime.Now.ToString());
+
+            var authorizationToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameAccessToken);
+            sb.AppendLine(authorizationToken);
+
+            //File.WriteAllText(@"C:\Users\zamfi\Desktop\myLog.txt", sb.ToString());
+
+            var tokenExpirationDate = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameSpotifyTokenExpirationDate);
+            sb.AppendLine(tokenExpirationDate);
+
+            //File.WriteAllText(@"C:\Users\zamfi\Desktop\myLog.txt", sb.ToString());
+
+
+            if (SpotifyTokenDetails.SpotifyAccessTokenExpirationDate != null && DateTime.Compare(DateTime.Parse(SpotifyTokenDetails.SpotifyAccessTokenExpirationDate), DateTime.UtcNow) < 0)
             {
-                await CreateClient();
+                CreateClient();
 
             }
-            else if (tokenExpirationDate != null && DateTime.Compare(DateTime.Parse(tokenExpirationDate), DateTime.UtcNow) < 0)
+            else if (SpotifyTokenDetails.SpotifyAccessTokenExpirationDate != null && DateTime.Compare(DateTime.Parse(SpotifyTokenDetails.SpotifyAccessTokenExpirationDate), DateTime.UtcNow) > 0)
             {
+                var refreshToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameRefreshToken);
                 var isSuccess = await RefreshAccessToken(refreshToken);
                 if (isSuccess == true)
                 {
-                   await CreateClient();
+                    CreateClient();
                 }
             }
-            async Task CreateClient()
+
+            void CreateClient()
             {
-                var authorizationToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameAccessToken);
-                _spotifyClient = new SpotifyClient(authorizationToken);
+                try
+                {
+                    _spotifyClient = new SpotifyClient(SpotifyTokenDetails.SpotifyAccessToken);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("////////////// " + ex.Message);
+                }
             }
         }
 
         public async Task<Uri> StartAuthorizationWithPKCE()
         {
+            var uri = await Task.Run(() =>
+            {
+                var loginRequest = new LoginRequest(
+                    new Uri(SpotifyConstants.SpotifyCallbackAdress),
+                    _clientId,
+                    LoginRequest.ResponseType.Code)
+                {
+                    CodeChallengeMethod = _codeChallengeMethod,
+                    CodeChallenge = _challenge,
+                    Scope = new[] { Scopes.PlaylistReadPrivate, Scopes.PlaylistReadCollaborative }
+                };
+                var uri = loginRequest.ToUri();
+                return uri;
+            });
+            return uri;
             //TODO Invoke an awaitable method that is showing the loading screen
             //TODO: Add Null verifier where neccesary
-            var loginRequest = new LoginRequest(
-              new Uri(SpotifyConstants.SpotifyCallbackAdress),
-              _clientId,
-              LoginRequest.ResponseType.Code
-            )
-            {
-                CodeChallengeMethod = _codeChallengeMethod,
-                CodeChallenge = _challenge,
-                Scope = new[] { Scopes.PlaylistReadPrivate, Scopes.PlaylistReadCollaborative }
-            };
-            var uri = loginRequest.ToUri();
-            return uri;
         }
 
         public async Task ExchangeCodeForToken(string code)
@@ -84,12 +109,19 @@ namespace TW.UI.Services.Spotify
             await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameRefreshToken, initialResponse.RefreshToken);
             await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameSpotifyTokenExpirationDate, tokenExpirationDate.ToString());
 
-            //await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
+            await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
         }
 
         public async Task<List<SpotifyPlaylist>> GetPlaylists()
         {
-            await SetUpSpotifyClient();
+            try
+            {
+                await SetUpSpotifyClient();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("/////////// " + ex.Message);
+            }
 
             var result = await _spotifyClientPlaylists.CurrentUsers();
 
@@ -125,9 +157,9 @@ namespace TW.UI.Services.Spotify
                     return true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("////////////////////// " +ex.Message);
+                Debug.WriteLine("////////////////////// " + ex.Message);
                 return false;
             }
             return false;

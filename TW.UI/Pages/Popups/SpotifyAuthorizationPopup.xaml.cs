@@ -11,7 +11,7 @@ public partial class SpotifyAuthorizationPopup : Popup
 {
     private readonly Delegate _myDelegate;
 
-    public SpotifyAuthorizationPopup(Uri loginUri , Delegate myDelegate)
+    public SpotifyAuthorizationPopup(Uri loginUri, Delegate myDelegate)
     {
         InitializeComponent();
         BindingContext = new SpotifyAuthorizationPopupViewModel(loginUri);
@@ -33,14 +33,14 @@ public partial class SpotifyAuthorizationPopup : Popup
                 if (result.IsSuccessStatusCode)
                 {
                     var content = await result.Content.ReadAsStringAsync();
-                    var tokenDetails = JsonSerializerHelper.DeserializeJson<SpotifyTokenDetails>(content);
+                    // var tokenDetails = JsonSerializerHelper.DeserializeJson<SpotifyTokenDetails>(content);
 
-                    tokenDetails.SpotifyTokenExpiresInSeconds = 10;
+                    //tokenDetails.SpotifyTokenExpiresInSeconds = 10;
 
-                    tokenDetails.SpotifyTokenExpirationDate = DateTime.Now.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
-                    await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyTokenExpirationDate), tokenDetails.SpotifyTokenExpirationDate.ToString());
-                    await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyRefreshToken), tokenDetails.SpotifyRefreshToken.ToString());
-                    Close();
+                    //tokenDetails.SpotifyTokenExpirationDate = DateTime.Now.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
+                    //await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyTokenExpirationDate), tokenDetails.SpotifyTokenExpirationDate.ToString());
+                    //await SecureStorage.Default.SetAsync(nameof(tokenDetails.SpotifyRefreshToken), tokenDetails.SpotifyRefreshToken.ToString());
+                    //Close();
                 }
             });
         }
@@ -52,7 +52,7 @@ public partial class SpotifyAuthorizationPopup : Popup
     }
     private void Popup_Closed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
     {
-        Device.InvokeOnMainThreadAsync(()=>  _myDelegate.DynamicInvoke()) ;
-      
+        //Device.InvokeOnMainThreadAsync(() => _myDelegate.DynamicInvoke());
+
     }
 }

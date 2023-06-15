@@ -1,6 +1,5 @@
-using CommunityToolkit.Maui.Core.Extensions;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using TW.UI.Models.Spotify.Data;
 using TW.UI.Models.Spotify.View;
 using TW.UI.Services.Spotify;
 
@@ -9,7 +8,7 @@ namespace TW.UI.Pages;
 public partial class SpotifyPlaylistsPage : ContentPage
 {
     private readonly ISpotifyService _spotifyCService;
-    private List<SpotifyPlaylistGroup> _playlists;
+    private List<SpotifyPlaylistGroup> _playlists=new();
     public List<SpotifyPlaylistGroup> Playlists
     {
         get
@@ -28,24 +27,26 @@ public partial class SpotifyPlaylistsPage : ContentPage
 
     public SpotifyPlaylistsPage(ISpotifyService spotifyCService)
     {
+        BindingContext = this;
+
         InitializeComponent();
 
         _spotifyCService = spotifyCService;
-
-        BindingContext = this;
-
+        
         try
         {
             GetPlaylists();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Debug.WriteLine("//////////" + ex.Message);
         }
     }
-    private async void GetPlaylists()
+    private void GetPlaylists()
     {
-        var playlistModels = await _spotifyCService.GetPlaylists();
+        List<SpotifyPlaylist> playlistModels = new List<SpotifyPlaylist>();
+        Task.Run(async () => playlistModels = await _spotifyCService.GetPlaylists());
+
         var playlistGroups = new List<SpotifyPlaylistGroup>();
         foreach (var playlist in playlistModels)
         {

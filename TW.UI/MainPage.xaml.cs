@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Maui.Views;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using TW.Infrastracture.Constants;
 using TW.UI.Pages;
 using TW.UI.Services.Spotify;
@@ -15,41 +14,41 @@ namespace TW.UI
         private bool _youtubeIsLoggedIn = false;
         private bool _spotifyIsLoggedIn = false;
 
-        public bool YoutubeIsLoggedIn 
+        public bool YoutubeIsLoggedIn
         {
             get
             {
                 return _youtubeIsLoggedIn;
             }
-            set 
+            set
             {
                 if (value == true)
                 {
-                    ChangeYoutubeButtonStyleForLoggedInUser();  
+                    ChangeYoutubeButtonStyleForLoggedInUser();
                 }
                 _youtubeIsLoggedIn = value;
 
             }
         }
 
-        public bool SpotifyIsLoggedIn 
+        public bool SpotifyIsLoggedIn
         {
-            get 
+            get
             {
                 return _spotifyIsLoggedIn;
             }
-            set 
+            set
             {
                 _spotifyIsLoggedIn = value;
                 ChangeSpotifyButtonStyle();
-            } 
+            }
         }
 
         public MainPage(ISpotifyService spotifyService, IYoutubeClientService youtubeService)
         {
             InitializeComponent();
-          //  CheckYoutubeLoginStatus();
-             CheckSpotifyLoginStatus();
+            //  CheckYoutubeLoginStatus();
+            CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
         }
@@ -62,9 +61,9 @@ namespace TW.UI
                 {
                     await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
                 }
-                catch(Exception ex) 
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("//////// "+ex.Message);
+                    Debug.WriteLine("//////// " + ex.Message);
                 }
             }
             else
@@ -119,22 +118,23 @@ namespace TW.UI
         }
         private async void CheckSpotifyLoginStatus()
         {
-            await Task.Run(async ()=>
-            {
-                var authorizationToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameAccessToken);
-                var refreshToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameRefreshToken);
+            var authorizationToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameAccessToken);
+            var refreshToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameRefreshToken);
+            var tokenExpirationDate = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameSpotifyTokenExpirationDate);
 
-                if (authorizationToken != null && refreshToken != null)
-                {
-                    SpotifyIsLoggedIn = true;
-                }
-                else
-                {
-                    SpotifyIsLoggedIn = false;
-                }
-            });
+            if (authorizationToken != null && refreshToken != null && tokenExpirationDate != null)
+            {
+                SpotifyTokenDetails.SpotifyRefreshToken = refreshToken;
+                SpotifyTokenDetails.SpotifyAccessToken = authorizationToken;
+                SpotifyTokenDetails.SpotifyAccessTokenExpirationDate = tokenExpirationDate;
+                SpotifyIsLoggedIn = true;
+            }
+            else
+            {
+                SpotifyIsLoggedIn = false;
+            }
         }
-        private async void ChangeSpotifyButtonStyle()
+        private void ChangeSpotifyButtonStyle()
         {
             if (SpotifyIsLoggedIn == true)
             {
@@ -151,9 +151,9 @@ namespace TW.UI
         }
         void ChangeYoutubeButtonStyleForLoggedInUser()
         {
-                YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
-                YoutubeButton.Text = "YoutubePlaylists";
-                YoutubeButton.TextColor = Colors.Gray;
+            YoutubeButton.BackgroundColor = Colors.AntiqueWhite;
+            YoutubeButton.Text = "YoutubePlaylists";
+            YoutubeButton.TextColor = Colors.Gray;
         }
 
 

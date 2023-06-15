@@ -12,9 +12,9 @@
         public const string IsLoggedInEndpoint = $"{baseApiEndpoint}/IsLoggedIn";
         public const string RefreshAccessTokenEndpoint = $"{baseApiEndpoint}/RefreshToken";
 
-        public const string StorageNameAccessToken = "SpotifyAccessToken";
-        public const string StorageNameRefreshToken = "SpotifyRefreshToken";
-        public const string StorageNameTokenType = "SpotifyTokenType";
-        public const string StorageNameSpotifyTokenExpirationDate = "SpotifyTokenExpirationDate";
+        public static string StorageNameAccessToken = "SpotifyAccessToken";
+        public static string StorageNameRefreshToken = "SpotifyRefreshToken";
+        public static string StorageNameTokenType = "SpotifyTokenType";
+        public static string StorageNameSpotifyTokenExpirationDate = "SpotifyTokenExpirationDate";
     }
 }

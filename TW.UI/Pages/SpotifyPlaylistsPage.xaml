@@ -8,13 +8,13 @@
              x:DataType="viewmodel:SpotifyPlaylistsPage"
              xmlns:model="clr-namespace:TW.UI.Models.Spotify.Data"
              xmlns:group="clr-namespace:TW.UI.Models.Spotify.View">
-    
+
     <StackLayout VerticalOptions="FillAndExpand">
         <ListView x:Name="listView"
                   VerticalOptions="FillAndExpand"
                   IsGroupingEnabled="True"
                   ItemsSource="{Binding Playlists}">
-        <ListView.GroupHeaderTemplate>
+            <ListView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="group:SpotifyPlaylistGroup">
                     <ViewCell>
                         <Label Text="{Binding Name}"
@@ -24,51 +24,13 @@
                                Padding="10"></Label>
                     </ViewCell>
                 </DataTemplate>
-        </ListView.GroupHeaderTemplate>
-        <ListView.ItemTemplate >
-            <DataTemplate  x:DataType="model:SpotifyTrack">
-                <TextCell Text="{Binding Name}"
+            </ListView.GroupHeaderTemplate>
+            <ListView.ItemTemplate >
+                <DataTemplate  x:DataType="model:SpotifyTrack">
+                    <TextCell Text="{Binding Name}"
                           Detail="{Binding Artist}"></TextCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </StackLayout>
-    
-    
-    <!--<VerticalStackLayout Margin="10" BindableLayout.ItemsSource="{Binding Playlists}">
-        <BindableLayout.ItemTemplate>
-            <DataTemplate x:DataType="model:SpotifyPlaylistModel">
-                <mct:Expander x:Name="thisExpander" VerticalOptions="StartAndExpand">
-                    <mct:Expander.Header>
-                        <Grid ColumnDefinitions="Auto" BackgroundColor="LightGray" >
-                            <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold"></Label>
-                            <Image Grid.Column="3" x:Name="headerImage" HeightRequest="30" WidthRequest="30" Source="arrowdown.svg">
-                                <Image.Triggers>
-                                    <DataTrigger TargetType="Image"
-                                                 Binding="{Binding Source={x:Reference thisExpander}, Path=IsExpanded}"
-                                                 Value="True">
-                                        <Setter Property="Rotation" Value="180"></Setter>
-                                    </DataTrigger>
-                                </Image.Triggers>
-                            </Image>
-                        </Grid>
-                    </mct:Expander.Header>
-                    <mct:Expander.Content>
-                        <Grid x:DataType="model:SpotifyTrackModel">
-                            <Label Text="{Binding Name}"></Label>
-                            <Label Text="{Binding Artist}"></Label>
-                        </Grid>
-                    </mct:Expander.Content>
-                    --><!--<VerticalStackLayout Margin="5" x:DataType="viewmodel:SpotifyPlaylistsPage" BindableLayout.ItemsSource="{Binding Playlists}">
-                        <BindableLayout.ItemTemplate>
-                            <DataTemplate x:DataType="model:SpotifyTrackModel">
-                                <Label Text="{Binding Name}" TextColor="Black" FontSize="18" ></Label>
-                                --><!--<TextCell Text="{Binding Name}" Detail="{Binding Artist}"></TextCell>--><!--
-                            </DataTemplate>
-                        </BindableLayout.ItemTemplate>
-                    </VerticalStackLayout>--><!--
-                </mct:Expander>-->
-            <!--</DataTemplate>
-        </BindableLayout.ItemTemplate>-->
-    <!--</VerticalStackLayout>-->
 </ContentPage>
