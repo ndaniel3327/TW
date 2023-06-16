@@ -26,7 +26,7 @@ namespace TW.UI
             builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
             //Main page should be singleton for the code to work
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddTransient<SpotifyPlaylistsPage>();
+           // builder.Services.AddTransient<SpotifyPlaylistsPage>();
             builder.Services.AddTransient<YoutubePlaylistsPage>();
 
 
