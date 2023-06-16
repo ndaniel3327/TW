@@ -5,8 +5,4 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TW.Infrastracture\TW.Infrastracture.csproj" />
-  </ItemGroup>
-
 </Project>

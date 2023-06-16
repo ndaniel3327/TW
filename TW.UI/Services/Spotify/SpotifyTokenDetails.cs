@@ -1,9 +1,15 @@
-﻿namespace TW.UI.Services.Spotify
+﻿using System.Text.Json.Serialization;
+
+namespace TW.UI.Services.Spotify
 {
-    public static class SpotifyTokenDetails
+    public  class SpotifyTokenDetails
     {
-        public static string SpotifyAccessToken { get; set; }
-        public static string SpotifyRefreshToken { get; set; }
-        public static string SpotifyAccessTokenExpirationDate { get; set; }
+        [JsonPropertyName("access_token")]
+        public string SpotifyAccessToken { get; set; }
+        [JsonPropertyName("refresh_token")]
+        public string SpotifyRefreshToken { get; set; }
+        [JsonPropertyName("expires_in")]
+        public string SpotifyTokenExpiresIn { get; set; }
+        // public static string SpotifyAccessTokenExpirationDate { get; set; }
     }
 }

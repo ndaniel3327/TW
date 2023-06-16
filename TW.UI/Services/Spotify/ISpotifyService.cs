@@ -4,7 +4,7 @@ namespace TW.UI.Services.Spotify
 {
     public interface ISpotifyService
     {
-        Task<Uri> StartAuthorizationWithPKCE();
+        Task<Uri> GetAuthorizationUri();
         Task ExchangeCodeForToken(string code);
         Task<List<SpotifyPlaylist>> GetPlaylists();
         Task<bool> RefreshAccessToken(string refreshToken);

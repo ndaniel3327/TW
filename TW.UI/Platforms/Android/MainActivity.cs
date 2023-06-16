@@ -47,7 +47,7 @@ namespace TW.UI
                 youtubeService.GetAuthorizationToken(code);
 
             }
-            else if (uri != null && uri.ToString().StartsWith("oauth://localhost:5001/api/Spotify/callback?code"))
+            else if (uri != null && uri.ToString().StartsWith("oauth://localhost:5001/api/Spotify/callback"))
             {
                 string code = HttpUtility.ParseQueryString(uri.Query).Get("code");
 

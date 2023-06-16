@@ -12,7 +12,7 @@ namespace TW.UI
         private readonly IYoutubeClientService _youtubeService;
 
         private bool _youtubeIsLoggedIn = false;
-        private bool _spotifyIsLoggedIn = true;
+        private bool _spotifyIsLoggedIn = false;
 
         public bool YoutubeIsLoggedIn
         {
@@ -48,7 +48,7 @@ namespace TW.UI
         {
             InitializeComponent();
             //  CheckYoutubeLoginStatus();
-           // CheckSpotifyLoginStatus();
+            // CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
         }
@@ -68,7 +68,7 @@ namespace TW.UI
             }
             else
             {
-                Uri loginUri = await _spotifyService.StartAuthorizationWithPKCE();
+                Uri loginUri = await _spotifyService.GetAuthorizationUri();
 
                 BrowserLaunchOptions options = new BrowserLaunchOptions()
                 {
