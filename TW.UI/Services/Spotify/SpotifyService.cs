@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using TW.Infrastracture.Constants;
@@ -9,6 +10,7 @@ namespace TW.UI.Services.Spotify
 {
     public class SpotifyService : ISpotifyService
     {
+        private readonly string _redirectUri = "oauth://localhost:5001/api/Spotify/callback";
         private readonly string _clientId = "2d84ad5eeb3f4b7c9fcc6cc479ab2d4a";
         private readonly string _codeChallengeMethod = "S256";
         public SpotifyService()
@@ -44,13 +46,13 @@ namespace TW.UI.Services.Spotify
             string codeVerifier = GenerateCodeVerifier(100);
             string codeChallenge = GenerateCodeChallange(codeVerifier);
 
-            await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameSpotifyCodeVerifier, codeVerifier);
+            await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameCodeVerifier, codeVerifier);
 
             string myStringUri = "https://accounts.spotify.com/authorize?" +
                 "response_type=code&" +
                 $"client_id={_clientId}&" +
                 $"scope={scope}&" +
-                $"redirect_uri={SpotifyConstants.SpotifyRedirectUri}&" +
+                $"redirect_uri={_redirectUri}&" +
                 $"code_challenge_method={_codeChallengeMethod}&" +
                 $"code_challenge={codeChallenge}";
 
@@ -60,17 +62,15 @@ namespace TW.UI.Services.Spotify
         }
         public async Task ExchangeCodeForToken(string code)
         {
-            string codeVerifier = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameSpotifyCodeVerifier);
+            string codeVerifier = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameCodeVerifier);
 
-            string myStringUri = "https://accounts.spotify.com/api/token?";
+            string myStringUri = "https://accounts.spotify.com/api/token";
             string postRequestContent =
             "grant_type=authorization_code&" +
             $"code={code}&" +
-            $"redirect_uri={SpotifyConstants.SpotifyRedirectUri}&" +
+            $"redirect_uri={_redirectUri}&" +
             $"client_id={_clientId}&" +
             $"code_verifier={codeVerifier}";
-
-            //TODO:move redirect uri in this class as private field;
 
             HttpClient httpClient = new HttpClient();
             var response = await httpClient.PostAsync(myStringUri, new StringContent(postRequestContent, Encoding.UTF8, "application/x-www-form-urlencoded"));
@@ -78,8 +78,45 @@ namespace TW.UI.Services.Spotify
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var tokenDetails = JsonSerializerHelper.DeserializeJson<SpotifyTokenDetails>(responseContent);
+                //TODO: Delete this:
+                tokenDetails.SpotifyTokenExpiresInSeconds = 30;
+                var tokenExpirationDate = DateTime.Now.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
+
+                await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameAccessToken, tokenDetails.SpotifyAccessToken);
+                await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameRefreshToken, tokenDetails.SpotifyRefreshToken);
+                await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameTokenExpirationDate, tokenExpirationDate.ToString());
+                await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameTokenType, tokenDetails.SpotifyTokenType);
             }
 
+        }
+        public async Task<bool> RefreshAccessToken()
+        {
+            var refreshToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameRefreshToken);
+            string myStringUri = "https://accounts.spotify.com/api/token";
+            string postRequestContent =
+            "grant_type=refresh_token&" +
+            $"client_id={_clientId}&" +
+            $"refresh_token={refreshToken}";
+
+            HttpClient httpClient = new HttpClient();
+            var response = await httpClient.PostAsync(myStringUri, new StringContent(postRequestContent, Encoding.UTF8, "application/x-www-form-urlencoded"));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var tokenDetails = JsonSerializerHelper.DeserializeJson<SpotifyTokenDetails>(responseContent);
+                //TODO: Delete this:
+                tokenDetails.SpotifyTokenExpiresInSeconds = 30;
+                var tokenExpirationDate = DateTime.Now.AddSeconds(tokenDetails.SpotifyTokenExpiresInSeconds);
+
+                await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameAccessToken, tokenDetails.SpotifyAccessToken);
+                await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameRefreshToken, tokenDetails.SpotifyRefreshToken);
+                await SecureStorage.Default.SetAsync(SpotifyConstants.StorageNameTokenExpirationDate, tokenExpirationDate.ToString());
+
+                return true;
+            }
+
+            return false;
         }
 
         //    private SpotifyClient _spotifyClient;
@@ -237,15 +274,21 @@ namespace TW.UI.Services.Spotify
         //        return false;
         //    }
 
-        public Task<List<SpotifyPlaylist>> GetPlaylists()
+        public async Task<List<SpotifyPlaylist>> GetPlaylists()
         {
-            throw new NotImplementedException();
-        }
+            string playlistsEndpoint = "https://api.spotify.com/v1/me/playlists";
 
-        public Task<bool> RefreshAccessToken(string refreshToken)
-        {
-            throw new NotImplementedException();
-        }
+            string accessToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameAccessToken);
+            string tokenType = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameTokenType);
 
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization
+                         = new AuthenticationHeaderValue(tokenType, accessToken);
+
+            var responseMessage = await httpClient.GetAsync(playlistsEndpoint);
+            var content = await responseMessage.Content.ReadAsStringAsync();
+
+            return null;
+        }
     }
 }

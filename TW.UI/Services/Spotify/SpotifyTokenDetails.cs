@@ -6,10 +6,14 @@ namespace TW.UI.Services.Spotify
     {
         [JsonPropertyName("access_token")]
         public string SpotifyAccessToken { get; set; }
+
         [JsonPropertyName("refresh_token")]
         public string SpotifyRefreshToken { get; set; }
+
         [JsonPropertyName("expires_in")]
-        public string SpotifyTokenExpiresIn { get; set; }
-        // public static string SpotifyAccessTokenExpirationDate { get; set; }
+        public int SpotifyTokenExpiresInSeconds { get; set; }
+
+        [JsonPropertyName("token_type")]
+        public string SpotifyTokenType { get; set; }
     }
 }

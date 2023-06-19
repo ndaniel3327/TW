@@ -24,11 +24,6 @@ public partial class SpotifyPlaylistsPage : ContentPage
             }
         }
     }
-    public SpotifyPlaylistsPage()
-    {
-        BindingContext = this;
-        InitializeComponent();
-    }
 
     public SpotifyPlaylistsPage(ISpotifyService spotifyCService)
     {

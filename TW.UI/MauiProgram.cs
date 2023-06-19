@@ -22,10 +22,10 @@ namespace TW.UI
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
+            builder.Services.AddTransient<ISpotifyService, SpotifyService>();
             builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
             //Main page should be singleton for the code to work
-            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddTransient<MainPage>();
            // builder.Services.AddTransient<SpotifyPlaylistsPage>();
             builder.Services.AddTransient<YoutubePlaylistsPage>();
 

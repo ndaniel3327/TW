@@ -5,7 +5,6 @@
         private const string baseApiEndpoint = "/api/Spotify";
 
         public const int HTTPSPort = 5001;
-        public const string SpotifyRedirectUri = "oauth://localhost:5001/api/Spotify/callback";
 
         public const string AuthorizationEndpoint = baseApiEndpoint;
         public const string PlaylistsEndpoint = $"{baseApiEndpoint}/Playlists";
@@ -15,7 +14,7 @@
         public const string StorageNameAccessToken = "SpotifyAccessToken";
         public const string StorageNameRefreshToken = "SpotifyRefreshToken";
         public const string StorageNameTokenType = "SpotifyTokenType";
-        public const string StorageNameSpotifyTokenExpirationDate = "SpotifyTokenExpirationDate";
-        public const string StorageNameSpotifyCodeVerifier = "SpotifyCodeVerifier";
+        public const string StorageNameTokenExpirationDate = "SpotifyTokenExpirationDate";
+        public const string StorageNameCodeVerifier = "SpotifyCodeVerifier";
     }
 }

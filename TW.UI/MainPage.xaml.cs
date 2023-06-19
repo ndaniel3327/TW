@@ -48,7 +48,7 @@ namespace TW.UI
         {
             InitializeComponent();
             //  CheckYoutubeLoginStatus();
-            // CheckSpotifyLoginStatus();
+            CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
         }
@@ -118,16 +118,23 @@ namespace TW.UI
         }
         private async void CheckSpotifyLoginStatus()
         {
-            var authorizationToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameAccessToken);
-            var refreshToken = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameRefreshToken);
-            var tokenExpirationDate = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameSpotifyTokenExpirationDate);
+            var tokenExpirationDate = await SecureStorage.Default.GetAsync(SpotifyConstants.StorageNameTokenExpirationDate);
 
-            if (authorizationToken != null && refreshToken != null && tokenExpirationDate != null)
+            if (tokenExpirationDate != null && DateTime.Compare(DateTime.Parse(tokenExpirationDate), DateTime.Now) < 0)
             {
-                SpotifyTokenDetails.SpotifyRefreshToken = refreshToken;
-                SpotifyTokenDetails.SpotifyAccessToken = authorizationToken;
-                SpotifyTokenDetails.SpotifyAccessTokenExpirationDate = tokenExpirationDate;
                 SpotifyIsLoggedIn = true;
+            }
+            else if (tokenExpirationDate != null && DateTime.Compare(DateTime.Parse(tokenExpirationDate), DateTime.Now) > 0)
+            {
+                bool isSuccess = await _spotifyService.RefreshAccessToken();
+                if (isSuccess)
+                {
+                    SpotifyIsLoggedIn = true;
+                }
+                else
+                {
+                    SpotifyIsLoggedIn = false;
+                }
             }
             else
             {
