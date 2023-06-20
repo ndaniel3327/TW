@@ -8,7 +8,7 @@ namespace TW.UI.Pages;
 public partial class SpotifyPlaylistsPage : ContentPage
 {
     private readonly ISpotifyService _spotifyCService;
-    private List<SpotifyPlaylistGroup> _playlists=new();
+    private List<SpotifyPlaylistGroup> _playlists = new();
     public List<SpotifyPlaylistGroup> Playlists
     {
         get
@@ -25,27 +25,20 @@ public partial class SpotifyPlaylistsPage : ContentPage
         }
     }
 
-    public SpotifyPlaylistsPage(ISpotifyService spotifyCService)
+    public SpotifyPlaylistsPage(ISpotifyService spotifyCService,List<SpotifyPlaylistGroup> playlistGroup)
     {
         BindingContext = this;
 
         InitializeComponent();
 
         _spotifyCService = spotifyCService;
-        
-        try
-        {
-            GetPlaylists();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine("//////////" + ex.Message);
-        }
+
+        //GetPlaylists();
     }
-    private void GetPlaylists()
+    private async Task GetPlaylists()
     {
         List<SpotifyPlaylist> playlistModels = new List<SpotifyPlaylist>();
-        Task.Run(async () => playlistModels = await _spotifyCService.GetPlaylists());
+        playlistModels = await _spotifyCService.GetPlaylists();
 
         var playlistGroups = new List<SpotifyPlaylistGroup>();
         foreach (var playlist in playlistModels)

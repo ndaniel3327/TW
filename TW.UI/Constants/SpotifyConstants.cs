@@ -1,15 +1,10 @@
-﻿namespace TW.Infrastracture.Constants
+﻿using TW.UI.Models.Spotify.View;
+
+namespace TW.UI.Constants
 {
     public static class SpotifyConstants
     {
-        private const string baseApiEndpoint = "/api/Spotify";
-
-        public const int HTTPSPort = 5001;
-
-        public const string AuthorizationEndpoint = baseApiEndpoint;
-        public const string PlaylistsEndpoint = $"{baseApiEndpoint}/Playlists";
-        public const string IsLoggedInEndpoint = $"{baseApiEndpoint}/IsLoggedIn";
-        public const string RefreshAccessTokenEndpoint = $"{baseApiEndpoint}/RefreshToken";
+        public static List<SpotifyPlaylistGroup> playlistGroups;
 
         public const string StorageNameAccessToken = "SpotifyAccessToken";
         public const string StorageNameRefreshToken = "SpotifyRefreshToken";

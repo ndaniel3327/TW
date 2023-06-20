@@ -1,13 +1,7 @@
-﻿using System.Net.Http.Headers;
-using System.Text.Json;
-using TW.Infrastracture.Constants;
-using TW.UI.Helpers;
-using TW.UI.Models;
-
-namespace TW.UI.Services.Spotify
+﻿namespace TW.UI.Services.Spotify
 {
     //public class SpotifyClientService
-      
+
 
     //{
     //    private readonly HttpsConnectionHelper _httpsHelper;

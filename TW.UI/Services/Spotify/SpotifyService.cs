@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using TW.Infrastracture.Constants;
+using TW.UI.Constants;
 using TW.UI.Helpers;
 using TW.UI.Models.Spotify.Data;
 
@@ -287,7 +287,15 @@ namespace TW.UI.Services.Spotify
 
             var responseMessage = await httpClient.GetAsync(playlistsEndpoint);
             var content = await responseMessage.Content.ReadAsStringAsync();
+            var playlistList = JsonSerializerHelper.DeserializeJson<SpotifyPlaylistList>(content);
 
+            //playlist not playlists
+            foreach(var playlists in playlistList.Playlists)
+            {
+                var response = await httpClient.GetAsync(playlistsEndpoint + "/" + playlists.Id+"/tracks");
+                var jsonContent = await response.Content.ReadAsStringAsync();
+            }
+            
             return null;
         }
     }

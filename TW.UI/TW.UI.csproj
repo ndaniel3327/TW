@@ -61,9 +61,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Pages\Popups\SpotifyAuthorizationPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Pages\SpotifyPlaylistsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -74,6 +71,8 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Youtube\" />
+	  <Folder Include="Pages\Popups\" />
+	  <Folder Include="ViewModels\" />
 	</ItemGroup>
 
 </Project>
