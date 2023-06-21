@@ -3,12 +3,10 @@ using TW.UI.Models.Spotify.Data;
 
 namespace TW.UI.Models.Spotify.View
 {
-    public class SpotifyPlaylistGroup : List<SpotifyTrack>
+    public class SpotifyPlaylistGroup
+        : List<SpotifyTrackView>
     {
         public string Name { get; set; }
-        public SpotifyPlaylistGroup(string name, List<SpotifyTrack> tracks) : base(tracks)
-        {
-            Name = name;
-        }
+        public List<SpotifyTrackView> Tracks { get; set; }
     }
 }

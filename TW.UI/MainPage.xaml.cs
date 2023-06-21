@@ -66,13 +66,7 @@ namespace TW.UI
                 {
                     var playlistModels = await _spotifyService.GetPlaylists();
 
-                    var playlistGroups = new List<SpotifyPlaylistGroup>();
-                    foreach (var playlist in playlistModels)
-                    {
-                        var playlistGroup = new SpotifyPlaylistGroup(playlist.Name, playlist.Tracks);
-                        playlistGroups.Add(playlistGroup);
-                    }
-                    SpotifyConstants.playlistGroups = playlistGroups;
+                    await Task.Run(()=>SpotifyConstants.playlistGroups = playlistModels);
 
                     await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
                 }

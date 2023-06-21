@@ -10,6 +10,8 @@ namespace TW.UI.Models.Spotify.Data
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
+
+        [JsonIgnore]
         public List<SpotifyTrack> Tracks { get; set; }
     }
 }

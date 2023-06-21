@@ -26,7 +26,7 @@ namespace TW.UI
             builder.Services.AddTransient<ISpotifyService, SpotifyService>();
             builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddTransient<SpotifyPlaylistsPage>(provider=>new SpotifyPlaylistsPage(provider.GetService<ISpotifyService>(),SpotifyConstants.playlistGroups));
+            builder.Services.AddTransient<SpotifyPlaylistsPage>();
             builder.Services.AddTransient<YoutubePlaylistsPage>();
 
             return builder.Build();
