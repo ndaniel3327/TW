@@ -24,7 +24,7 @@ namespace TW.UI
                 });
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddTransient<ISpotifyService, SpotifyService>();
-            builder.Services.AddSingleton<IYoutubeClientService, YoutubeClientService>();
+            builder.Services.AddTransient<IYoutubeService, YoutubeService>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<SpotifyPlaylistsPage>();
             builder.Services.AddTransient<YoutubePlaylistsPage>();

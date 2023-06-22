@@ -26,11 +26,18 @@
                 Clicked="OnYoutubeButtonClicked"
                 HorizontalOptions="Center" />
             <Button
+                x:Name="GoToPlaylistsButton"
+                Text="Go To Playlists"
+                HorizontalOptions="Center"
+                IsVisible="false">
+            </Button>
+            <Button
                 x:Name="LogOutYoutube"
                 Text="LogOutYoutube"
                 Clicked="LogOutYoutube_Clicked"
                 HorizontalOptions="Center"
                 ></Button>
+            
         </VerticalStackLayout>
     </ScrollView>
 

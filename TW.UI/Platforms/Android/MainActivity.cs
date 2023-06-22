@@ -43,8 +43,11 @@ namespace TW.UI
                 var uriSubstring = uriString.Substring(codeIndex).Split("&");
                 var code = uriSubstring[0].Substring(uriSubstring[0].IndexOf("=") + 1);
 
-                var youtubeService = ServiceHelper.GetService<IYoutubeClientService>();
+                var youtubeService = ServiceHelper.GetService<IYoutubeService>();
                 youtubeService.GetAuthorizationToken(code);
+
+                var mainPage = ServiceHelper.GetService<MainPage>();
+                mainPage.YoutubeIsLoggedIn = true;
 
             }
             else if (uri != null && uri.ToString().StartsWith("oauth://localhost:5001/api/Spotify/callback"))

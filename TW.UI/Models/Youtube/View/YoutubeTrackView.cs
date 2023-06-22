@@ -1,6 +1,6 @@
-﻿namespace TW.UI.Services.Youtube
+﻿namespace TW.UI.Models.Youtube.View
 {
-    public class YoutubeTrackModel
+    public class YoutubeTrackView
     {
         public string Artist { get; set; }
         public string Name { get; set; }

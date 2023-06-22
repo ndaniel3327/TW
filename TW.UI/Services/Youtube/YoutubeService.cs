@@ -1,11 +1,14 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
+using TW.UI.Constants;
 using TW.UI.Helpers;
+using TW.UI.Models.Youtube.Data;
 using TW.UI.Pages;
 
 namespace TW.UI.Services.Youtube
 {
-    public class YoutubeClientService : IYoutubeClientService
+    public class YoutubeService
+        : IYoutubeService
     {
         private readonly string _clientId = "829868223814-gn9dbtit6si40k2vd7thblkfi4a1lv4i.apps.googleusercontent.com";
 
@@ -33,20 +36,18 @@ namespace TW.UI.Services.Youtube
 
             var responseJson = await response.Content.ReadAsStringAsync();
             var token = JsonSerializerHelper.DeserializeJson<YoutubeTokenDetails>(responseJson);
+            //TODO: Remove this
             token.YoutubeExpiresInSeconds = 10;
             var addingDate = DateTime.Now;
-            token.YoutubeTokenExpirationDate = addingDate.AddSeconds(token.YoutubeExpiresInSeconds);
+            var expirationDate = addingDate.AddSeconds(token.YoutubeExpiresInSeconds);
 
-            await SecureStorage.Default.SetAsync(nameof(token.YoutubeAccessToken), token.YoutubeAccessToken);
-            await SecureStorage.Default.SetAsync(nameof(token.YoutubeRefreshToken), token.YoutubeRefreshToken);
-            await SecureStorage.Default.SetAsync(nameof(token.YoutubeTokenType), token.YoutubeTokenType);
-            await SecureStorage.Default.SetAsync(nameof(token.YoutubeTokenExpirationDate), token.YoutubeTokenExpirationDate.ToString());
-
-
-            await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
+            await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameAccessToken, token.YoutubeAccessToken);
+            await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameRefreshToken, token.YoutubeRefreshToken);
+            await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameTokenType, token.YoutubeTokenType);
+            await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameTokenExpirationDate, expirationDate.ToString());
         }
 
-        public async Task<YoutubePlaylistGroup> GetYoutubePlaylists()
+        public async Task<YoutubePlaylistList> GetYoutubePlaylists()
         {
             string accessToken = await SecureStorage.Default.GetAsync("YoutubeAccessToken");
             string tokenType = await SecureStorage.Default.GetAsync("YoutubeTokenType");
@@ -59,9 +60,9 @@ namespace TW.UI.Services.Youtube
                 "part=snippet&" +
                 "mine=true");
             var youtubePlaylists = await responseMessage.Content.ReadAsStringAsync();
-            var playlists = JsonSerializerHelper.DeserializeJson<YoutubePlaylistGroup>(youtubePlaylists);
+            var playlists = JsonSerializerHelper.DeserializeJson<YoutubePlaylistList>(youtubePlaylists);
 
-            var playlistGroup = new YoutubePlaylistGroup();
+            var playlistGroup = new YoutubePlaylistList();
             foreach (var playlist in playlists.Playlists)
             {
                 var localresponseMessage = await httpClient.GetAsync("https://www.googleapis.com/youtube/v3/playlistItems?" +
@@ -76,7 +77,7 @@ namespace TW.UI.Services.Youtube
             return playlists;
         }
 
-        public async void RefreshAccessToken()
+        public async Task<bool> RefreshAccessToken()
         {
             string refreshToken = await SecureStorage.Default.GetAsync("YoutubeRefreshToken");
 
@@ -89,15 +90,24 @@ namespace TW.UI.Services.Youtube
                 $"refresh_token={refreshToken}";
 
             var response = await httpClient.PostAsync(myUri, new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded"));
-            var responseJson = await response.Content.ReadAsStringAsync();
-            var token = JsonSerializerHelper.DeserializeJson<YoutubeTokenDetails>(responseJson);
-            token.YoutubeExpiresInSeconds = 10;
-            var addingDate = DateTime.Now;
-            token.YoutubeTokenExpirationDate = addingDate.AddSeconds(token.YoutubeExpiresInSeconds);
+            if(response.IsSuccessStatusCode)
+            {
+                var responseJson = await response.Content.ReadAsStringAsync();
+                var token = JsonSerializerHelper.DeserializeJson<YoutubeTokenDetails>(responseJson);
+                //TODO: Remove this
+                token.YoutubeExpiresInSeconds = 10;
+                var addingDate = DateTime.Now;
+                var expirationDate = addingDate.AddSeconds(token.YoutubeExpiresInSeconds);
 
-            await SecureStorage.Default.SetAsync(nameof(token.YoutubeAccessToken), token.YoutubeAccessToken);
-            await SecureStorage.Default.SetAsync(nameof(token.YoutubeTokenType), token.YoutubeTokenType);
-            await SecureStorage.Default.SetAsync(nameof(token.YoutubeTokenExpirationDate), token.YoutubeTokenExpirationDate.ToString());
+                await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameAccessToken, token.YoutubeAccessToken);
+                await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameTokenType, token.YoutubeTokenType);
+                await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameTokenExpirationDate , expirationDate.ToString());
+
+                return true;
+            }
+
+            return false;
+
         }
 
     }

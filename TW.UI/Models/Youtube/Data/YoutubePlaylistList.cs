@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace TW.UI.Services.Youtube
+namespace TW.UI.Models.Youtube.Data
 {
-    public class YoutubePlaylistGroup
+    public class YoutubePlaylistList
     {
         [JsonPropertyName("items")]
         public List<YoutubePlaylist> Playlists { get; set; }
@@ -37,7 +32,7 @@ namespace TW.UI.Services.Youtube
 
     public class YoutubeTrackInfo
     {
-        [JsonPropertyName ("title")]
+        [JsonPropertyName("title")]
         public string Name { get; set; }
     }
 }

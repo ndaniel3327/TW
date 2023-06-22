@@ -69,10 +69,4 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Models\Youtube\" />
-	  <Folder Include="Pages\Popups\" />
-	  <Folder Include="ViewModels\" />
-	</ItemGroup>
-
 </Project>

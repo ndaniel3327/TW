@@ -5,7 +5,7 @@
              Title="YoutubePlaylistsPage"
              xmlns:viewmodel="clr-namespace:TW.UI.Pages"
              x:DataType="viewmodel:YoutubePlaylistsPage"
-             xmlns:model="clr-namespace:TW.UI.Services.Youtube">
+             xmlns:model="clr-namespace:TW.UI.Models.Youtube.View">
     <StackLayout>
         <ListView x:Name="listView"
                   VerticalOptions="FillAndExpand"
@@ -13,7 +13,7 @@
                   IsGroupingEnabled="True">
              
             <ListView.GroupHeaderTemplate>
-                <DataTemplate x:DataType="model:YoutubePlaylistModel">
+                <DataTemplate x:DataType="model:YoutubePlaylistGroup">
                     <ViewCell>
                         <Label Text="{Binding Name}"
                                BackgroundColor="LightGray"
@@ -24,7 +24,7 @@
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:YoutubeTrackModel">
+                <DataTemplate x:DataType="model:YoutubeTrackView">
                     <TextCell Text="{Binding Name}"></TextCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

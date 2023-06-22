@@ -1,13 +1,14 @@
+using TW.UI.Models.Youtube.View;
 using TW.UI.Services.Youtube;
 
 namespace TW.UI.Pages;
 
 public partial class YoutubePlaylistsPage : ContentPage
 {
-    private readonly IYoutubeClientService _youtubeService;
+    private readonly IYoutubeService _youtubeService;
     
-    private List<YoutubePlaylistModel> _youtubePlaylists;
-    public List<YoutubePlaylistModel> YoutubePlaylists 
+    private List<YoutubePlaylistGroup> _youtubePlaylists;
+    public List<YoutubePlaylistGroup> YoutubePlaylists 
     {
         get 
         {
@@ -22,7 +23,7 @@ public partial class YoutubePlaylistsPage : ContentPage
             }
         }
     }
-    public YoutubePlaylistsPage(IYoutubeClientService youtubeService)
+    public YoutubePlaylistsPage(IYoutubeService youtubeService)
 	{
 		InitializeComponent();
         BindingContext = this;
@@ -33,16 +34,16 @@ public partial class YoutubePlaylistsPage : ContentPage
     private async void GetPlaylists()
     {
         var playlistGroup =await _youtubeService.GetYoutubePlaylists();
-        var playlistsModel = new List<YoutubePlaylistModel>(); 
+        var playlistsModel = new List<YoutubePlaylistGroup>(); 
         foreach (var playlist in playlistGroup.Playlists)
         {
-            var tracks = new List<YoutubeTrackModel>();
+            var tracks = new List<YoutubeTrackView>();
             var trackNameList = playlist.Tracks.Select(q => q.TrackInfo.Name);
             foreach (var trackName in trackNameList)
             {
-                tracks.Add(new YoutubeTrackModel() { Name = trackName });
+                tracks.Add(new YoutubeTrackView() { Name = trackName });
             }
-            var playlistModel = new YoutubePlaylistModel(playlist.PlaylistInfo.Name, tracks);
+            var playlistModel = new YoutubePlaylistGroup(playlist.PlaylistInfo.Name, tracks);
             playlistsModel.Add(playlistModel);
         }
         YoutubePlaylists = playlistsModel;
