@@ -142,18 +142,17 @@ namespace TW.UI.Services.Spotify
 
             var playlistGroupView = new List<SpotifyPlaylistGroup>();
 
-            foreach(var playlist in playlistList.Playlists)
+            foreach (var playlist in playlistList.Playlists)
             {
                 var response = await httpClient.GetAsync($"https://api.spotify.com/v1/playlists/{playlist.Id}/tracks?fields=items(track(name,artists(name)))");
                 var jsonContent = await response.Content.ReadAsStringAsync();
                 var playlistItems = JsonSerializerHelper.DeserializeJson<SpotifyTrackList>(jsonContent);
-                playlistGroupView.Add(new SpotifyPlaylistGroup()
-                {
-                    Name = playlist.Name,
-                    Tracks = _mapper.Map<List<SpotifyTrackView>>(playlistItems.Tracks)
-                });
+                playlistGroupView.Add
+                    (
+                    new SpotifyPlaylistGroup(playlist.Name, _mapper.Map<List<SpotifyTrackView>>(playlistItems.Tracks))
+                );
             }
-            
+
             return playlistGroupView;
         }
     }
