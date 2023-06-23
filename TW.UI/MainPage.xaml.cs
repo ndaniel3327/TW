@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using CommunityToolkit.Maui.Views;
 using TW.UI.Constants;
 using TW.UI.Pages;
+using TW.UI.Pages.PopupPages;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 
@@ -23,7 +24,7 @@ namespace TW.UI
             set
             {
                 _youtubeIsLoggedIn = value;
-                ChangeYoutubeButtonStyleAccordingToLoginStatus();
+                ChangeYoutubeButtonVIsibilityAccordingToLoginStatus();
                 CheckGoToPlaylistkButtonStatus();
 
             }
@@ -38,7 +39,7 @@ namespace TW.UI
             set
             {
                 _spotifyIsLoggedIn = value;
-                ChangeSpotifyButtonStyleAccordingToLoginStatus();
+                ChangeSpotifyButtonVisibilityAccordingToLoginStatus();
                 CheckGoToPlaylistkButtonStatus();
             }
         }
@@ -94,6 +95,32 @@ namespace TW.UI
             }
         }
 
+        private async void OnGoToPlaylistsButtonClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(PlaylistsPage));
+        }
+        private async void OnAddLocalFilesButtonClicked(object sender, EventArgs e)
+        {
+            var audioFileType=new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                {DevicePlatform.Android,new[]{ "audio/mpeg"} }  //audio/mpeg means .mp3 files
+            });
+
+            var result = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle="Pick Audio File Please",
+                FileTypes=audioFileType
+            });
+            if (result == null)
+                return;
+
+            var stream = result.FileName;
+
+            var popup = new PlaylistSelectForLocalFilesPopup(stream);
+
+            this.ShowPopup(popup);
+        }
+
         private async void CheckYoutubeLoginStatus()
         {
             var expirationDate = await SecureStorage.Default.GetAsync("YoutubeTokenExpirationDate");
@@ -146,21 +173,21 @@ namespace TW.UI
                 SpotifyIsLoggedIn = false;
             }
         }
-        private void ChangeSpotifyButtonStyleAccordingToLoginStatus()
+        private void ChangeSpotifyButtonVisibilityAccordingToLoginStatus()
         {
             if (SpotifyIsLoggedIn == true)
             {
                 SpotifyButton.IsVisible = false;
             }
-            else if(SpotifyIsLoggedIn == false)
+            else if (SpotifyIsLoggedIn == false)
             {
                 SpotifyButton.IsVisible = true;
             }
 
         }
-        private void ChangeYoutubeButtonStyleAccordingToLoginStatus()
+        private void ChangeYoutubeButtonVIsibilityAccordingToLoginStatus()
         {
-            if(YoutubeIsLoggedIn == true)
+            if (YoutubeIsLoggedIn == true)
             {
                 YoutubeButton.IsVisible = false;
             }
@@ -169,7 +196,7 @@ namespace TW.UI
                 YoutubeButton.IsVisible = true;
             }
         }
-        private void CheckGoToPlaylistkButtonStatus()
+        private async void CheckGoToPlaylistkButtonStatus()
         {
             if (SpotifyIsLoggedIn == true || YoutubeIsLoggedIn == true)
             {
@@ -178,6 +205,11 @@ namespace TW.UI
             else if (SpotifyIsLoggedIn == false && YoutubeIsLoggedIn == false)
             {
                 GoToPlaylistsButton.IsVisible = false;
+            }
+
+            if (SpotifyIsLoggedIn == true && YoutubeIsLoggedIn == true)
+            {
+                await Shell.Current.GoToAsync(nameof(PlaylistsPage));
             }
         }
 

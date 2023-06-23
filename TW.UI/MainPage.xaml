@@ -13,31 +13,40 @@
                 Source="dotnet_bot.png"
                 SemanticProperties.Description="Cute dot net bot waving hi to you!"
                 HeightRequest="200"
-                HorizontalOptions="Center" />
-
+                HorizontalOptions="Center" 
+                ></Image>
             <Button
                 x:Name="SpotifyButton"
                 Text="LogIn with Spotify"
                 Clicked="OnSpotifyButtonClicked"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center" 
+                ></Button>
             <Button
                 x:Name="YoutubeButton"
                 Text="LogIn with Youtube"
                 Clicked="OnYoutubeButtonClicked"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center"
+                ></Button>
             <Button
                 x:Name="GoToPlaylistsButton"
                 Text="Go To Playlists"
+                Clicked="OnGoToPlaylistsButtonClicked"
                 HorizontalOptions="Center"
-                IsVisible="false">
-            </Button>
+                IsVisible="false"
+                ></Button>
+            <Button
+                x:Name="AddLocalFilesButton"
+                Text="AddLocalFiles"
+                Clicked="OnAddLocalFilesButtonClicked"
+                HorizontalOptions="Center"
+                ></Button>
             <Button
                 x:Name="LogOutYoutube"
                 Text="LogOutYoutube"
                 Clicked="LogOutYoutube_Clicked"
                 HorizontalOptions="Center"
                 ></Button>
-            
+
         </VerticalStackLayout>
     </ScrollView>
 
