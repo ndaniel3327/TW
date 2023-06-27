@@ -114,9 +114,10 @@ namespace TW.UI
             if (result == null)
                 return;
 
-            var stream = result.FileName;
+            string fileName = result.FileName;
+            string filePath = result.FullPath;
 
-            var popup = new PlaylistSelectForLocalFilesPopup(stream);
+            var popup = new PlaylistSelectForLocalFilesPopup(fileName,filePath);
 
             this.ShowPopup(popup);
         }
