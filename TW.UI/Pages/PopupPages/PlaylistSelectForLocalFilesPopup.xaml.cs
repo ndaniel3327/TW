@@ -133,17 +133,4 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
 
         GetLocalPlaylists();
     }
-
-    private void OnEntryFocused(object sender, FocusEventArgs e)
-    {
-        okButton.IsVisible = false;
-        deletePlaylistButton.IsVisible= false;
-       // listView.SelectedItem = null;  //TODO: code selected item too
-    }
-
-    private void OnEntryUnfocused(object sender, FocusEventArgs e)
-    {
-        okButton.IsVisible= true;
-        deletePlaylistButton.IsVisible = true;
-    }
 }

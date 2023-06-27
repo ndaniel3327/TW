@@ -14,15 +14,25 @@
             x:Name="listView"
             ItemsSource="{Binding Playlists}"
             ItemSelected="OnListViewItemSelected"
-            ></ListView>
+            >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Playlists}"></Label>
+                            <ImageButton Source="checkmark.svg"></ImageButton>
+                            <ImageButton Source="xmark.svg"></ImageButton>
+                        </HorizontalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <Entry 
             x:Name="myEntry"
             IsVisible="false"
             Placeholder="Add New Playlist Name"
-            PlaceholderColor="LightGray"
+            PlaceholderColor="DarkGray"
             Completed="OnEntryCompleted"
-            Focused="OnEntryFocused"
-            Unfocused="OnEntryUnfocused"
             Margin="10,10,9,10"
             ></Entry>
         <HorizontalStackLayout>
