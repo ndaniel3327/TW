@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup 
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="TW.UI.Pages.PopupPages.SpotifyPlaylistsPopup"
+             xmlns:viewmodel="clr-namespace:TW.UI.Pages.PopupPages"
+             x:DataType="viewmodel:SpotifyPlaylistsPopup"
+             xmlns:group="clr-namespace:TW.UI.Models.Spotify.View">
+    <VerticalStackLayout VerticalOptions="FillAndExpand">
+        <Label Text="Hello!"></Label>
+        <ListView VerticalOptions="FillAndExpand"
+                  IsGroupingEnabled="True"
+                  ItemsSource="{Binding Playlists}">
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="group:SpotifyPlaylistGroup">
+                    <ViewCell>
+                        <Label Text="{Binding Name}"
+                               BackgroundColor="LightGray"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               Padding="10"></Label>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="group:SpotifyTrackView">
+                    <TextCell Text="{Binding Name}"
+                          Detail="{Binding Artists}"></TextCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+</toolkit:Popup>

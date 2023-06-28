@@ -1,9 +1,10 @@
+using CommunityToolkit.Maui.Views;
 using TW.UI.Models.Youtube.View;
 using TW.UI.Services.Youtube;
 
-namespace TW.UI.Pages;
+namespace TW.UI.Pages.PopupPages;
 
-public partial class YoutubePlaylistsPage : ContentPage
+public partial class YoutubePlaylistsPopup : Popup
 {
     private readonly IYoutubeService _youtubeService;
     
@@ -23,7 +24,7 @@ public partial class YoutubePlaylistsPage : ContentPage
             }
         }
     }
-    public YoutubePlaylistsPage(IYoutubeService youtubeService)
+    public YoutubePlaylistsPopup(IYoutubeService youtubeService)
 	{
 		InitializeComponent();
         BindingContext = this;

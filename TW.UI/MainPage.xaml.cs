@@ -61,7 +61,7 @@ namespace TW.UI
 
                 await Task.Run(() => SpotifyConstants.playlistGroups = playlistModels);
 
-                await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
+               // await Shell.Current.GoToAsync(nameof(SpotifyPlaylistsPage));
             }
             else
             {
@@ -78,9 +78,9 @@ namespace TW.UI
 
         private async void OnYoutubeButtonClicked(object sender, EventArgs e)
         {
-            if (_youtubeIsLoggedIn == true)
+            if (YoutubeIsLoggedIn == true)
             {
-                await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
+                // await Shell.Current.GoToAsync(nameof(YoutubePlaylistsPage));
             }
             else
             {

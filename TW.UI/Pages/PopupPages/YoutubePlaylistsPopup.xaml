@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TW.UI.Pages.YoutubePlaylistsPage"
-             Title="YoutubePlaylistsPage"
-             xmlns:viewmodel="clr-namespace:TW.UI.Pages"
-             x:DataType="viewmodel:YoutubePlaylistsPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="TW.UI.Pages.PopupPages.YoutubePlaylistsPopup"
+             xmlns:viewmodel="clr-namespace:TW.UI.Pages.PopupPages"
+             x:DataType="viewmodel:YoutubePlaylistsPopup"
              xmlns:model="clr-namespace:TW.UI.Models.Youtube.View">
-    <StackLayout>
+    <VerticalStackLayout>
         <ListView x:Name="listView"
                   VerticalOptions="FillAndExpand"
                   ItemsSource="{Binding YoutubePlaylists}"
@@ -29,5 +29,5 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </StackLayout>
-</ContentPage>
+    </VerticalStackLayout>
+</toolkit:Popup>

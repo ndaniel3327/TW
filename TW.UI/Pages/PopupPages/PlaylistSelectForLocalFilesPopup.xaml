@@ -9,23 +9,26 @@
 
     <VerticalStackLayout
         BackgroundColor="White">
+        <Label Text="Select a playlist :"
+               Margin="10,20,10,0"
+               FontAttributes="Bold"></Label>
         <ListView
             Margin="0,20,0,0"
             x:Name="listView"
             ItemsSource="{Binding Playlists}"
             ItemSelected="OnListViewItemSelected"
             >
-            <ListView.ItemTemplate>
+            <!--<ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <HorizontalStackLayout>
-                            <Label Text="{Binding Playlists}"></Label>
+                        <HorizontalStackLayout HorizontalOptions="FillAndExpand">
+                            <Label></Label>
                             <ImageButton Source="checkmark.svg"></ImageButton>
                             <ImageButton Source="xmark.svg"></ImageButton>
                         </HorizontalStackLayout>
                     </ViewCell>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ListView.ItemTemplate>-->
         </ListView>
         <Entry 
             x:Name="myEntry"

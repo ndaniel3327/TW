@@ -1,9 +1,10 @@
+using CommunityToolkit.Maui.Views;
 using TW.UI.Constants;
 using TW.UI.Models.Spotify.View;
 
-namespace TW.UI.Pages;
+namespace TW.UI.Pages.PopupPages;
 
-public partial class SpotifyPlaylistsPage : ContentPage
+public partial class SpotifyPlaylistsPopup : Popup
 {
     private List<SpotifyPlaylistGroup> _playlists = new();
     public List<SpotifyPlaylistGroup> Playlists
@@ -19,12 +20,13 @@ public partial class SpotifyPlaylistsPage : ContentPage
         }
     }
 
-    public SpotifyPlaylistsPage()
+    public SpotifyPlaylistsPopup(List<SpotifyPlaylistGroup> spotifyPlaylists)
     {
+        Size= new Size(DeviceDisplay.Current.MainDisplayInfo.Width/3, DeviceDisplay.Current.MainDisplayInfo.Height/4);
         BindingContext = this;
 
         InitializeComponent();
 
-        Playlists = SpotifyConstants.playlistGroups;
+        Playlists = spotifyPlaylists;
     }
 }

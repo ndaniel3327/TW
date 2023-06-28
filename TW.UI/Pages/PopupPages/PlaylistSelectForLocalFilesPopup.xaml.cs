@@ -52,7 +52,7 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
         _fileName = fileName;
         _filePath = filePath;
     }
-    private void GetLocalPlaylists()
+    private int GetLocalPlaylists()
     {
         string fullPath = Path.Combine(_mainDirectoryPath, LocalFilesConstants.LocalPlaylistsFileName);
         if (File.Exists(fullPath))
@@ -67,11 +67,13 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
             //    playlists.Add(playlistName);
             //}
             Playlists = playlistNames.ToList();
+            return Playlists.Count;
         }
         else
         {
             var stream = File.Create(fullPath);
             stream.Close();
+            return 0;
         }
     }
 
@@ -89,7 +91,7 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
             stream.Close();
         }
 
-        File.AppendAllText(playlistFilePath, "name=" + _fileName + "@path=" + _filePath);
+        File.AppendAllText(playlistFilePath, "name=" + _fileName + "@path=" + _filePath + Environment.NewLine);
         var content = File.ReadAllLines(playlistFilePath);
 
         this.Close();
@@ -98,15 +100,21 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
     private void OnEntryCompleted(object sender, EventArgs e)
     {
         string playlistName = ((Entry)sender).Text;
-        string fullPath = Path.Combine(_mainDirectoryPath, LocalFilesConstants.LocalPlaylistsFileName);
-        File.AppendAllText(fullPath, playlistName + Environment.NewLine);
+        if( !string.IsNullOrEmpty(playlistName))
+        {
+            string fullPath = Path.Combine(_mainDirectoryPath, LocalFilesConstants.LocalPlaylistsFileName);
+            File.AppendAllText(fullPath, playlistName + Environment.NewLine);
 
-        string mainDirectoryPath = FileSystem.Current.AppDataDirectory;
-        var stream = File.Create(Path.Combine(mainDirectoryPath, playlistName));
-        stream.Close();
+            string mainDirectoryPath = FileSystem.Current.AppDataDirectory;
+            var stream = File.Create(Path.Combine(mainDirectoryPath, playlistName));
+            stream.Close();
 
-        myEntry.Text = String.Empty;
-        GetLocalPlaylists();
+            myEntry.Text = String.Empty;
+
+            GetLocalPlaylists();
+            okButton.IsVisible= false;
+            deletePlaylistButton.IsVisible= false;
+        } 
     }
 
     private void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -131,6 +139,14 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
 
         File.Delete(Path.Combine(_mainDirectoryPath, _selectedPlaylist));
 
-        GetLocalPlaylists();
+        int numberOfPlaylists = GetLocalPlaylists();
+        if(numberOfPlaylists == 0)
+        {
+            okButton.IsVisible=false;
+            deletePlaylistButton.IsVisible = false;
+        }
+        listView.SelectedItem = null;
+        okButton.IsVisible = false;
+        deletePlaylistButton.IsVisible = false;  
     }
 }

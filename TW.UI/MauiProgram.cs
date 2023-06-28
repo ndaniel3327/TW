@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
 using System.Reflection;
-using TW.UI.Constants;
+using TW.UI.Helpers;
 using TW.UI.Pages;
+using TW.UI.Pages.PopupPages;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 
@@ -26,8 +27,8 @@ namespace TW.UI
             builder.Services.AddTransient<ISpotifyService, SpotifyService>();
             builder.Services.AddTransient<IYoutubeService, YoutubeService>();
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddTransient<SpotifyPlaylistsPage>();
-            builder.Services.AddTransient<YoutubePlaylistsPage>();
+            builder.Services.AddTransient<YoutubePlaylistsPopup>();
+            builder.Services.AddTransient<PlaylistsPage>();
 
             return builder.Build();
         }

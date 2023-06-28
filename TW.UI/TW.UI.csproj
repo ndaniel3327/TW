@@ -50,6 +50,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="YoutubePlaylistsPopup.xaml.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Platforms\Android\Resources\xml\auto_backup_rules.xml" />
 	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
 	  <None Remove="Resources\Images\checkmark.svg" />
@@ -66,6 +70,9 @@
 	  <Compile Update="Pages\PopupPages\PlaylistSelectForLocalFilesPopup.xaml.cs">
 	    <DependentUpon>PlaylistSelectForLocalFilesPopup.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\PopupPages\SpotifyPlaylistsPopup.xaml.cs">
+	    <DependentUpon>SpotifyPlaylistsPopup.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -75,10 +82,10 @@
 	  <MauiXaml Update="Pages\PopupPages\PlaylistSelectForLocalFilesPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\SpotifyPlaylistsPage.xaml">
+	  <MauiXaml Update="Pages\PopupPages\SpotifyPlaylistsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\YoutubePlaylistsPage.xaml">
+	  <MauiXaml Update="Pages\PopupPages\YoutubePlaylistsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

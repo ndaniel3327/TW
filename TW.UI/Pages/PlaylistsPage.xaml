@@ -3,11 +3,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TW.UI.Pages.PlaylistsPage"
              >
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Youtube" ></ToolbarItem>
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem Text="Youtube"
+                     Ba></ToolbarItem>
         <ToolbarItem Text="Spotify"></ToolbarItem>
         <ToolbarItem Text="Local"></ToolbarItem>
-    </ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>-->
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="0.33*,0.33*,0.33*"
+              RowDefinitions="*">
+            <Button Text="Spotify"
+                    FontSize="13"
+                    TextColor="Black"
+                    x:Name="spotifyButton"
+                    HorizontalOptions="End"
+                    BackgroundColor="White"
+                    WidthRequest="80"
+                    HeightRequest="40"
+                    Margin="10,10,10,10"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Clicked="SpotifyButtonClicked"
+                    ></Button>
+            <Button Text="Youtube"
+                    FontSize="13"
+                    TextColor="Black" 
+                    x:Name="youtubeButton"
+                    HorizontalOptions="End"
+                    BackgroundColor="White"
+                    WidthRequest="80"
+                    HeightRequest="40"
+                    Margin="10,10,10,10"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Clicked="YoutubeButtonClicked"
+                    ></Button>
+            <Button Text="Local" 
+                    FontSize="13"
+                    TextColor="Black"
+                    HorizontalOptions="End"
+                    BackgroundColor="White"
+                    WidthRequest="80"
+                    HeightRequest="40"
+                    Margin="10,10,10,10"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Clicked="LocalButtonClicked"
+                    ></Button>
+        </Grid>
+    </Shell.TitleView>
     <VerticalStackLayout>
         <Label 
             Text="Playlists Page"
