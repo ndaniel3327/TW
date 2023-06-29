@@ -149,7 +149,7 @@ namespace TW.UI.Services.Spotify
                 var playlistItems = JsonSerializerHelper.DeserializeJson<SpotifyTrackList>(jsonContent);
                 playlistGroupView.Add
                     (
-                    new SpotifyPlaylistGroup(playlist.Name, _mapper.Map<List<SpotifyTrackView>>(playlistItems.Tracks))
+                    new SpotifyPlaylistGroup(playlist.Id, playlist.Name, _mapper.Map<List<SpotifyTrackView>>(playlistItems.Tracks))
                 );
             }
 

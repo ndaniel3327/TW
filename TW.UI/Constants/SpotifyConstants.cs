@@ -1,10 +1,8 @@
-﻿using TW.UI.Models.Spotify.View;
-
-namespace TW.UI.Constants
+﻿namespace TW.UI.Constants
 {
     public static class SpotifyConstants
     {
-        public static List<SpotifyPlaylistGroup> playlistGroups;
+        public const string SpotifyPlaylistsFileName = "SpotifyPlaylistsFile";
 
         public const string StorageNameAccessToken = "SpotifyAccessToken";
         public const string StorageNameRefreshToken = "SpotifyRefreshToken";

@@ -6,8 +6,8 @@ namespace TW.UI.Pages.PopupPages;
 
 public partial class SpotifyPlaylistsPopup : Popup
 {
-    private List<SpotifyPlaylistGroup> _playlists = new();
-    public List<SpotifyPlaylistGroup> Playlists
+    private List<string> _playlists = new();
+    public List<string> Playlists
     {
         get
         {
@@ -20,13 +20,23 @@ public partial class SpotifyPlaylistsPopup : Popup
         }
     }
 
-    public SpotifyPlaylistsPopup(List<SpotifyPlaylistGroup> spotifyPlaylists)
+    public SpotifyPlaylistsPopup(List<string> spotifyPlaylistNames)
     {
         Size= new Size(DeviceDisplay.Current.MainDisplayInfo.Width/3, DeviceDisplay.Current.MainDisplayInfo.Height/4);
         BindingContext = this;
 
         InitializeComponent();
 
-        Playlists = spotifyPlaylists;
+        Playlists = spotifyPlaylistNames;
+    }
+
+    private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void OnXButtonClicked(object sender, EventArgs e)
+    {
+        this.Close();
     }
 }

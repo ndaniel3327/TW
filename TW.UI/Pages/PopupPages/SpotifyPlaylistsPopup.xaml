@@ -6,13 +6,42 @@
              x:Class="TW.UI.Pages.PopupPages.SpotifyPlaylistsPopup"
              xmlns:viewmodel="clr-namespace:TW.UI.Pages.PopupPages"
              x:DataType="viewmodel:SpotifyPlaylistsPopup"
-             xmlns:group="clr-namespace:TW.UI.Models.Spotify.View">
-    <VerticalStackLayout VerticalOptions="FillAndExpand">
-        <Label Text="Hello!"></Label>
-        <ListView VerticalOptions="FillAndExpand"
-                  IsGroupingEnabled="True"
-                  ItemsSource="{Binding Playlists}">
-            <ListView.GroupHeaderTemplate>
+             xmlns:group="clr-namespace:TW.UI.Models.Spotify.View"
+             CanBeDismissedByTappingOutsideOfPopup="False">
+
+    <VerticalStackLayout BackgroundColor="White">
+
+            <ImageButton Source="xmark.svg"
+                         Clicked="OnXButtonClicked"
+                         HorizontalOptions="End"
+                         BackgroundColor="LightGray"
+                         Padding="10">
+                
+            </ImageButton>
+
+            <Label Text="My Spotify Playlists :"
+                   FontSize="Header"
+                   FontAttributes="Bold"
+                   Margin="10"
+                   HorizontalOptions="StartAndExpand">
+            </Label>
+
+
+            <CollectionView Margin="10"
+                            HorizontalOptions="CenterAndExpand"
+                            SelectionMode="Multiple"
+                            ItemsSource="{Binding Playlists}"
+                            SelectionChanged="OnCollectionViewSelectionChanged">
+                
+                <!--<CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+
+                    </ViewCell>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>-->
+
+                <!--<ListView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="group:SpotifyPlaylistGroup">
                     <ViewCell>
                         <Label Text="{Binding Name}"
@@ -28,7 +57,7 @@
                     <TextCell Text="{Binding Name}"
                           Detail="{Binding Artists}"></TextCell>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </VerticalStackLayout>
+            </ListView.ItemTemplate>-->
+            </CollectionView>
+        </VerticalStackLayout>
 </toolkit:Popup>

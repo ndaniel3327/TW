@@ -52,10 +52,9 @@
                     ></Button>
         </Grid>
     </Shell.TitleView>
-    <VerticalStackLayout>
+    <VerticalStackLayout BackgroundColor="White">
         <Label 
             Text="Playlists Page"
-            VerticalOptions="Center" 
             HorizontalOptions="Center" />
     </VerticalStackLayout>
 </ContentPage>
