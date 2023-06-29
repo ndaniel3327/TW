@@ -2,7 +2,10 @@
 {
     public static class SpotifyConstants
     {
-        public const string SpotifyPlaylistsFileName = "SpotifyPlaylistsFile";
+        private static string _mainDirectoryPath = FileSystem.Current.AppDataDirectory;
+        private const string _spotifyPlaylistsFileName = "SpotifyPlaylistsFile";
+
+        public static string SpotifyPlaylitsFileFullPath = Path.Combine(_mainDirectoryPath, _spotifyPlaylistsFileName);
 
         public const string StorageNameAccessToken = "SpotifyAccessToken";
         public const string StorageNameRefreshToken = "SpotifyRefreshToken";

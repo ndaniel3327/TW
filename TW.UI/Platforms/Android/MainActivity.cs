@@ -47,7 +47,7 @@ namespace TW.UI
                 youtubeService.GetAuthorizationToken(code);
 
                 var mainPage = ServiceHelper.GetService<MainPage>();
-                mainPage.YoutubeIsLoggedIn = true;
+                mainPage.IsYoutubeLoggedIn = true;
 
             }
             else if (uri != null && uri.ToString().StartsWith("oauth://localhost:5001/api/Spotify/callback"))
@@ -58,7 +58,7 @@ namespace TW.UI
                 await spotifyService.ExchangeCodeForToken(code);
 
                 var mainPage = ServiceHelper.GetService<MainPage>();
-                mainPage.SpotifyIsLoggedIn= true;
+                mainPage.IsSpotifyLoggedIn= true;
             }
         }
     }
