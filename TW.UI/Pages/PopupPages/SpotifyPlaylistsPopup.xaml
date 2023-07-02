@@ -28,18 +28,17 @@
 
 
             <CollectionView Margin="10"
+                            x:Name="collectionView"
                             HorizontalOptions="CenterAndExpand"
                             SelectionMode="Multiple"
                             ItemsSource="{Binding Playlists}"
-                            SelectionChanged="OnCollectionViewSelectionChanged">
-                
-                <!--<CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-
-                    </ViewCell>
+                            SelectionChanged="OnCollectionViewSelectionChanged"
+                            SelectedItems="{Binding PreselectedItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodel:PlaylistAndId">
+                    <Label Text="{Binding Name}"></Label>
                 </DataTemplate>
-            </CollectionView.ItemTemplate>-->
+            </CollectionView.ItemTemplate>
 
                 <!--<ListView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="group:SpotifyPlaylistGroup">

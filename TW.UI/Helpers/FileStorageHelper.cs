@@ -28,5 +28,9 @@
             string selected = contents[_indexOfSelected].Substring(contents[_indexOfSelected].IndexOf("selected=") + 9);
             return selected;
         }
+        public static string GenerateAndReturnEntry(string id , string name , string selected)
+        {
+            return "id=" + id + "@name=" + name + "@selected="+selected;
+        }
     }
 }
