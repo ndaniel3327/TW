@@ -69,9 +69,13 @@ public partial class SpotifyPlaylistsPopup : Popup
         //}
         var preselected = Playlists.Where(x => x.IsSelected);
         PreselectedItems = new List<object>();
-        for (int i = 0; i < preselected.Count(); i++)
+        for (int i = 0; i < Playlists.Count(); i++)
         {
-            PreselectedItems.Add(Playlists[i]);
+            var playlist = Playlists[i];
+            if (playlist.IsSelected)
+            {
+                PreselectedItems.Add(Playlists[i]);
+            }
         }
         //PreselectedItems = new List<object>() { , Playlists[1] }; //Playlists.Where(x => x.IsSelected).ToList();
 
