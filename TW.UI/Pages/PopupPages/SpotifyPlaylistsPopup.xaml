@@ -8,7 +8,7 @@
              x:DataType="viewmodel:SpotifyPlaylistsPopup"
              xmlns:group="clr-namespace:TW.UI.Models.Spotify.View"
              CanBeDismissedByTappingOutsideOfPopup="True"
-             Closed="Popup_Closed">
+             Closed="OnPopupClosed">
 
     <VerticalStackLayout BackgroundColor="White">
 

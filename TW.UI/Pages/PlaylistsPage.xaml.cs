@@ -68,11 +68,9 @@ public partial class PlaylistsPage : ContentPage
             _spotifyPlaylistGroupsData = await _spotifyService.GetPlaylists();
             //var spotifyPlaylistsStorageData = new List<string>();
 
-            string spotifyPlaylistsFilePath = SpotifyConstants.SpotifyPlaylitsFileFullPath;
-
-            if (!File.Exists(spotifyPlaylistsFilePath))
+            if (!File.Exists(SpotifyConstants.SpotifyPlaylitsFileFullPath))
             {
-                var stream = File.Create(spotifyPlaylistsFilePath);
+                var stream = File.Create(SpotifyConstants.SpotifyPlaylitsFileFullPath);
                 stream.Close();
 
                 foreach (var playlist in _spotifyPlaylistGroupsData)
@@ -80,13 +78,13 @@ public partial class PlaylistsPage : ContentPage
                     _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.Name + "@selected=true");
                 }
 
-                File.WriteAllLines(spotifyPlaylistsFilePath, _spotifyPlaylistsStorageData.ToArray());
+                File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, _spotifyPlaylistsStorageData.ToArray());
 
                 DisplayedSpotifyPlaylists = _spotifyPlaylistGroupsData;
             }
             else
             {
-                var oldSpotifyPlaylistsStorageData = File.ReadAllLines(spotifyPlaylistsFilePath).ToList();
+                var oldSpotifyPlaylistsStorageData = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath).ToList();
                 if (oldSpotifyPlaylistsStorageData.Count == 0)
                 {
                     foreach (var playlist in _spotifyPlaylistGroupsData)
@@ -94,7 +92,7 @@ public partial class PlaylistsPage : ContentPage
                         _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.Name + "@selected=true");
                     }
 
-                    File.WriteAllLines(spotifyPlaylistsFilePath, _spotifyPlaylistsStorageData.ToArray());
+                    File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, _spotifyPlaylistsStorageData.ToArray());
 
                     DisplayedSpotifyPlaylists = _spotifyPlaylistGroupsData;
                 }
@@ -118,7 +116,7 @@ public partial class PlaylistsPage : ContentPage
                             _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.Name + "@selected=true");
                         }
                     }
-                    File.WriteAllLines(spotifyPlaylistsFilePath, _spotifyPlaylistsStorageData.ToArray());
+                    File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, _spotifyPlaylistsStorageData.ToArray());
                     GetDisplayedSpotifyPlaylists();
                 }
             }
@@ -126,8 +124,9 @@ public partial class PlaylistsPage : ContentPage
     }
     private void GetDisplayedSpotifyPlaylists()
     {
+        var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath).ToList();
         List<string> selectedPlaylistsIds = new();
-        foreach (var playlist in _spotifyPlaylistsStorageData)
+        foreach (var playlist in playlists)
         {
             string isSelected = FileStorageHelper.ReturnSelected(playlist);
             if (isSelected == "true")

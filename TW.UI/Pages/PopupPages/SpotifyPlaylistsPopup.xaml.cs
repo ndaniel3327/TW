@@ -8,7 +8,7 @@ public partial class SpotifyPlaylistsPopup : Popup
 {
     private readonly Action _action;
 
-    
+
     private List<object> _preselectedItems;
     public List<object> PreselectedItems
     {
@@ -23,7 +23,7 @@ public partial class SpotifyPlaylistsPopup : Popup
     private List<PlaylistAndId> _playlists;
     private List<PlaylistAndId> _curentlySelectedItems;
 
-    public List<PlaylistAndId>Playlists
+    public List<PlaylistAndId> Playlists
     {
         get
         {
@@ -36,13 +36,13 @@ public partial class SpotifyPlaylistsPopup : Popup
         }
     }
 
-    
+
 
     public SpotifyPlaylistsPopup(Action action)
     {
         Playlists = new List<PlaylistAndId>();
 
-        Size = new Size(DeviceDisplay.Current.MainDisplayInfo.Width/3, DeviceDisplay.Current.MainDisplayInfo.Height/4);
+        Size = new Size(DeviceDisplay.Current.MainDisplayInfo.Width / 3, DeviceDisplay.Current.MainDisplayInfo.Height / 4);
         BindingContext = this;
         GetAllItemsAndPreselectedItems();
         InitializeComponent();
@@ -82,7 +82,45 @@ public partial class SpotifyPlaylistsPopup : Popup
     }
     private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
+
+        var temporaryPlaylistList = new List<string>();
         var items = PreselectedItems;
+        if (items != null && items.Count != 0)
+        {
+
+            foreach (var playlist in playlists)
+            {
+                string id = FileStorageHelper.ReturnId(playlist);
+                string name = FileStorageHelper.ReturnName(playlist);
+
+                bool isNotSelected = true;
+                foreach (var item in items)
+                {
+                    if (((PlaylistAndId)item).Id == id)
+                    {
+                        temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "true"));
+                        isNotSelected = false;
+                    }
+                }
+                if (isNotSelected)
+                {
+                    temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
+                }
+            }
+        }
+        else if (items == null || items.Count == 0)
+        {
+            foreach (var playlist in playlists)
+            {
+                string id = FileStorageHelper.ReturnId(playlist);
+                string name = FileStorageHelper.ReturnName(playlist);
+                temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
+            }
+        }
+        File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, temporaryPlaylistList);
+        
+
 
 
         //foreach (var selectedItem in castedSelectedItems)
@@ -104,34 +142,34 @@ public partial class SpotifyPlaylistsPopup : Popup
 
     private void OnXButtonClicked(object sender, EventArgs e)
     {
-        var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
+        //var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
 
-        List<PlaylistAndId> temporarySelectedItemsList = new();
+        //List<PlaylistAndId> temporarySelectedItemsList = new();
 
-        List<string> newPlaylistData = new();
-        foreach (var item in _curentlySelectedItems)
-        {
-            bool isNew= true;
-            foreach (var playlistItem in playlists)
-            {
-                string id = FileStorageHelper.ReturnId(playlistItem);
-                if(id == item.Id)
-                {
-                    newPlaylistData.Add(FileStorageHelper.GenerateAndReturnEntry(item.Id, item.Name, "true"));
-                    isNew = false;
-                }
-            }
-            if(isNew)
-            {
-                newPlaylistData.Add(FileStorageHelper.GenerateAndReturnEntry(item.Id, item.Name, "false"));
-            }
-        }
-        _action.Invoke();
+        //List<string> newPlaylistData = new();
+        //foreach (var item in _curentlySelectedItems)
+        //{
+        //    bool isNew = true;
+        //    foreach (var playlistItem in playlists)
+        //    {
+        //        string id = FileStorageHelper.ReturnId(playlistItem);
+        //        if (id == item.Id)
+        //        {
+        //            newPlaylistData.Add(FileStorageHelper.GenerateAndReturnEntry(item.Id, item.Name, "true"));
+        //            isNew = false;
+        //        }
+        //    }
+        //    if (isNew)
+        //    {
+        //        newPlaylistData.Add(FileStorageHelper.GenerateAndReturnEntry(item.Id, item.Name, "false"));
+        //    }
+        //}
+        //_action.Invoke();
         this.Close();
     }
 
-    private void Popup_Closed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
+    private void OnPopupClosed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
     {
-
+        _action.Invoke();
     }
 }
