@@ -7,7 +7,8 @@
              xmlns:viewmodel="clr-namespace:TW.UI.Pages.PopupPages"
              x:DataType="viewmodel:SpotifyPlaylistsPopup"
              xmlns:group="clr-namespace:TW.UI.Models.Spotify.View"
-             CanBeDismissedByTappingOutsideOfPopup="False">
+             CanBeDismissedByTappingOutsideOfPopup="True"
+             Closed="Popup_Closed">
 
     <VerticalStackLayout BackgroundColor="White">
 
@@ -29,7 +30,7 @@
 
             <CollectionView Margin="10"
                             x:Name="collectionView"
-                            HorizontalOptions="CenterAndExpand"
+                            HorizontalOptions="StartAndExpand"
                             SelectionMode="Multiple"
                             ItemsSource="{Binding Playlists}"
                             SelectionChanged="OnCollectionViewSelectionChanged"

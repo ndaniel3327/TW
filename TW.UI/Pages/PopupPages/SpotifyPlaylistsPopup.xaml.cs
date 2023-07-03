@@ -40,39 +40,46 @@ public partial class SpotifyPlaylistsPopup : Popup
 
     public SpotifyPlaylistsPopup(Action action)
     {
-        Size= new Size(DeviceDisplay.Current.MainDisplayInfo.Width/3, DeviceDisplay.Current.MainDisplayInfo.Height/4);
+        Playlists = new List<PlaylistAndId>();
+
+        Size = new Size(DeviceDisplay.Current.MainDisplayInfo.Width/3, DeviceDisplay.Current.MainDisplayInfo.Height/4);
         BindingContext = this;
-
+        GetAllItemsAndPreselectedItems();
         InitializeComponent();
-        _action = action;
 
+        _action = action;
+    }
+    private void GetAllItemsAndPreselectedItems()
+    {
         var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
 
-        var playlistNameAndId = new List<PlaylistAndId>();
-        List<object> preselectedItems = new();
-        int i = 0;
         foreach (var playlist in playlists)
         {
             string name = FileStorageHelper.ReturnName(playlist);
             string id = FileStorageHelper.ReturnId(playlist);
             string selected = FileStorageHelper.ReturnSelected(playlist);
-            if (selected == "true")
-            {
-                preselectedItems.Add(new PlaylistAndId { Name = name, Id = id });
-            }
-            playlistNameAndId.Add(new PlaylistAndId { Name = name, Id = id });
-            i++;
-        }
-        _preselectedItems = preselectedItems;
-        Playlists = playlistNameAndId;
-    }
+            bool isSelected = bool.Parse(selected);
 
+            Playlists.Add(new PlaylistAndId { Name = name, Id = id, IsSelected = isSelected });
+        }
+        //List<object> selectedByDefault = new();
+        //foreach(var item in preselectedItems)
+        //{
+        //    selectedByDefault.Add(Playlists[Playlists.IndexOf(item)]);
+        //}
+        var preselected = Playlists.Where(x => x.IsSelected);
+        PreselectedItems = new List<object>();
+        for (int i = 0; i < preselected.Count(); i++)
+        {
+            PreselectedItems.Add(Playlists[i]);
+        }
+        //PreselectedItems = new List<object>() { , Playlists[1] }; //Playlists.Where(x => x.IsSelected).ToList();
+
+    }
     private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        //var items = ((CollectionView)sender).SelectedItems;
-        var selectedItems = e.CurrentSelection;
-        List<PlaylistAndId> castedSelectedItems = (List<PlaylistAndId>)selectedItems;
-        _curentlySelectedItems = castedSelectedItems;
+        var items = PreselectedItems;
+
 
         //foreach (var selectedItem in castedSelectedItems)
         //{
@@ -117,5 +124,10 @@ public partial class SpotifyPlaylistsPopup : Popup
         }
         _action.Invoke();
         this.Close();
+    }
+
+    private void Popup_Closed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
+    {
+
     }
 }

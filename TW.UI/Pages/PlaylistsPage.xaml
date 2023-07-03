@@ -55,25 +55,48 @@
                     ></Button>
         </Grid>
     </Shell.TitleView>
-    <VerticalStackLayout BackgroundColor="White">
-        <Label 
-            Text="Playlists Page"
-            HorizontalOptions="Center" />
-        <ListView ItemsSource="{Binding DisplayedSpotifyPlaylists }"
-                  IsGroupingEnabled="True">
-            <ListView.GroupHeaderTemplate>
+    <StackLayout BackgroundColor="White">
+        <!--<CollectionView ItemsSource="{Binding DisplayedSpotifyPlaylists}"
+                        IsGrouped="True"
+                        BackgroundColor="Wheat">
+            <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="model:SpotifyPlaylistGroup">
-                    <TextCell Text="{Binding Name}"></TextCell>
+                    <Label Text="{Binding Name}"></Label>
                 </DataTemplate>
-            </ListView.GroupHeaderTemplate>
-            <ListView.ItemTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:SpotifyTrackView">
-                    <TextCell Text="{Binding Name}"
-                              Detail="{Binding Artists}">
-                        
-                    </TextCell>
+                    <VerticalStackLayout>
+                        <Label Text="{Binding Name}"></Label>
+                    </VerticalStackLayout>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </VerticalStackLayout>
+            </CollectionView.ItemTemplate>
+        </CollectionView>-->
+
+        <!--<Label 
+            Text="Playlists Page"
+            HorizontalOptions="Center" />-->
+    <ListView ItemsSource="{Binding DisplayedSpotifyPlaylists}"
+                  IsGroupingEnabled="True"
+                  Margin="10">
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate x:DataType="model:SpotifyPlaylistGroup">
+                    <ViewCell>
+                        <Label BackgroundColor="LightGray"
+                               FontAttributes="Bold"
+                               Padding="10"
+                               Text="{Binding Name}"></Label>
+                    </ViewCell>
+                </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="model:SpotifyTrackView">
+                <TextCell Text="{Binding Name}"
+                              Detail="{Binding Artists}">
+
+                </TextCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+    </StackLayout>
 </ContentPage>
