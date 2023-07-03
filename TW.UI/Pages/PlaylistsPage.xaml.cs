@@ -11,9 +11,9 @@ public partial class PlaylistsPage : ContentPage
 {
     private readonly ISpotifyService _spotifyService;
 
-    private List<string> _spotifyPlaylistsStorageData=new();
+    private List<string> _spotifyPlaylistsStorageData = new();
 
-    private List<SpotifyPlaylistGroup> _spotifyPlaylistGroupsData;
+    private List<SpotifyPlaylistDetails> _spotifyPlaylistGroupsData;
     private List<SpotifyPlaylistGroup> _displayedSpotifyPlaylists;
     private Action RefreshDisplayedItemsDelegate;
     public List<SpotifyPlaylistGroup> DisplayedSpotifyPlaylists
@@ -32,6 +32,7 @@ public partial class PlaylistsPage : ContentPage
 
     public PlaylistsPage(MainPage mainPage, ISpotifyService spotifyService)
     {
+        BindingContext = this;
         InitializeComponent();
 
         RefreshDisplayedItemsDelegate = GetDisplayedSpotifyPlaylists;
@@ -62,62 +63,70 @@ public partial class PlaylistsPage : ContentPage
 
     private async void GetSpotifyPlaylistData()
     {
-        _spotifyPlaylistGroupsData = await _spotifyService.GetPlaylists();
-        //var spotifyPlaylistsStorageData = new List<string>();
-
-        string spotifyPlaylistsFilePath = SpotifyConstants.SpotifyPlaylitsFileFullPath;
-
-        if (!File.Exists(spotifyPlaylistsFilePath))
+        await Task.Run(async () =>
         {
-            var stream = File.Create(spotifyPlaylistsFilePath);
-            stream.Close();
+            _spotifyPlaylistGroupsData = await _spotifyService.GetPlaylists();
+            //var spotifyPlaylistsStorageData = new List<string>();
 
-            foreach (var playlist in _spotifyPlaylistGroupsData)
+            string spotifyPlaylistsFilePath = SpotifyConstants.SpotifyPlaylitsFileFullPath;
+
+            if (!File.Exists(spotifyPlaylistsFilePath))
             {
-                _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.Name + "@selected=true");
-            }
+                var stream = File.Create(spotifyPlaylistsFilePath);
+                stream.Close();
 
-            File.WriteAllLines(spotifyPlaylistsFilePath, _spotifyPlaylistsStorageData.ToArray());
-
-            DisplayedSpotifyPlaylists = _spotifyPlaylistGroupsData;
-        }
-        else
-        {
-            var oldSpotifyPlaylistsStorageData = File.ReadAllLines(spotifyPlaylistsFilePath).ToList();
-            if (oldSpotifyPlaylistsStorageData.Count == 0)
-            {
+                List<SpotifyPlaylistGroup> playlistGroups = new();
                 foreach (var playlist in _spotifyPlaylistGroupsData)
                 {
-                    _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.Name + "@selected=true");
+                    _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.PlaylistGroup.Name + "@selected=true");
+                    playlistGroups.Add(playlist.PlaylistGroup);
                 }
 
                 File.WriteAllLines(spotifyPlaylistsFilePath, _spotifyPlaylistsStorageData.ToArray());
 
-                DisplayedSpotifyPlaylists = _spotifyPlaylistGroupsData;
+                DisplayedSpotifyPlaylists = playlistGroups;
             }
-            else if (oldSpotifyPlaylistsStorageData.Count > 0)
+            else
             {
-                foreach (var playlist in _spotifyPlaylistGroupsData)
+                var oldSpotifyPlaylistsStorageData = File.ReadAllLines(spotifyPlaylistsFilePath).ToList();
+                if (oldSpotifyPlaylistsStorageData.Count == 0)
                 {
-                    foreach (var oldPlaylist in oldSpotifyPlaylistsStorageData)
+                    List<SpotifyPlaylistGroup> playlistGroups = new();
+                    foreach (var playlist in _spotifyPlaylistGroupsData)
                     {
-                        string oldPlaylistId = FileStorageHelper.ReturnId(oldPlaylist);
-                        if (oldPlaylistId == playlist.Id)
+                        _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.PlaylistGroup.Name + "@selected=true");
+                        playlistGroups.Add(playlist.PlaylistGroup);
+                    }
+
+                    File.WriteAllLines(spotifyPlaylistsFilePath, _spotifyPlaylistsStorageData.ToArray());
+
+                    DisplayedSpotifyPlaylists = playlistGroups;
+                }
+                else if (oldSpotifyPlaylistsStorageData.Count > 0)
+                {
+                    foreach (var playlist in _spotifyPlaylistGroupsData)
+                    {
+                        bool isNew = true;
+                        foreach (var oldPlaylist in oldSpotifyPlaylistsStorageData)
                         {
-                            _spotifyPlaylistsStorageData.Add(oldPlaylist);
+                            string oldPlaylistId = FileStorageHelper.ReturnId(oldPlaylist);
+                            if (oldPlaylistId == playlist.Id)
+                            {
+                                _spotifyPlaylistsStorageData.Add(oldPlaylist);
+                                isNew = false;
+                            }
+
                         }
-                        else if (oldPlaylistId != playlist.Id)
+                        if (isNew)
                         {
-                            _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.Name + "@selected=true");
+                            _spotifyPlaylistsStorageData.Add("id=" + playlist.Id + "@name=" + playlist.PlaylistGroup.Name + "@selected=true");
                         }
                     }
+                    File.WriteAllLines(spotifyPlaylistsFilePath, _spotifyPlaylistsStorageData.ToArray());
+                    GetDisplayedSpotifyPlaylists();
                 }
-                File.WriteAllLines(spotifyPlaylistsFilePath, _spotifyPlaylistsStorageData.ToArray());
-                GetDisplayedSpotifyPlaylists();
             }
-            
-        }
-
+        });
     }
     private void GetDisplayedSpotifyPlaylists()
     {
@@ -138,7 +147,7 @@ public partial class PlaylistsPage : ContentPage
             {
                 if (playlist.Id == id)
                 {
-                    spotifyPlaylistGroupsDisplay.Add(playlist);
+                    spotifyPlaylistGroupsDisplay.Add(playlist.PlaylistGroup);
                 }
             }
         }

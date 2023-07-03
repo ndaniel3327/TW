@@ -28,7 +28,7 @@ namespace TW.UI
             builder.Services.AddTransient<IYoutubeService, YoutubeService>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<YoutubePlaylistsPopup>();
-            builder.Services.AddTransient<PlaylistsPage>();
+            builder.Services.AddSingleton<PlaylistsPage>();
 
             return builder.Build();
         }

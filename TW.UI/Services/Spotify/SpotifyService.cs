@@ -125,7 +125,7 @@ namespace TW.UI.Services.Spotify
             return false;
         }
 
-        public async Task<List<SpotifyPlaylistGroup>> GetPlaylists()
+        public async Task<List<SpotifyPlaylistDetails>> GetPlaylists()
         {
             string playlistsEndpoint = "https://api.spotify.com/v1/me/playlists";
 
@@ -140,7 +140,7 @@ namespace TW.UI.Services.Spotify
             var content = await responseMessage.Content.ReadAsStringAsync();
             var playlistList = JsonSerializerHelper.DeserializeJson<SpotifyPlaylistList>(content);
 
-            var playlistGroupView = new List<SpotifyPlaylistGroup>();
+            var playlistGroupView = new List<SpotifyPlaylistDetails>();
 
             foreach (var playlist in playlistList.Playlists)
             {
@@ -149,8 +149,11 @@ namespace TW.UI.Services.Spotify
                 var playlistItems = JsonSerializerHelper.DeserializeJson<SpotifyTrackList>(jsonContent);
                 playlistGroupView.Add
                     (
-                    new SpotifyPlaylistGroup(playlist.Id, playlist.Name, _mapper.Map<List<SpotifyTrackView>>(playlistItems.Tracks))
-                );
+                    new SpotifyPlaylistDetails
+                    {
+                        Id = playlist.Id,
+                        PlaylistGroup = new SpotifyPlaylistGroup(playlist.Name, _mapper.Map<List<SpotifyTrackView>>(playlistItems.Tracks))
+                    });
             }
 
             return playlistGroupView;

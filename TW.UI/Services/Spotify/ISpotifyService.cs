@@ -6,7 +6,7 @@ namespace TW.UI.Services.Spotify
     {
         Task<Uri> GetAuthorizationUri();
         Task ExchangeCodeForToken(string code);
-        Task<List<SpotifyPlaylistGroup>> GetPlaylists();
+        Task<List<SpotifyPlaylistDetails>> GetPlaylists();
         Task<bool> RefreshAccessToken();
     }
 }
