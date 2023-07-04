@@ -9,20 +9,9 @@ namespace TW.Infrastructure.Profiles
     {
         public MappingProfiles()
         {
-            CreateMap<SpotifyTrack, SpotifyTrackView>()
+            CreateMap<SpotifyTrack, PlaylistDisplayTracks>()
                 .ForMember(destination => destination.Name, action => action.MapFrom(source => source.TrackInfo.Name))
                 .ForMember(destination=>destination.ArtistsNames,action=>action.MapFrom(source=>source.TrackInfo.Artists.Select(c=>c.Name)));
-
-            CreateMap<SpotifyTrackView, PlaylistDisplayTracks>();
-            CreateMap<SpotifyPlaylistGroup, PlaylistDisplayGroup>();
-                //.ConstructUsing(x=> new PlaylistDisplayGroup(x.Id,x.Name,x.Tracks));
-                //.ForCtorParam("tracks",
-                //options => options.MapFrom(source => source.Tracks))
-                //.ForCtorParam("id",
-                //options=>options.MapFrom(source=>source.Id))
-                //.ForCtorParam("name",
-                //options=>options.MapFrom(source => source.Name));
-
         }
     }
 }

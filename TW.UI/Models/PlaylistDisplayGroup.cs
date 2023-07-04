@@ -5,8 +5,6 @@
         public string Id { get; set; }
         public string Name { get; set; }
 
-        public List<PlaylistDisplayTracks> Tracks { get; set; }
-
         public PlaylistDisplayGroup()
         {
             
@@ -15,21 +13,12 @@
         {
             Id = id;
             Name = name;
-            Tracks = tracks;
         }
     }
 
     public class PlaylistDisplayTracks
     {
-        public PlaylistDisplayTracks()
-        {
-
-        }
-        public PlaylistDisplayTracks(int id)
-        {
-            Id = id;
-        }
-        public int Id { get; set; }
+        public List<string> ArtistsNames { get; set; }
         public string Name { get; set; }
         public string Artists { get; set; }
     }

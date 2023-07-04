@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using TW.UI.Models;
 using TW.UI.Models.Youtube.View;
 using TW.UI.Services.Youtube;
 
@@ -8,8 +9,8 @@ public partial class YoutubePlaylistsPopup : Popup
 {
     private readonly IYoutubeService _youtubeService;
     
-    private List<YoutubePlaylistGroup> _youtubePlaylists;
-    public List<YoutubePlaylistGroup> YoutubePlaylists 
+    private List<PlaylistDisplayGroup> _youtubePlaylists;
+    public List<PlaylistDisplayGroup> YoutubePlaylists 
     {
         get 
         {
@@ -35,16 +36,16 @@ public partial class YoutubePlaylistsPopup : Popup
     private async void GetPlaylists()
     {
         var playlistGroup =await _youtubeService.GetYoutubePlaylists();
-        var playlistsModel = new List<YoutubePlaylistGroup>(); 
+        var playlistsModel = new List<PlaylistDisplayGroup>(); 
         foreach (var playlist in playlistGroup.Playlists)
         {
-            var tracks = new List<YoutubeTrackView>();
+            var tracks = new List<PlaylistDisplayTracks>();
             var trackNameList = playlist.Tracks.Select(q => q.TrackInfo.Name);
             foreach (var trackName in trackNameList)
             {
-                tracks.Add(new YoutubeTrackView() { Name = trackName });
+                tracks.Add(new PlaylistDisplayTracks() { Name = trackName });
             }
-            var playlistModel = new YoutubePlaylistGroup(playlist.PlaylistInfo.Name, tracks);
+            var playlistModel = new PlaylistDisplayGroup(playlist.Id,playlist.PlaylistInfo.Name, tracks);
             playlistsModel.Add(playlistModel);
         }
         YoutubePlaylists = playlistsModel;

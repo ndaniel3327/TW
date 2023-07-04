@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using TW.UI.Constants;
 using TW.UI.Helpers;
+using TW.UI.Models;
 using TW.UI.Models.Spotify.Data;
 using TW.UI.Models.Spotify.View;
 
@@ -125,7 +126,7 @@ namespace TW.UI.Services.Spotify
             return false;
         }
 
-        public async Task<List<SpotifyPlaylistGroup>> GetPlaylists()
+        public async Task<List<PlaylistDisplayGroup>> GetPlaylists()
         {
             string playlistsEndpoint = "https://api.spotify.com/v1/me/playlists";
 
@@ -140,7 +141,7 @@ namespace TW.UI.Services.Spotify
             var content = await responseMessage.Content.ReadAsStringAsync();
             var playlistList = JsonSerializerHelper.DeserializeJson<SpotifyPlaylistList>(content);
 
-            var playlistGroupView = new List<SpotifyPlaylistGroup>();
+            var playlistGroupView = new List<PlaylistDisplayGroup>();
 
             foreach (var playlist in playlistList.Playlists)
             {
@@ -149,7 +150,7 @@ namespace TW.UI.Services.Spotify
                 var playlistItems = JsonSerializerHelper.DeserializeJson<SpotifyTrackList>(jsonContent);
                 playlistGroupView.Add
                     (
-                    new SpotifyPlaylistGroup(playlist.Id, playlist.Name, _mapper.Map<List<SpotifyTrackView>>(playlistItems.Tracks))
+                    new PlaylistDisplayGroup(playlist.Id, playlist.Name, _mapper.Map<List<PlaylistDisplayTracks>>(playlistItems.Tracks))
                 );
             }
 

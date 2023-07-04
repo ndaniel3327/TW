@@ -1,4 +1,5 @@
-﻿using TW.UI.Models.Spotify.View;
+﻿using TW.UI.Models;
+using TW.UI.Models.Spotify.View;
 
 namespace TW.UI.Services.Spotify
 {
@@ -6,7 +7,7 @@ namespace TW.UI.Services.Spotify
     {
         Task<Uri> GetAuthorizationUri();
         Task ExchangeCodeForToken(string code);
-        Task<List<SpotifyPlaylistGroup>> GetPlaylists();
+        Task<List<PlaylistDisplayGroup>> GetPlaylists();
         Task<bool> RefreshAccessToken();
     }
 }
