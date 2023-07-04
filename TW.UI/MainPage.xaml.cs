@@ -55,7 +55,7 @@ namespace TW.UI
             //TODO: test full functionality while having 0 playlists in the Spotify/Youtube account
 
             //TODO:Delete this
-            File.Delete(SpotifyConstants.SpotifyPlaylitsFileFullPath);
+            //File.Delete(SpotifyConstants.SpotifyPlaylitsFileFullPath);
         }
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)

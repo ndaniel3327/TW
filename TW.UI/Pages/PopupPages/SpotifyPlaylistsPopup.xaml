@@ -34,7 +34,7 @@
                             SelectionMode="Multiple"
                             ItemsSource="{Binding Playlists}"
                             SelectionChanged="OnCollectionViewSelectionChanged"
-                            SelectedItems="{Binding PreselectedItems}">
+                            SelectedItems="{Binding SelectedItems}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodel:PlaylistAndId">
                     <Label Text="{Binding Name}"></Label>

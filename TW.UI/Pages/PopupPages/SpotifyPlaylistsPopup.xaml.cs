@@ -8,20 +8,18 @@ public partial class SpotifyPlaylistsPopup : Popup
 {
     private readonly Action _action;
 
-
-    private List<object> _preselectedItems;
-    public List<object> PreselectedItems
+    private List<object> _selectedItems;
+    public List<object> SelectedItems
     {
-        get => _preselectedItems;
+        get => _selectedItems;
         set
         {
-            _preselectedItems = value;
-            OnPropertyChanged(nameof(PreselectedItems));
+            _selectedItems = value;
+            OnPropertyChanged(nameof(SelectedItems));
         }
     }
 
     private List<PlaylistAndId> _playlists;
-    private List<PlaylistAndId> _curentlySelectedItems;
 
     public List<PlaylistAndId> Playlists
     {
@@ -36,8 +34,6 @@ public partial class SpotifyPlaylistsPopup : Popup
         }
     }
 
-
-
     public SpotifyPlaylistsPopup(Action action)
     {
         Playlists = new List<PlaylistAndId>();
@@ -49,6 +45,7 @@ public partial class SpotifyPlaylistsPopup : Popup
 
         _action = action;
     }
+
     private void GetAllItemsAndPreselectedItems()
     {
         var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
@@ -62,30 +59,23 @@ public partial class SpotifyPlaylistsPopup : Popup
 
             Playlists.Add(new PlaylistAndId { Name = name, Id = id, IsSelected = isSelected });
         }
-        //List<object> selectedByDefault = new();
-        //foreach(var item in preselectedItems)
-        //{
-        //    selectedByDefault.Add(Playlists[Playlists.IndexOf(item)]);
-        //}
         var preselected = Playlists.Where(x => x.IsSelected);
-        PreselectedItems = new List<object>();
+        SelectedItems = new List<object>();
         for (int i = 0; i < Playlists.Count(); i++)
         {
             var playlist = Playlists[i];
             if (playlist.IsSelected)
             {
-                PreselectedItems.Add(Playlists[i]);
+                SelectedItems.Add(Playlists[i]);
             }
         }
-        //PreselectedItems = new List<object>() { , Playlists[1] }; //Playlists.Where(x => x.IsSelected).ToList();
-
     }
     private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
 
         var temporaryPlaylistList = new List<string>();
-        var items = PreselectedItems;
+        var items = SelectedItems;
         if (items != null && items.Count != 0)
         {
 
@@ -119,52 +109,10 @@ public partial class SpotifyPlaylistsPopup : Popup
             }
         }
         File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, temporaryPlaylistList);
-        
-
-
-
-        //foreach (var selectedItem in castedSelectedItems)
-        //{
-        //    bool isNew = true;
-        //    foreach (var item in _selectedItems)
-        //    {
-        //        if (item.Id == selectedItem.Id)
-        //        {
-        //            isNew = false;
-        //        }
-        //    }
-        //    if(isNew)
-        //    {
-        //        _selectedItems.Add(new PlaylistAndId { Id = selectedItem.Id, Name = selectedItem.Name });
-        //    }
-        //}
     }
 
     private void OnXButtonClicked(object sender, EventArgs e)
     {
-        //var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
-
-        //List<PlaylistAndId> temporarySelectedItemsList = new();
-
-        //List<string> newPlaylistData = new();
-        //foreach (var item in _curentlySelectedItems)
-        //{
-        //    bool isNew = true;
-        //    foreach (var playlistItem in playlists)
-        //    {
-        //        string id = FileStorageHelper.ReturnId(playlistItem);
-        //        if (id == item.Id)
-        //        {
-        //            newPlaylistData.Add(FileStorageHelper.GenerateAndReturnEntry(item.Id, item.Name, "true"));
-        //            isNew = false;
-        //        }
-        //    }
-        //    if (isNew)
-        //    {
-        //        newPlaylistData.Add(FileStorageHelper.GenerateAndReturnEntry(item.Id, item.Name, "false"));
-        //    }
-        //}
-        //_action.Invoke();
         this.Close();
     }
 
