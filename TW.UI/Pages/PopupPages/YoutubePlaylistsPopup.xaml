@@ -1,33 +1,42 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<toolkit:Popup 
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TW.UI.Pages.PopupPages.YoutubePlaylistsPopup"
              xmlns:viewmodel="clr-namespace:TW.UI.Pages.PopupPages"
              x:DataType="viewmodel:YoutubePlaylistsPopup"
-             xmlns:model="clr-namespace:TW.UI.Models.Youtube.View">
-    <VerticalStackLayout>
-        <ListView x:Name="listView"
-                  VerticalOptions="FillAndExpand"
-                  ItemsSource="{Binding YoutubePlaylists}"
-                  IsGroupingEnabled="True">
-             
-            <ListView.GroupHeaderTemplate>
-                <DataTemplate x:DataType="model:YoutubePlaylistGroup">
-                    <ViewCell>
-                        <Label Text="{Binding Name}"
-                               BackgroundColor="LightGray"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               Padding="10"></Label>
-                    </ViewCell>
+             Closed="OnPopupClosed">
+    <VerticalStackLayout BackgroundColor="White">
+
+        <ImageButton Source="xmark.svg"
+                         Clicked="OnXMarkButtonClicked"
+                         HorizontalOptions="End"
+                         BackgroundColor="LightGray"
+                         Padding="10">
+
+        </ImageButton>
+
+        <Label Text="My Youtube Playlists :"
+                   FontSize="Header"
+                   FontAttributes="Bold"
+                   Margin="10"
+                   HorizontalOptions="StartAndExpand">
+        </Label>
+
+
+        <CollectionView Margin="10"
+                            x:Name="collectionView"
+                            HorizontalOptions="StartAndExpand"
+                            SelectionMode="Multiple"
+                            ItemsSource="{Binding Playlists}"
+                            SelectionChanged="OnCollectionViewSelectionChanged"
+                            SelectedItems="{Binding SelectedItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodel:PlaylistAndId">
+                    <Label Text="{Binding Name}"></Label>
                 </DataTemplate>
-            </ListView.GroupHeaderTemplate>
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:YoutubeTrackView">
-                    <TextCell Text="{Binding Name}"></TextCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </toolkit:Popup>

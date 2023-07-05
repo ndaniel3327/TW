@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using TW.UI.Models.Spotify.Data;
-
-namespace TW.UI.Models.Spotify.View
+﻿namespace TW.UI.Models.Spotify.View
 {
     public class SpotifyPlaylistGroup : List<SpotifyTrackView>
     {

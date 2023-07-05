@@ -54,10 +54,9 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
     }
     private int GetLocalPlaylists()
     {
-        string fullPath = Path.Combine(_mainDirectoryPath, LocalFilesConstants.LocalPlaylistsFileName);
-        if (File.Exists(fullPath))
+        if (File.Exists(LocalFilesConstants.LocalPlaylistsFileFullPath))
         {
-            string[] playlistNames = File.ReadAllLines(fullPath);
+            string[] playlistNames = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
             //List<string> playlists = new();
             //foreach (string line in content)
             //{
@@ -71,7 +70,7 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
         }
         else
         {
-            var stream = File.Create(fullPath);
+            var stream = File.Create(LocalFilesConstants.LocalPlaylistsFileFullPath);
             stream.Close();
             return 0;
         }
@@ -102,7 +101,7 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
         string playlistName = ((Entry)sender).Text;
         if( !string.IsNullOrEmpty(playlistName))
         {
-            string fullPath = Path.Combine(_mainDirectoryPath, LocalFilesConstants.LocalPlaylistsFileName);
+            string fullPath = LocalFilesConstants.LocalPlaylistsFileFullPath;
             File.AppendAllText(fullPath, playlistName + Environment.NewLine);
 
             string mainDirectoryPath = FileSystem.Current.AppDataDirectory;
@@ -130,7 +129,7 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
 
     private void OnDeletePlaylistButtonClicked(object sender, EventArgs e)
     {
-        string fullPath = Path.Combine(_mainDirectoryPath, LocalFilesConstants.LocalPlaylistsFileName);
+        string fullPath = LocalFilesConstants.LocalPlaylistsFileFullPath;
         var playlistNames = File.ReadAllLines(fullPath);
 
         List<string> temporaryPlaylistNameList = new List<string>(playlistNames);

@@ -57,7 +57,9 @@
 	  <None Remove="Platforms\Android\Resources\xml\auto_backup_rules.xml" />
 	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
 	  <None Remove="Resources\Images\checkmark.svg" />
+	  <None Remove="Resources\Images\spotifyicon.svg" />
 	  <None Remove="Resources\Images\xmark.svg" />
+	  <None Remove="Resources\Images\youtubeicon.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -77,6 +79,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Pages\PlaylistsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\PopupPages\LocalPlaylistsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\PopupPages\PlaylistSelectForLocalFilesPopup.xaml">

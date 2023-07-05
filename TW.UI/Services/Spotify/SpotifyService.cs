@@ -4,10 +4,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using TW.UI.Constants;
+using TW.UI.Enums;
 using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Models.Spotify.Data;
-using TW.UI.Models.Spotify.View;
 
 namespace TW.UI.Services.Spotify
 {
@@ -150,7 +150,7 @@ namespace TW.UI.Services.Spotify
                 var playlistItems = JsonSerializerHelper.DeserializeJson<SpotifyTrackList>(jsonContent);
                 playlistGroupView.Add
                     (
-                    new PlaylistDisplayGroup(playlist.Id, playlist.Name, _mapper.Map<List<PlaylistDisplayTracks>>(playlistItems.Tracks))
+                    new PlaylistDisplayGroup(playlist.Id, playlist.Name, _mapper.Map<List<PlaylistDisplayTracks>>(playlistItems.Tracks),PlaylistSource.Spotify, ImageSource.FromFile("spotifyicon.svg") )
                 );
             }
 

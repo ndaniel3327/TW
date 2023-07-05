@@ -1,7 +1,9 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using TW.UI.Constants;
+using TW.UI.Enums;
 using TW.UI.Helpers;
+using TW.UI.Models;
 using TW.UI.Models.Youtube.Data;
 using TW.UI.Pages;
 
@@ -47,7 +49,7 @@ namespace TW.UI.Services.Youtube
             await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameTokenExpirationDate, expirationDate.ToString());
         }
 
-        public async Task<YoutubePlaylistList> GetYoutubePlaylists()
+        public async Task<List<PlaylistDisplayGroup>> GetYoutubePlaylists()
         {
             string accessToken = await SecureStorage.Default.GetAsync("YoutubeAccessToken");
             string tokenType = await SecureStorage.Default.GetAsync("YoutubeTokenType");
@@ -59,10 +61,9 @@ namespace TW.UI.Services.Youtube
             var responseMessage = await httpClient.GetAsync("https://www.googleapis.com/youtube/v3/playlists?" +
                 "part=snippet&" +
                 "mine=true");
-            var youtubePlaylists = await responseMessage.Content.ReadAsStringAsync();
-            var playlists = JsonSerializerHelper.DeserializeJson<YoutubePlaylistList>(youtubePlaylists);
+            var listOfYoutubePlaylists = await responseMessage.Content.ReadAsStringAsync();
+            var playlists = JsonSerializerHelper.DeserializeJson<YoutubePlaylistList>(listOfYoutubePlaylists);
 
-            var playlistGroup = new YoutubePlaylistList();
             foreach (var playlist in playlists.Playlists)
             {
                 var localresponseMessage = await httpClient.GetAsync("https://www.googleapis.com/youtube/v3/playlistItems?" +
@@ -74,7 +75,20 @@ namespace TW.UI.Services.Youtube
 
                 playlist.Tracks = deserializedPlaylist.Tracks;
             }
-            return playlists;
+
+            var playlistsModel = new List<PlaylistDisplayGroup>();
+            foreach (var playlist in playlists.Playlists)
+            {
+                var tracks = new List<PlaylistDisplayTracks>();
+                var trackNameList = playlist.Tracks.Select(q => q.TrackInfo.Name);
+                foreach (var trackName in trackNameList)
+                {
+                    tracks.Add(new PlaylistDisplayTracks() { Name = trackName });
+                }
+                var playlistModel = new PlaylistDisplayGroup(playlist.Id, playlist.PlaylistInfo.Name, tracks,PlaylistSource.Youtube, ImageSource.FromFile("youtubeicon.svg"));
+                playlistsModel.Add(playlistModel);
+            }
+            return playlistsModel;
         }
 
         public async Task<bool> RefreshAccessToken()
@@ -105,9 +119,7 @@ namespace TW.UI.Services.Youtube
 
                 return true;
             }
-
             return false;
-
         }
 
     }

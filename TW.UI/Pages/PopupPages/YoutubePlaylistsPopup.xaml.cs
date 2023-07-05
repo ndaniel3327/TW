@@ -1,53 +1,132 @@
 using CommunityToolkit.Maui.Views;
-using TW.UI.Models;
-using TW.UI.Models.Youtube.View;
-using TW.UI.Services.Youtube;
+using TW.UI.Constants;
+using TW.UI.Helpers;
 
 namespace TW.UI.Pages.PopupPages;
 
 public partial class YoutubePlaylistsPopup : Popup
 {
-    private readonly IYoutubeService _youtubeService;
-    
-    private List<PlaylistDisplayGroup> _youtubePlaylists;
-    public List<PlaylistDisplayGroup> YoutubePlaylists 
+    private readonly Action _action;
+
+    private List<PlaylistAndId> _playlists;
+    public List<PlaylistAndId> Playlists
     {
-        get 
+        get
         {
-            return _youtubePlaylists;
-        } 
+            return _playlists;
+        }
         set
         {
-            if (_youtubePlaylists != value)
+            if (_playlists != value)
             {
-                _youtubePlaylists = value;
-                OnPropertyChanged(nameof(YoutubePlaylists));
+                _playlists = value;
+                OnPropertyChanged(nameof(Playlists));
             }
         }
     }
-    public YoutubePlaylistsPopup(IYoutubeService youtubeService)
-	{
-		InitializeComponent();
-        BindingContext = this;
-        _youtubeService = youtubeService;
-        GetPlaylists();
+    private List<object> _selectedItems;
+
+    public List<object> SelectedItems
+    {
+        get
+        {
+            return _selectedItems;
+        }
+        set
+        {
+            _selectedItems = value;
+            OnPropertyChanged();
+        }
     }
 
-    private async void GetPlaylists()
+
+    public YoutubePlaylistsPopup(Action action)
     {
-        var playlistGroup =await _youtubeService.GetYoutubePlaylists();
-        var playlistsModel = new List<PlaylistDisplayGroup>(); 
-        foreach (var playlist in playlistGroup.Playlists)
+        Playlists = new List<PlaylistAndId>();
+
+        Size = new Size(DeviceDisplay.Current.MainDisplayInfo.Width / 3, DeviceDisplay.Current.MainDisplayInfo.Height / 4);
+
+        BindingContext = this;
+        _action = action;
+
+        GetAllItemsAndPreselectedItems();
+
+        InitializeComponent();
+    }
+
+    private void GetAllItemsAndPreselectedItems()
+    {
+        var playlists = File.ReadAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath);
+
+        foreach (var playlist in playlists)
         {
-            var tracks = new List<PlaylistDisplayTracks>();
-            var trackNameList = playlist.Tracks.Select(q => q.TrackInfo.Name);
-            foreach (var trackName in trackNameList)
-            {
-                tracks.Add(new PlaylistDisplayTracks() { Name = trackName });
-            }
-            var playlistModel = new PlaylistDisplayGroup(playlist.Id,playlist.PlaylistInfo.Name, tracks);
-            playlistsModel.Add(playlistModel);
+            string name = FileStorageHelper.ReturnName(playlist);
+            string id = FileStorageHelper.ReturnId(playlist);
+            string selected = FileStorageHelper.ReturnSelected(playlist);
+            bool isSelected = bool.Parse(selected);
+
+            Playlists.Add(new PlaylistAndId { Name = name, Id = id, IsSelected = isSelected });
         }
-        YoutubePlaylists = playlistsModel;
+        var preselected = Playlists.Where(x => x.IsSelected);
+        SelectedItems = new List<object>();
+        for (int i = 0; i < Playlists.Count(); i++)
+        {
+            var playlist = Playlists[i];
+            if (playlist.IsSelected)
+            {
+                SelectedItems.Add(Playlists[i]);
+            }
+        }
+    }
+
+    private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var playlists = File.ReadAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath);
+
+        var temporaryPlaylistList = new List<string>();
+        var items = SelectedItems;
+        if (items != null && items.Count != 0)
+        {
+
+            foreach (var playlist in playlists)
+            {
+                string id = FileStorageHelper.ReturnId(playlist);
+                string name = FileStorageHelper.ReturnName(playlist);
+
+                bool isNotSelected = true;
+                foreach (var item in items)
+                {
+                    if (((PlaylistAndId)item).Id == id)
+                    {
+                        temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "true"));
+                        isNotSelected = false;
+                    }
+                }
+                if (isNotSelected)
+                {
+                    temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
+                }
+            }
+        }
+        else if (items == null || items.Count == 0)
+        {
+            foreach (var playlist in playlists)
+            {
+                string id = FileStorageHelper.ReturnId(playlist);
+                string name = FileStorageHelper.ReturnName(playlist);
+                temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
+            }
+        }
+        File.WriteAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath, temporaryPlaylistList);
+    }
+
+    private void OnXMarkButtonClicked(object sender, EventArgs e)
+    {
+        this.Close();
+    }
+
+    private void OnPopupClosed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
+    {
+        _action.Invoke();
     }
 }

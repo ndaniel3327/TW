@@ -2,6 +2,9 @@
 {
     public class LocalFilesConstants
     {
-        public const string LocalPlaylistsFileName = "LocalPlaylistsFile";
+        private static string _mainDirectoryPath = FileSystem.Current.AppDataDirectory;
+        private const string _localPlaylistsFileName = "LocalPlaylistsFile";
+
+        public static string LocalPlaylistsFileFullPath = Path.Combine(_mainDirectoryPath, _localPlaylistsFileName);
     }
 }

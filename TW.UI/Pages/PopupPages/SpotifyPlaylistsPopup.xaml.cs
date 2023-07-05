@@ -37,13 +37,14 @@ public partial class SpotifyPlaylistsPopup : Popup
     public SpotifyPlaylistsPopup(Action action)
     {
         Playlists = new List<PlaylistAndId>();
+        SelectedItems = new List<object>();
 
         Size = new Size(DeviceDisplay.Current.MainDisplayInfo.Width / 3, DeviceDisplay.Current.MainDisplayInfo.Height / 4);
         BindingContext = this;
+        _action = action;
+
         GetAllItemsAndPreselectedItems();
         InitializeComponent();
-
-        _action = action;
     }
 
     private void GetAllItemsAndPreselectedItems()
@@ -60,7 +61,7 @@ public partial class SpotifyPlaylistsPopup : Popup
             Playlists.Add(new PlaylistAndId { Name = name, Id = id, IsSelected = isSelected });
         }
         var preselected = Playlists.Where(x => x.IsSelected);
-        SelectedItems = new List<object>();
+
         for (int i = 0; i < Playlists.Count(); i++)
         {
             var playlist = Playlists[i];
