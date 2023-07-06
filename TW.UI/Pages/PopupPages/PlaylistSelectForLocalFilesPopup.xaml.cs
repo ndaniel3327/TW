@@ -1,19 +1,18 @@
 using CommunityToolkit.Maui.Views;
 using TW.UI.Constants;
+using TW.UI.Helpers;
 
 namespace TW.UI.Pages.PopupPages;
 
 public partial class PlaylistSelectForLocalFilesPopup : Popup
 {
-    private string _mainDirectoryPath;
-    private List<string> _playlists;
-    private Size _popupSize;
-    private readonly string _fileName;
-    private readonly string _filePath;
-    private string _selectedPlaylist;
+    private string _selectedPlaylistId;
     private int _selectedItemIndex;
-
-    public List<string> Playlists
+    private string _mainDirectoryPath;
+    private string _fileName;
+    private string _filePath;
+    private List<PlaylistAndId> _playlists;
+    public List<PlaylistAndId> Playlists
     {
         get
         {
@@ -25,47 +24,33 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
             OnPropertyChanged(nameof(Playlists));
         }
     }
-    public Size PopupSize
-    {
-        get
-        {
-            return _popupSize;
-        }
-        set
-        {
-            _popupSize = value;
-            OnPropertyChanged(nameof(PopupSize));
-        }
-    }
     public PlaylistSelectForLocalFilesPopup(string fileName, string filePath)
     {
         var screenWith = DeviceDisplay.MainDisplayInfo.Width;
         var screenHeight = DeviceDisplay.MainDisplayInfo.Height;
-        PopupSize = new Size(screenWith, screenHeight);
-
+        this.Size = new Size(screenWith, screenHeight);
+        _mainDirectoryPath = FileSystem.Current.AppDataDirectory;
+        _fileName = fileName;
+        _filePath = filePath;
         InitializeComponent();
         BindingContext = this;
 
-        string mainDirectoryPath = FileSystem.Current.AppDataDirectory;
-        _mainDirectoryPath = mainDirectoryPath;
         GetLocalPlaylists();
-        _fileName = fileName;
-        _filePath = filePath;
     }
     private int GetLocalPlaylists()
     {
         if (File.Exists(LocalFilesConstants.LocalPlaylistsFileFullPath))
         {
-            string[] playlistNames = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
-            //List<string> playlists = new();
-            //foreach (string line in content)
-            //{
-            //    int startingIndex = line.IndexOf("name=" + 1);
-            //    int endingIndex = line.IndexOf('&');
-            //    string playlistName = line.Substring(line.IndexOf ("name=") + 1,endingIndex-startingIndex);
-            //    playlists.Add(playlistName);
-            //}
-            Playlists = playlistNames.ToList();
+            string[] localPlaylists = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
+            List<PlaylistAndId> playlistsList = new();
+            foreach (string localPlaylist in localPlaylists)
+            {
+                string id = FileStorageHelper.ReturnId(localPlaylist);
+                string name = FileStorageHelper.ReturnName(localPlaylist);
+                playlistsList.Add(new PlaylistAndId() { Id=id,Name=name});
+            }
+
+            Playlists = playlistsList;
             return Playlists.Count;
         }
         else
@@ -83,14 +68,14 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
 
     private void OnOkButtonClicked(object sender, EventArgs e)
     {
-        var playlistFilePath = Path.Combine(_mainDirectoryPath, _selectedPlaylist);
+        var playlistFilePath = Path.Combine(_mainDirectoryPath, _selectedPlaylistId);
         if (!File.Exists(playlistFilePath))
         {
             var stream = File.Create(playlistFilePath);
             stream.Close();
         }
-
-        File.AppendAllText(playlistFilePath, "name=" + _fileName + "@path=" + _filePath + Environment.NewLine);
+        string id = Guid.NewGuid().ToString();
+        File.AppendAllText(playlistFilePath, "id=" + id + "@name=" + _fileName + "@path=" + _filePath + Environment.NewLine);
         var content = File.ReadAllLines(playlistFilePath);
 
         this.Close();
@@ -99,53 +84,53 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
     private void OnEntryCompleted(object sender, EventArgs e)
     {
         string playlistName = ((Entry)sender).Text;
-        if( !string.IsNullOrEmpty(playlistName))
+        if (!string.IsNullOrEmpty(playlistName))
         {
             string fullPath = LocalFilesConstants.LocalPlaylistsFileFullPath;
-            File.AppendAllText(fullPath, playlistName + Environment.NewLine);
+            string id = Guid.NewGuid().ToString();
+            File.AppendAllText(fullPath, "id=" + id + "@name=" + playlistName +"@selected=true"+ Environment.NewLine);
 
             string mainDirectoryPath = FileSystem.Current.AppDataDirectory;
-            var stream = File.Create(Path.Combine(mainDirectoryPath, playlistName));
+            var stream = File.Create(Path.Combine(mainDirectoryPath, id));
             stream.Close();
 
             myEntry.Text = String.Empty;
 
             GetLocalPlaylists();
-            okButton.IsVisible= false;
-            deletePlaylistButton.IsVisible= false;
-        } 
+            okButton.IsVisible = false;
+            deletePlaylistButton.IsVisible = false;
+        }
     }
 
     private void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         okButton.IsVisible = true;
         deletePlaylistButton.IsVisible = true;
-        if(e.SelectedItem!= null && e.SelectedItemIndex>=0) 
+        if (e.SelectedItem != null && e.SelectedItemIndex >= 0)
         {
-            _selectedPlaylist = e.SelectedItem.ToString();
+            _selectedPlaylistId = ((PlaylistAndId)e.SelectedItem).Id.ToString();
             _selectedItemIndex = e.SelectedItemIndex;
         }
     }
 
     private void OnDeletePlaylistButtonClicked(object sender, EventArgs e)
     {
-        string fullPath = LocalFilesConstants.LocalPlaylistsFileFullPath;
-        var playlistNames = File.ReadAllLines(fullPath);
+        var playlistNames = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
 
         List<string> temporaryPlaylistNameList = new List<string>(playlistNames);
         temporaryPlaylistNameList.RemoveAt(_selectedItemIndex);
-        File.WriteAllLines(fullPath,temporaryPlaylistNameList.ToArray());
+        File.WriteAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath, temporaryPlaylistNameList.ToArray());
 
-        File.Delete(Path.Combine(_mainDirectoryPath, _selectedPlaylist));
+        File.Delete(Path.Combine(_mainDirectoryPath, _selectedPlaylistId));
 
         int numberOfPlaylists = GetLocalPlaylists();
-        if(numberOfPlaylists == 0)
+        if (numberOfPlaylists == 0)
         {
-            okButton.IsVisible=false;
+            okButton.IsVisible = false;
             deletePlaylistButton.IsVisible = false;
         }
         listView.SelectedItem = null;
         okButton.IsVisible = false;
-        deletePlaylistButton.IsVisible = false;  
+        deletePlaylistButton.IsVisible = false;
     }
 }

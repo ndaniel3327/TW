@@ -2,18 +2,14 @@
 
 namespace TW.UI.Models
 {
-    public class PlaylistDisplayGroup : List<PlaylistDisplayTracks>
+    public class PlaylistDisplayGroup : List<PlaylistDisplayTrack>
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public PlaylistSource Source { get; set; }
         public ImageSource ImageSource { get; set; }
 
-        public PlaylistDisplayGroup()
-        {
-            
-        }
-        public PlaylistDisplayGroup(string id, string name, List<PlaylistDisplayTracks> tracks,PlaylistSource source,ImageSource imageSource) : base(tracks)
+        public PlaylistDisplayGroup(string id, string name, List<PlaylistDisplayTrack> tracks,PlaylistSource source,ImageSource imageSource) : base(tracks)
         {
             Id = id;
             Name = name;
@@ -22,10 +18,11 @@ namespace TW.UI.Models
         }
     }
 
-    public class PlaylistDisplayTracks
+    public class PlaylistDisplayTrack
     {
-        public List<string> ArtistsNames { get; set; }
+        public List<string> ArtistsNames { get; set; } = new();
         public string Name { get; set; }
-        public string Artists { get; set; }
+        public string Artists => string.Join(" and ", ArtistsNames);
+        public ImageSource MenuImageSource { get; set; }
     }
 }

@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             
-             x:Class="TW.UI.Pages.PopupPages.LocalPlaylistsPopup">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="TW.UI.Pages.PopupPages.LocalPlaylistsPopup"
+               xmlns:viewmodel="clr-namespace:TW.UI.Pages.PopupPages"
+               x:DataType="viewmodel:LocalPlaylistsPopup"
+               Closed="OnPopupClosed">
+    <VerticalStackLayout BackgroundColor="White">
+
+        <ImageButton Source="xmark.svg"
+                         Clicked="OnXMarkButtonClicked"
+                         HorizontalOptions="End"
+                         BackgroundColor="LightGray"
+                         Padding="10">
+
+        </ImageButton>
+
+        <Label Text="My Local Playlists :"
+                   FontSize="Header"
+                   FontAttributes="Bold"
+                   Margin="10"
+                   HorizontalOptions="StartAndExpand">
+        </Label>
+
+
+        <CollectionView     Margin="10"
+                            x:Name="collectionView"
+                            HorizontalOptions="StartAndExpand"
+                            SelectionMode="Multiple"
+                            ItemsSource="{Binding Playlists}"
+                            SelectionChanged="OnCollectionViewSelectionChanged"
+                            SelectedItems="{Binding SelectedItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodel:PlaylistAndId">
+                    <Label Text="{Binding Name}"></Label>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </toolkit:Popup>

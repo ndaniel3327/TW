@@ -79,11 +79,11 @@ namespace TW.UI.Services.Youtube
             var playlistsModel = new List<PlaylistDisplayGroup>();
             foreach (var playlist in playlists.Playlists)
             {
-                var tracks = new List<PlaylistDisplayTracks>();
+                var tracks = new List<PlaylistDisplayTrack>();
                 var trackNameList = playlist.Tracks.Select(q => q.TrackInfo.Name);
                 foreach (var trackName in trackNameList)
                 {
-                    tracks.Add(new PlaylistDisplayTracks() { Name = trackName });
+                    tracks.Add(new PlaylistDisplayTrack() { Name = trackName });
                 }
                 var playlistModel = new PlaylistDisplayGroup(playlist.Id, playlist.PlaylistInfo.Name, tracks,PlaylistSource.Youtube, ImageSource.FromFile("youtubeicon.svg"));
                 playlistsModel.Add(playlistModel);

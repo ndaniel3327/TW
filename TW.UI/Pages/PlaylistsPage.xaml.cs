@@ -3,6 +3,7 @@ using TW.UI.Constants;
 using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Pages.PopupPages;
+using TW.UI.Services.Local;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 
@@ -15,12 +16,25 @@ public partial class PlaylistsPage : ContentPage
 
     private readonly ISpotifyService _spotifyService;
     private readonly IYoutubeService _youtubeService;
+    private readonly ILocalFilesService _localFilesService;
 
     private List<PlaylistDisplayGroup> _spotifyPlaylistGroupsData;
     private List<PlaylistDisplayGroup> _youtubePlaylistGroupsData;
 
     private Action RefreshSpotifyDisplayedItemsDelegate;
     private Action RefreshYoutubeDisplayedItemsDelegate;
+    private Action RefreshLocalDisplayedItemsDelegate;
+
+    private List<PlaylistDisplayGroup> _displayedLocalPlaylists = new();
+    public List<PlaylistDisplayGroup> DisplayedLocalPlaylists
+    {
+        get { return _displayedLocalPlaylists; }
+        set
+        {
+            _displayedLocalPlaylists = value;
+            DisplayedPlaylists = _displayedSpotifyPlaylists.Concat(_displayedYoutubePlaylists.Concat(_displayedLocalPlaylists)).ToList();
+        }
+    }
 
     private List<PlaylistDisplayGroup> _displayedSpotifyPlaylists = new();
     public List<PlaylistDisplayGroup> DisplayedSpotifyPlaylists
@@ -32,10 +46,11 @@ public partial class PlaylistsPage : ContentPage
         set
         {
             _displayedSpotifyPlaylists = value;
-            DisplayedPlaylists = _displayedSpotifyPlaylists.Concat(_displayedYoutubePlaylists).ToList();
+            DisplayedPlaylists = _displayedSpotifyPlaylists.Concat(_displayedYoutubePlaylists.Concat(_displayedLocalPlaylists)).ToList();
         }
     }
-    private List<PlaylistDisplayGroup> _displayedYoutubePlaylists=new();
+
+    private List<PlaylistDisplayGroup> _displayedYoutubePlaylists = new();
     public List<PlaylistDisplayGroup> DisplayedYoutubePlaylists
     {
         get
@@ -45,13 +60,16 @@ public partial class PlaylistsPage : ContentPage
         set
         {
             _displayedYoutubePlaylists = value;
-            DisplayedPlaylists = _displayedSpotifyPlaylists.Concat(_displayedYoutubePlaylists).ToList();
+            DisplayedPlaylists = _displayedSpotifyPlaylists.Concat(_displayedYoutubePlaylists.Concat(_displayedLocalPlaylists)).ToList();
         }
     }
+
     private List<PlaylistDisplayGroup> _displayedPlaylists = new();
-    public List<PlaylistDisplayGroup> DisplayedPlaylists 
+    private ImageSource imageButtonSource;
+
+    public List<PlaylistDisplayGroup> DisplayedPlaylists
     {
-        get 
+        get
         {
             return _displayedPlaylists;
         }
@@ -62,18 +80,18 @@ public partial class PlaylistsPage : ContentPage
         }
     }
 
-
-    public PlaylistsPage(MainPage mainPage, ISpotifyService spotifyService, IYoutubeService youtubeService)
+    public PlaylistsPage(MainPage mainPage, ISpotifyService spotifyService, IYoutubeService youtubeService, ILocalFilesService localFilesService)
     {
         BindingContext = this;
         InitializeComponent();
 
         RefreshSpotifyDisplayedItemsDelegate = GetDisplayedSpotifyPlaylists;
         RefreshYoutubeDisplayedItemsDelegate = GetDisplayedYoutubePlaylists;
+        RefreshLocalDisplayedItemsDelegate = GetDisplayedLocalPlaylists;
 
         _spotifyService = spotifyService;
         _youtubeService = youtubeService;
-
+        _localFilesService = localFilesService;
         if (mainPage.IsSpotifyLoggedIn == true)
         {
             GetSpotifyPlaylistData();
@@ -84,7 +102,7 @@ public partial class PlaylistsPage : ContentPage
             spotifyButton.BackgroundColor = Colors.Gray;
         }
 
-        if(mainPage.IsYoutubeLoggedIn==true)
+        if (mainPage.IsYoutubeLoggedIn == true)
         {
             GetYoutubePlaylistData();
         }
@@ -93,11 +111,21 @@ public partial class PlaylistsPage : ContentPage
             youtubeButton.IsEnabled = false;
             youtubeButton.BackgroundColor = Colors.Gray;
         }
+
+        if (File.Exists(LocalFilesConstants.LocalPlaylistsFileFullPath))
+        {
+            GetDisplayedLocalPlaylists();
+        }
+        else
+        {
+            localButton.IsEnabled = false;
+            localButton.BackgroundColor = Colors.Gray;
+        }
     }
 
     private async void GetYoutubePlaylistData()
     {
-        await Task.Run(async() =>
+        await Task.Run(async () =>
         {
             _youtubePlaylistGroupsData = await _youtubeService.GetYoutubePlaylists();
             var youtubePlaylistsStorageData = new List<string>();
@@ -109,7 +137,7 @@ public partial class PlaylistsPage : ContentPage
 
                 foreach (var playlist in _youtubePlaylistGroupsData)
                 {
-                    youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id,playlist.Name,_selected));
+                    youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
                 }
 
                 File.WriteAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath, youtubePlaylistsStorageData.ToArray());
@@ -198,7 +226,7 @@ public partial class PlaylistsPage : ContentPage
 
                 foreach (var playlist in _spotifyPlaylistGroupsData)
                 {
-                    spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id,playlist.Name,_selected));
+                    spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
                 }
 
                 File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, spotifyPlaylistsStorageData.ToArray());
@@ -212,7 +240,7 @@ public partial class PlaylistsPage : ContentPage
                 {
                     foreach (var playlist in _spotifyPlaylistGroupsData)
                     {
-                        spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id,playlist.Name,_selected));
+                        spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
                     }
 
                     File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, spotifyPlaylistsStorageData.ToArray());
@@ -271,6 +299,35 @@ public partial class PlaylistsPage : ContentPage
         }
         DisplayedSpotifyPlaylists = spotifyPlaylistGroupsDisplay;
     }
+
+    private void GetDisplayedLocalPlaylists()
+    {
+        var localPlaylists = _localFilesService.GetLocalPlaylists();
+
+        var localPlaylistsData = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
+        List<string> selectedPlaylistsIds = new();
+        foreach (var playlist in localPlaylistsData)
+        {
+            string isSelected = FileStorageHelper.ReturnSelected(playlist);
+            if (isSelected == "true")
+            {
+                selectedPlaylistsIds.Add(FileStorageHelper.ReturnId(playlist));
+            }
+        }
+
+        var displayedLocalPlaylists = new List<PlaylistDisplayGroup>();
+        foreach (var playlist in localPlaylists)
+        {
+            foreach (var id in selectedPlaylistsIds)
+            {
+                if (playlist.Id == id)
+                {
+                    displayedLocalPlaylists.Add(playlist);
+                }
+            }
+        }
+        DisplayedLocalPlaylists = displayedLocalPlaylists;
+    }
     private void OnYoutubeButtonClicked(object sender, EventArgs e)
     {
         this.ShowPopup(new YoutubePlaylistsPopup(RefreshYoutubeDisplayedItemsDelegate));
@@ -283,6 +340,14 @@ public partial class PlaylistsPage : ContentPage
 
     private void OnLocalButtonClicked(object sender, EventArgs e)
     {
+        this.ShowPopup(new LocalPlaylistsPopup(RefreshLocalDisplayedItemsDelegate));
+    }
 
+    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var selecteItem = e.CurrentSelection as PlaylistDisplayTrack;
+        selecteItem.MenuImageSource = ImageSource.FromFile("menuicon.svg");
+        var previousSelection = e.PreviousSelection as PlaylistDisplayTrack;
+        selecteItem.MenuImageSource = null;
     }
 }

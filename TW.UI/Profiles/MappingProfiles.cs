@@ -9,7 +9,7 @@ namespace TW.Infrastructure.Profiles
     {
         public MappingProfiles()
         {
-            CreateMap<SpotifyTrack, PlaylistDisplayTracks>()
+            CreateMap<SpotifyTrack, PlaylistDisplayTrack>()
                 .ForMember(destination => destination.Name, action => action.MapFrom(source => source.TrackInfo.Name))
                 .ForMember(destination=>destination.ArtistsNames,action=>action.MapFrom(source=>source.TrackInfo.Artists.Select(c=>c.Name)));
         }

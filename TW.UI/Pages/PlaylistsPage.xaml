@@ -37,6 +37,7 @@
                     Clicked="OnYoutubeButtonClicked"
                     ></Button>
             <Button Text="Local" 
+                    x:Name="localButton"
                     FontSize="13"
                     TextColor="Black"
                     HorizontalOptions="End"
@@ -51,32 +52,33 @@
         </Grid>
     </Shell.TitleView>
     <StackLayout BackgroundColor="White">
-        <ListView x:Name="listView"
+        <CollectionView x:Name="listView"
                   ItemsSource="{Binding DisplayedPlaylists}"
-                  IsGroupingEnabled="True"
-                  Margin="10">
-        <ListView.GroupHeaderTemplate>
+                  IsGrouped="True"
+                  Margin="10"
+                  SelectionChanged="OnSelectionChanged">
+            <CollectionView.GroupHeaderTemplate>
                 <DataTemplate  x:DataType="model:PlaylistDisplayGroup">
-                    <ViewCell>
-                        <HorizontalStackLayout BackgroundColor="LightGray">
-                            <Image Source="{Binding ImageSource}"
+                    <HorizontalStackLayout BackgroundColor="LightGray">
+                        <Image Source="{Binding ImageSource}"
                                    Margin="10"></Image>
-                            <Label
+                        <Label
                                FontAttributes="Bold"
                                Padding="10"
                                Text="{Binding Name}"></Label>
-                        </HorizontalStackLayout>
-                    </ViewCell>
-                </DataTemplate>
-        </ListView.GroupHeaderTemplate>
-        <ListView.ItemTemplate>
-            <DataTemplate x:DataType="model:PlaylistDisplayTracks">
-                <TextCell Text="{Binding Name}"
-                              Detail="{Binding Artists}">
 
-                </TextCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+                        <ImageButton x:DataType="model:PlaylistDisplayTrack" Source="{Binding MenuImageSource }"></ImageButton>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+        </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="model:PlaylistDisplayTrack">
+                    <VerticalStackLayout>
+                        <Label Text="{Binding Name}"></Label>
+                        <Label Text="{Binding Artists}"></Label>
+                    </VerticalStackLayout>
+                </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
     </StackLayout>
 </ContentPage>

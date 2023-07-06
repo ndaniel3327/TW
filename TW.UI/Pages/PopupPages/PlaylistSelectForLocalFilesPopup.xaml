@@ -4,8 +4,7 @@
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="TW.UI.Pages.PopupPages.PlaylistSelectForLocalFilesPopup"
                xmlns:viewmodel="clr-namespace:TW.UI.Pages.PopupPages"
-               x:DataType="viewmodel:PlaylistSelectForLocalFilesPopup"
-               Size="{Binding PopupSize}">
+               x:DataType="viewmodel:PlaylistSelectForLocalFilesPopup">
 
     <VerticalStackLayout
         BackgroundColor="White">
@@ -18,17 +17,12 @@
             ItemsSource="{Binding Playlists}"
             ItemSelected="OnListViewItemSelected"
             >
-            <!--<ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <HorizontalStackLayout HorizontalOptions="FillAndExpand">
-                            <Label></Label>
-                            <ImageButton Source="checkmark.svg"></ImageButton>
-                            <ImageButton Source="xmark.svg"></ImageButton>
-                        </HorizontalStackLayout>
-                    </ViewCell>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodel:PlaylistAndId">
+                    <TextCell Text="{Binding Name}"></TextCell>
                 </DataTemplate>
-            </ListView.ItemTemplate>-->
+            </ListView.ItemTemplate>
+            
         </ListView>
         <Entry 
             x:Name="myEntry"

@@ -4,6 +4,7 @@ using System.Reflection;
 using TW.UI.Helpers;
 using TW.UI.Pages;
 using TW.UI.Pages.PopupPages;
+using TW.UI.Services.Local;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 
@@ -24,10 +25,13 @@ namespace TW.UI
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
             builder.Services.AddTransient<ISpotifyService, SpotifyService>();
             builder.Services.AddTransient<IYoutubeService, YoutubeService>();
+            builder.Services.AddTransient<ILocalFilesService, LocalFilesService>();
+
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddTransient<YoutubePlaylistsPopup>();
+            //builder.Services.AddTransient<YoutubePlaylistsPopup>();  ?????
             builder.Services.AddTransient<PlaylistsPage>();
 
             return builder.Build();
