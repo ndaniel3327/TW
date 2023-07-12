@@ -80,6 +80,8 @@ public partial class PlaylistsPage : ContentPage
         }
     }
 
+    public PlaylistDisplayTrack SelectedItem { get; set; }
+
     public PlaylistsPage(MainPage mainPage, ISpotifyService spotifyService, IYoutubeService youtubeService, ILocalFilesService localFilesService)
     {
         BindingContext = this;
@@ -345,9 +347,16 @@ public partial class PlaylistsPage : ContentPage
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var selecteItem = e.CurrentSelection as PlaylistDisplayTrack;
-        selecteItem.MenuImageSource = ImageSource.FromFile("menuicon.svg");
-        var previousSelection = e.PreviousSelection as PlaylistDisplayTrack;
-        selecteItem.MenuImageSource = null;
+        SelectedItem.IsSelected = true;
+        //e.CurrentSelection as PlaylistDisplayTrack;
+        //selecteItem.MenuImageSource = ImageSource.FromFile("menuicon.svg");
+
+        if (e.PreviousSelection.Count > 0)
+            (e.PreviousSelection[0] as PlaylistDisplayTrack).IsSelected =false;
+    }
+
+    private void menuButton_Clicked(object sender, EventArgs e)
+    { 
+        this.ShowPopup(new Popup() { Size=new Size(200, 200) , Anchor=listView});
     }
 }

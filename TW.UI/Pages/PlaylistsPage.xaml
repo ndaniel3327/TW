@@ -4,9 +4,15 @@
              x:Class="TW.UI.Pages.PlaylistsPage"
              xmlns:viewmodel="clr-namespace:TW.UI.Pages"
              x:DataType="viewmodel:PlaylistsPage"
-             xmlns:model="clr-namespace:TW.UI.Models"
-             >
-    
+             xmlns:model="clr-namespace:TW.UI.Models">
+    <!-->
+    <ContentPage.Resources>
+        <MenuFlyout x:Key="songMenuFlyout">
+            <MenuFlyoutItem Text="Red"></MenuFlyoutItem>
+            <MenuFlyoutItem Text="Green"></MenuFlyoutItem>
+        </MenuFlyout>
+    </ContentPage.Resources>-->
+
     <Shell.TitleView>
         <Grid ColumnDefinitions="0.33*,0.33*,0.33*"
               RowDefinitions="*">
@@ -51,34 +57,43 @@
                     ></Button>
         </Grid>
     </Shell.TitleView>
-    <StackLayout BackgroundColor="White">
+    <ScrollView BackgroundColor="White">
         <CollectionView x:Name="listView"
                   ItemsSource="{Binding DisplayedPlaylists}"
                   IsGrouped="True"
                   Margin="10"
-                  SelectionChanged="OnSelectionChanged">
+                        SelectionMode="Single"
+                  SelectionChanged="OnSelectionChanged"
+                        
+                        VerticalScrollBarVisibility="Always"
+                        SelectedItem="{Binding SelectedItem}">
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate  x:DataType="model:PlaylistDisplayGroup">
-                    <HorizontalStackLayout BackgroundColor="LightGray">
+                    <HorizontalStackLayout BackgroundColor="LightGray" HeightRequest="50">
                         <Image Source="{Binding ImageSource}"
-                                   Margin="10"></Image>
+                                   Margin="10" ></Image>
                         <Label
+                               VerticalOptions="Center"
                                FontAttributes="Bold"
                                Padding="10"
                                Text="{Binding Name}"></Label>
 
-                        <ImageButton x:DataType="model:PlaylistDisplayTrack" Source="{Binding MenuImageSource }"></ImageButton>
                     </HorizontalStackLayout>
                 </DataTemplate>
-        </CollectionView.GroupHeaderTemplate>
+            </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="model:PlaylistDisplayTrack">
-                    <VerticalStackLayout>
-                        <Label Text="{Binding Name}"></Label>
-                        <Label Text="{Binding Artists}"></Label>
-                    </VerticalStackLayout>
+                <DataTemplate x:DataType="model:PlaylistDisplayTrack">
+                    <Grid x:Name="myGrid" ColumnDefinitions="0.9*,0.1*" HeightRequest="60">
+                        <VerticalStackLayout Padding="5" VerticalOptions="Center" Grid.Column="0">
+                            <Label Text="{Binding Name}" FontSize="15"></Label>
+                            <Label Text="{Binding Artists}" FontSize="13"></Label>
+                        </VerticalStackLayout>
+                        <ImageButton x:Name="menuButton" IsVisible="{Binding IsSelected}" Clicked="menuButton_Clicked" Source="menuicon.svg" Grid.Column="1" Padding="5">
+                        </ImageButton>
+                    </Grid>
                 </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
-    </StackLayout>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+    </ScrollView>
 </ContentPage>

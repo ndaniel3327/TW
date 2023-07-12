@@ -1,4 +1,5 @@
-﻿using TW.UI.Enums;
+﻿using System.ComponentModel;
+using TW.UI.Enums;
 
 namespace TW.UI.Models
 {
@@ -18,11 +19,23 @@ namespace TW.UI.Models
         }
     }
 
-    public class PlaylistDisplayTrack
+    public class PlaylistDisplayTrack : INotifyPropertyChanged
     {
         public List<string> ArtistsNames { get; set; } = new();
         public string Name { get; set; }
         public string Artists => string.Join(" and ", ArtistsNames);
-        public ImageSource MenuImageSource { get; set; }
+        private bool _isSelected;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { _isSelected = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected))); ;
+            }
+        }
+
+
     }
 }
