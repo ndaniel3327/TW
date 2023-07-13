@@ -58,7 +58,8 @@
         </Grid>
     </Shell.TitleView>
     <ScrollView BackgroundColor="White">
-        <CollectionView x:Name="listView"
+        <CollectionView 
+                        x:Name="listView"
                   ItemsSource="{Binding DisplayedPlaylists}"
                   IsGrouped="True"
                   Margin="10"
@@ -82,18 +83,28 @@
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:PlaylistDisplayTrack">
-                    <Grid x:Name="myGrid" ColumnDefinitions="0.9*,0.1*" HeightRequest="60">
-                        <VerticalStackLayout Padding="5" VerticalOptions="Center" Grid.Column="0">
+                <DataTemplate x:Name="dataTemplate" x:DataType="model:PlaylistDisplayTrack">
+                    <Grid x:Name="myGrid" 
+                          ColumnDefinitions="0.9*,0.1*" 
+                          HeightRequest="60"
+                          x:DataType="viewmodel:PlaylistsPage" 
+                          AnchorX="{Binding MenuButtonAnchorX }"
+                          AnchorY="{Binding MenuButtonAnchorY }">
+                        <VerticalStackLayout  x:DataType="model:PlaylistDisplayTrack" Padding="5" VerticalOptions="Center" Grid.Column="0">
                             <Label Text="{Binding Name}" FontSize="15"></Label>
                             <Label Text="{Binding Artists}" FontSize="13"></Label>
                         </VerticalStackLayout>
-                        <ImageButton x:Name="menuButton" IsVisible="{Binding IsSelected}" Clicked="menuButton_Clicked" Source="menuicon.svg" Grid.Column="1" Padding="5">
+                        <ImageButton x:Name="menuButton" 
+                                     x:DataType="model:PlaylistDisplayTrack"
+                                     IsVisible="{Binding IsSelected}" 
+                                     Clicked="menuButton_Clicked" 
+                                     Source="menuicon.svg" 
+                                     Grid.Column="1" 
+                                     Padding="5">
                         </ImageButton>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        
     </ScrollView>
 </ContentPage>

@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
 using System.Reflection;
-using TW.UI.Helpers;
 using TW.UI.Pages;
-using TW.UI.Pages.PopupPages;
 using TW.UI.Services.Local;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
@@ -32,7 +30,7 @@ namespace TW.UI
 
             builder.Services.AddSingleton<MainPage>();
             //builder.Services.AddTransient<YoutubePlaylistsPopup>();  ?????
-            builder.Services.AddTransient<PlaylistsPage>();
+            builder.Services.AddSingleton<PlaylistsPage>();
 
             return builder.Build();
         }

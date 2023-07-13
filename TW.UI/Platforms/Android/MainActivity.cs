@@ -2,8 +2,14 @@
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
+using Android.Widget;
+using AndroidX.AppCompat.View.Menu;
+using Microsoft.Maui.Embedding;
+using Microsoft.Maui.Platform;
 using System.Web;
 using TW.UI.Helpers;
+using TW.UI.Pages;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 
@@ -25,14 +31,25 @@ namespace TW.UI
     )]
     public class MainActivity : MauiAppCompatActivity
     {
-        public MainActivity()
-        {
-
-        }
+        MauiContext _mauiContext;
 
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+
+            // Perform your normal Android registration
+
+            MauiAppBuilder builder = MauiApp.CreateBuilder();
+            builder.UseMauiEmbedding<Microsoft.Maui.Controls.Application>();
+            MauiApp mauiApp = builder.Build();
+            _mauiContext = new MauiContext(mauiApp.Services, this);
+
+            var playlistPage = ServiceHelper.GetService<PlaylistsPage>();
+            Android.Views.View view = playlistPage.ToPlatform(_mauiContext);
+            var menuBUtton =  view.FindViewWithTag("menuButton");
+            PopupMenu menuPopup = new PopupMenu(_mauiContext.Context,view);
+            menuPopup.Menu.Add(Menu.None, 1, 1, "Move To");
+            menuPopup.Menu.Add(Menu.None, 2, 2, "Delete");
 
             var uri = Intent?.Data;
 
@@ -60,6 +77,8 @@ namespace TW.UI
                 var mainPage = ServiceHelper.GetService<MainPage>();
                 mainPage.IsSpotifyLoggedIn= true;
             }
+
+
         }
     }
 }

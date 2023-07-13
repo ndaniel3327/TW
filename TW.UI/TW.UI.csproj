@@ -112,6 +112,9 @@
 	  <MauiXaml Update="Pages\PopupPages\PlaylistSelectForLocalFilesPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\PopupPages\SongMenuPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\PopupPages\SpotifyPlaylistsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

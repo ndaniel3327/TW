@@ -1,3 +1,4 @@
+using Android.Widget;
 using CommunityToolkit.Maui.Views;
 using TW.UI.Constants;
 using TW.UI.Helpers;
@@ -81,6 +82,8 @@ public partial class PlaylistsPage : ContentPage
     }
 
     public PlaylistDisplayTrack SelectedItem { get; set; }
+    public double MenuButtonAnchorX { get; set; }
+    public double MenuButtonAnchorY { get; set; }
 
     public PlaylistsPage(MainPage mainPage, ISpotifyService spotifyService, IYoutubeService youtubeService, ILocalFilesService localFilesService)
     {
@@ -356,7 +359,7 @@ public partial class PlaylistsPage : ContentPage
     }
 
     private void menuButton_Clicked(object sender, EventArgs e)
-    { 
-        this.ShowPopup(new Popup() { Size=new Size(200, 200) , Anchor=listView});
+    {
+
     }
 }
