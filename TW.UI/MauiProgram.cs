@@ -30,7 +30,7 @@ namespace TW.UI
 
             builder.Services.AddSingleton<MainPage>();
             //builder.Services.AddTransient<YoutubePlaylistsPopup>();  ?????
-            builder.Services.AddSingleton<PlaylistsPage>();
+            builder.Services.AddTransient<PlaylistsPage>();
 
             return builder.Build();
         }

@@ -45,11 +45,6 @@ namespace TW.UI
             _mauiContext = new MauiContext(mauiApp.Services, this);
 
             var playlistPage = ServiceHelper.GetService<PlaylistsPage>();
-            Android.Views.View view = playlistPage.ToPlatform(_mauiContext);
-            var menuBUtton =  view.FindViewWithTag("menuButton");
-            PopupMenu menuPopup = new PopupMenu(_mauiContext.Context,view);
-            menuPopup.Menu.Add(Menu.None, 1, 1, "Move To");
-            menuPopup.Menu.Add(Menu.None, 2, 2, "Delete");
 
             var uri = Intent?.Data;
 

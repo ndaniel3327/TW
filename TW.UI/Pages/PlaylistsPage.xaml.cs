@@ -1,4 +1,3 @@
-using Android.Widget;
 using CommunityToolkit.Maui.Views;
 using TW.UI.Constants;
 using TW.UI.Helpers;
@@ -66,7 +65,6 @@ public partial class PlaylistsPage : ContentPage
     }
 
     private List<PlaylistDisplayGroup> _displayedPlaylists = new();
-    private ImageSource imageButtonSource;
 
     public List<PlaylistDisplayGroup> DisplayedPlaylists
     {
@@ -82,8 +80,6 @@ public partial class PlaylistsPage : ContentPage
     }
 
     public PlaylistDisplayTrack SelectedItem { get; set; }
-    public double MenuButtonAnchorX { get; set; }
-    public double MenuButtonAnchorY { get; set; }
 
     public PlaylistsPage(MainPage mainPage, ISpotifyService spotifyService, IYoutubeService youtubeService, ILocalFilesService localFilesService)
     {
@@ -360,6 +356,10 @@ public partial class PlaylistsPage : ContentPage
 
     private void menuButton_Clicked(object sender, EventArgs e)
     {
-
+        SelectedItem.MenuIsVisible = !SelectedItem.MenuIsVisible;
+        //await DisplayActionSheet("", "", null, "Move to 1", "Move to 2");
+        Picker picker = new Picker();
+        picker.IsVisible = true;
+        picker.ItemsSource = File.ReadAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath);
     }
 }

@@ -25,6 +25,7 @@ namespace TW.UI.Models
         public string Name { get; set; }
         public string Artists => string.Join(" and ", ArtistsNames);
         private bool _isSelected;
+        private bool _menuIsVisible;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -36,6 +37,14 @@ namespace TW.UI.Models
             }
         }
 
-
+        public bool MenuIsVisible
+        {
+            get { return _menuIsVisible; }
+            set
+            {
+                _menuIsVisible = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MenuIsVisible))); ;
+            }
+        }
     }
 }

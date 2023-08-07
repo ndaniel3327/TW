@@ -68,43 +68,60 @@
                         
                         VerticalScrollBarVisibility="Always"
                         SelectedItem="{Binding SelectedItem}">
-            <CollectionView.GroupHeaderTemplate>
-                <DataTemplate  x:DataType="model:PlaylistDisplayGroup">
-                    <HorizontalStackLayout BackgroundColor="LightGray" HeightRequest="50">
-                        <Image Source="{Binding ImageSource}"
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate  x:DataType="model:PlaylistDisplayGroup">
+                        <HorizontalStackLayout BackgroundColor="LightGray" HeightRequest="50">
+                            <Image Source="{Binding ImageSource}"
                                    Margin="10" ></Image>
-                        <Label
+                            <Label
                                VerticalOptions="Center"
                                FontAttributes="Bold"
                                Padding="10"
                                Text="{Binding Name}"></Label>
 
-                    </HorizontalStackLayout>
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:Name="dataTemplate" x:DataType="model:PlaylistDisplayTrack">
                     <Grid x:Name="myGrid" 
+
                           ColumnDefinitions="0.9*,0.1*" 
-                          HeightRequest="60"
-                          x:DataType="viewmodel:PlaylistsPage" 
-                          AnchorX="{Binding MenuButtonAnchorX }"
-                          AnchorY="{Binding MenuButtonAnchorY }">
-                        <VerticalStackLayout  x:DataType="model:PlaylistDisplayTrack" Padding="5" VerticalOptions="Center" Grid.Column="0">
+                          MinimumHeightRequest="60"
+                          x:DataType="viewmodel:PlaylistsPage" >
+                        <VerticalStackLayout  x:DataType="model:PlaylistDisplayTrack" 
+                                              Padding="5" 
+                                              VerticalOptions="Center" 
+                                              Grid.Column="0"
+                                              Grid.Row="0">
                             <Label Text="{Binding Name}" FontSize="15"></Label>
                             <Label Text="{Binding Artists}" FontSize="13"></Label>
                         </VerticalStackLayout>
-                        <ImageButton x:Name="menuButton" 
+                        <ImageButton x:Name="menuButton"
                                      x:DataType="model:PlaylistDisplayTrack"
                                      IsVisible="{Binding IsSelected}" 
                                      Clicked="menuButton_Clicked" 
                                      Source="menuicon.svg" 
-                                     Grid.Column="1" 
+                                     HeightRequest="60"
+                                     Grid.Column="1"
+                                     
                                      Padding="5">
                         </ImageButton>
+                        <VerticalStackLayout ZIndex="100"
+                                             x:Name="myMenu"
+                                             x:DataType="model:PlaylistDisplayTrack"
+                                             IsVisible="{Binding MenuIsVisible}"
+                                             Grid.Column="0"
+                                   >
+                            <Button Text="Btn1" TextColor="Black" BackgroundColor="Transparent"></Button>
+                            <Button Text="Btn2" TextColor="Black" BackgroundColor="Transparent"></Button>
+                            <Button Text="Btn3" TextColor="Black" BackgroundColor="Transparent"></Button>
+
+                        </VerticalStackLayout>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
     </ScrollView>
 </ContentPage>

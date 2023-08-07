@@ -47,10 +47,12 @@ namespace TW.UI
         public MainPage(ISpotifyService spotifyService, IYoutubeService youtubeService)
         {
             InitializeComponent();
-            CheckYoutubeLoginStatus();
-            CheckSpotifyLoginStatus();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
+
+            CheckYoutubeLoginStatus();
+            CheckSpotifyLoginStatus();
+
 
             //TODO: test full functionality while having 0 playlists in the Spotify/Youtube account
 
