@@ -85,7 +85,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:Name="dataTemplate" x:DataType="model:PlaylistDisplayTrack">
                     <Grid x:Name="myGrid" 
-
+                          RowDefinitions="0.3*,0.7*"
                           ColumnDefinitions="0.9*,0.1*" 
                           MinimumHeightRequest="60"
                           x:DataType="viewmodel:PlaylistsPage" >
@@ -102,9 +102,9 @@
                                      IsVisible="{Binding IsSelected}" 
                                      Clicked="menuButton_Clicked" 
                                      Source="menuicon.svg" 
-                                     HeightRequest="60"
+                                     HeightRequest="70"
                                      Grid.Column="1"
-                                     
+                                     Grid.Row="0"
                                      Padding="5">
                         </ImageButton>
                         <VerticalStackLayout ZIndex="100"
@@ -112,7 +112,7 @@
                                              x:DataType="model:PlaylistDisplayTrack"
                                              IsVisible="{Binding MenuIsVisible}"
                                              Grid.Column="0"
-                                   >
+                                             Grid.Row="1">
                             <Button Text="Btn1" TextColor="Black" BackgroundColor="Transparent"></Button>
                             <Button Text="Btn2" TextColor="Black" BackgroundColor="Transparent"></Button>
                             <Button Text="Btn3" TextColor="Black" BackgroundColor="Transparent"></Button>
