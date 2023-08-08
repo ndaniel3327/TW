@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using Mopups.Services;
 using TW.UI.Constants;
 using TW.UI.Helpers;
 using TW.UI.Models;
@@ -358,8 +359,13 @@ public partial class PlaylistsPage : ContentPage
     {
         SelectedItem.MenuIsVisible = !SelectedItem.MenuIsVisible;
         //await DisplayActionSheet("", "", null, "Move to 1", "Move to 2");
-        Picker picker = new Picker();
-        picker.IsVisible = true;
-        picker.ItemsSource = File.ReadAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath);
+
+        var imageButton = (ImageButton)sender;
+        var menuPopup = new MoveToMenu();
+        menuPopup.BackgroundColor = Colors.Transparent;
+        menuPopup.TranslationX = imageButton.X- menuPopup.X ;
+        menuPopup.TranslationY= imageButton.Y-menuPopup.Y;
+
+        MopupService.Instance.PushAsync(menuPopup);
     }
 }
