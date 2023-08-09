@@ -21,9 +21,12 @@ namespace TW.UI.Models
 
     public class PlaylistDisplayTrack : INotifyPropertyChanged
     {
+        public string PlaylistsId { get; set; }
+        public string TrackId { get;set; }
         public List<string> ArtistsNames { get; set; } = new();
         public string Name { get; set; }
         public string Artists => string.Join(" and ", ArtistsNames);
+
         private bool _isSelected;
         private bool _menuIsVisible;
 

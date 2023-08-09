@@ -84,30 +84,25 @@
                 </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:Name="dataTemplate" x:DataType="model:PlaylistDisplayTrack">
-                    <Grid x:Name="myGrid" 
-                          RowDefinitions="0.3*,0.7*"
-                          ColumnDefinitions="0.9*,0.1*" 
+                    <Grid ColumnDefinitions="0.9*,0.1*" 
                           MinimumHeightRequest="60"
                           x:DataType="viewmodel:PlaylistsPage" >
                         <VerticalStackLayout  x:DataType="model:PlaylistDisplayTrack" 
                                               Padding="5" 
                                               VerticalOptions="Center" 
-                                              Grid.Column="0"
-                                              Grid.Row="0">
+                                              Grid.Column="0">
                             <Label Text="{Binding Name}" FontSize="15"></Label>
                             <Label Text="{Binding Artists}" FontSize="13"></Label>
                         </VerticalStackLayout>
-                        <ImageButton x:Name="menuButton"
-                                     x:DataType="model:PlaylistDisplayTrack"
-                                     IsVisible="{Binding IsSelected}" 
+                        <ImageButton x:DataType="model:PlaylistDisplayTrack"
+                                     IsVisible="{Binding IsSelected}"
                                      Clicked="menuButton_Clicked" 
                                      Source="menuicon.svg" 
                                      HeightRequest="70"
                                      Grid.Column="1"
-                                     Grid.Row="0"
                                      Padding="5">
                         </ImageButton>
-                        <VerticalStackLayout ZIndex="100"
+                        <!--<VerticalStackLayout ZIndex="100"
                                              x:Name="myMenu"
                                              x:DataType="model:PlaylistDisplayTrack"
                                              IsVisible="{Binding MenuIsVisible}"
@@ -117,7 +112,7 @@
                             <Button Text="Btn2" TextColor="Black" BackgroundColor="Transparent"></Button>
                             <Button Text="Btn3" TextColor="Black" BackgroundColor="Transparent"></Button>
 
-                        </VerticalStackLayout>
+                        </VerticalStackLayout>-->
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

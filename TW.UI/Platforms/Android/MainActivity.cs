@@ -32,19 +32,12 @@ namespace TW.UI
     public class MainActivity : MauiAppCompatActivity
     {
         MauiContext _mauiContext;
+        public static Activity Instance;
 
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
-            // Perform your normal Android registration
-
-            MauiAppBuilder builder = MauiApp.CreateBuilder();
-            builder.UseMauiEmbedding<Microsoft.Maui.Controls.Application>();
-            MauiApp mauiApp = builder.Build();
-            _mauiContext = new MauiContext(mauiApp.Services, this);
-
-            var playlistPage = ServiceHelper.GetService<PlaylistsPage>();
+            Instance = this;
 
             var uri = Intent?.Data;
 

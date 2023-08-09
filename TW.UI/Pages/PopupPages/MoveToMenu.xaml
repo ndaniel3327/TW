@@ -5,10 +5,9 @@
              x:Class="TW.UI.Pages.PopupPages.MoveToMenu"
              xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"     
              BackgroundColor="#F4FAFC"
-
-             CloseWhenBackgroundIsClicked="True"
-                  
+             CloseWhenBackgroundIsClicked="True"  
              Title="MyPopupPage">
+    
     <VerticalStackLayout x:Name="menuPopup" WidthRequest="200" HeightRequest="200" VerticalOptions="CenterAndExpand" BackgroundColor="Yellow">
         <Label 
             Text="Welcome to .NET MAUI!"

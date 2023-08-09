@@ -1,5 +1,4 @@
 using CommunityToolkit.Maui.Views;
-using Mopups.Services;
 using TW.UI.Constants;
 using TW.UI.Helpers;
 using TW.UI.Models;
@@ -22,10 +21,14 @@ public partial class PlaylistsPage : ContentPage
     private List<PlaylistDisplayGroup> _spotifyPlaylistGroupsData;
     private List<PlaylistDisplayGroup> _youtubePlaylistGroupsData;
 
+    //When you hit the close button on the popup where you select playlists to display them this delegate is used to refresh the displayed list of playlists 
     private Action RefreshSpotifyDisplayedItemsDelegate;
     private Action RefreshYoutubeDisplayedItemsDelegate;
     private Action RefreshLocalDisplayedItemsDelegate;
 
+    #region DisplayedPlaylists
+
+    //What makes up the displayed list
     private List<PlaylistDisplayGroup> _displayedLocalPlaylists = new();
     public List<PlaylistDisplayGroup> DisplayedLocalPlaylists
     {
@@ -67,6 +70,7 @@ public partial class PlaylistsPage : ContentPage
 
     private List<PlaylistDisplayGroup> _displayedPlaylists = new();
 
+    //What is actaully displayed
     public List<PlaylistDisplayGroup> DisplayedPlaylists
     {
         get
@@ -79,14 +83,20 @@ public partial class PlaylistsPage : ContentPage
             OnPropertyChanged(nameof(DisplayedPlaylists));
         }
     }
-
+    #endregion
     public PlaylistDisplayTrack SelectedItem { get; set; }
 
-    public PlaylistsPage(MainPage mainPage, ISpotifyService spotifyService, IYoutubeService youtubeService, ILocalFilesService localFilesService)
+    public PlaylistsPage(
+        MainPage mainPage, 
+        ISpotifyService spotifyService, 
+        IYoutubeService youtubeService, 
+        ILocalFilesService localFilesService)
     {
         BindingContext = this;
         InitializeComponent();
 
+        //Add the method that will refresh the "selected" playliste in the delegate
+        //Refresh is done via the DisplayedPlaylists property specific to each service (Youtube/Spotify/Local)
         RefreshSpotifyDisplayedItemsDelegate = GetDisplayedSpotifyPlaylists;
         RefreshYoutubeDisplayedItemsDelegate = GetDisplayedYoutubePlaylists;
         RefreshLocalDisplayedItemsDelegate = GetDisplayedLocalPlaylists;
@@ -94,6 +104,9 @@ public partial class PlaylistsPage : ContentPage
         _spotifyService = spotifyService;
         _youtubeService = youtubeService;
         _localFilesService = localFilesService;
+
+        //Check if the user is logged in so the button to select what playlists to display is enabled/disabled
+        #region LoginCheck
         if (mainPage.IsSpotifyLoggedIn == true)
         {
             GetSpotifyPlaylistData();
@@ -123,6 +136,7 @@ public partial class PlaylistsPage : ContentPage
             localButton.IsEnabled = false;
             localButton.BackgroundColor = Colors.Gray;
         }
+        #endregion
     }
 
     private async void GetYoutubePlaylistData()
@@ -358,14 +372,35 @@ public partial class PlaylistsPage : ContentPage
     private void menuButton_Clicked(object sender, EventArgs e)
     {
         SelectedItem.MenuIsVisible = !SelectedItem.MenuIsVisible;
+
+        AndroidHelper.ShowPopup((ImageButton)sender);
+
+        var song = SelectedItem;
         //await DisplayActionSheet("", "", null, "Move to 1", "Move to 2");
 
-        var imageButton = (ImageButton)sender;
-        var menuPopup = new MoveToMenu();
-        menuPopup.BackgroundColor = Colors.Transparent;
-        menuPopup.TranslationX = imageButton.X- menuPopup.X ;
-        menuPopup.TranslationY= imageButton.Y-menuPopup.Y;
+        //var imageButton = (Microsoft.Maui.Controls.ImageButton)sender;
+        //var menuPopup = new MoveToMenu();
+        //menuPopup.BackgroundColor = Colors.Transparent;
 
-        MopupService.Instance.PushAsync(menuPopup);
+        //var platformViewImageButton = imageButton.Handler.PlatformView as global::Android.Widget.ImageButton;
+
+        //global::Android.Widget.PopupMenu popupMenu = new global::Android.Widget.PopupMenu(global::Android.App.Application.Context, platformViewImageButton);
+
+        //popupMenu.Show();
+
+
+        //Microsoft.UI.Xaml.Window window = (Microsoft.UI.Xaml.Window)App.Current.Windows.First<Window>().Handler.PlatformView;
+        //var platformview = CounterBtn.Handler.PlatformView as Microsoft.Maui.Platform.MauiButton;
+        //var point = platformview.TransformToVisual(window.Content).TransformPoint(new Windows.Foundation.Point(0, 0));
+
+        //menuPopup.TranslationX = imageButton.TranslationX;
+        //menuPopup.TranslationY= imageButton.Y-menuPopup.Y;
+
+        //MopupService.Instance.PushAsync(menuPopup);
+        //ShowMenuPopup();
     }
+
+    //private partial void ShowMenuPopup(ImageButton imageButton);
+        
+
 }

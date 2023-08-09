@@ -83,7 +83,14 @@ namespace TW.UI.Services.Youtube
                 var trackNameList = playlist.Tracks.Select(q => q.TrackInfo.Name);
                 foreach (var trackName in trackNameList)
                 {
-                    tracks.Add(new PlaylistDisplayTrack() { Name = trackName });
+                    tracks.Add(new PlaylistDisplayTrack()
+                    {
+                        Name = trackName
+                        //TODO: finish the idea
+                        //PlaylistsId=playlist.Id, 
+                        //TrackId=new Guid().ToString()})
+
+                    });
                 }
                 var playlistModel = new PlaylistDisplayGroup(playlist.Id, playlist.PlaylistInfo.Name, tracks,PlaylistSource.Youtube, ImageSource.FromFile("youtubeicon.svg"));
                 playlistsModel.Add(playlistModel);
