@@ -6,6 +6,7 @@ using TW.UI.Pages.PopupPages;
 using TW.UI.Services.Local;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
+using System.Linq;
 
 namespace TW.UI.Pages;
 
@@ -139,12 +140,23 @@ public partial class PlaylistsPage : ContentPage
         #endregion
     }
 
+    public class FileToSave
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+    // Updates local stored data base on spotify account data
     private async void GetYoutubePlaylistData()
     {
+
+        var sss = DisplayedYoutubePlaylists.Select(x => new FileToSave { Id = x.Id });
+
         await Task.Run(async () =>
         {
             _youtubePlaylistGroupsData = await _youtubeService.GetYoutubePlaylists();
             var youtubePlaylistsStorageData = new List<string>();
+
+            // If you log-in for the first time store all playlists with the status "selected"
 
             if (!File.Exists(YoutubeConstants.YoutubePlaylitsFileFullPath))
             {
@@ -163,6 +175,9 @@ public partial class PlaylistsPage : ContentPage
             else
             {
                 var oldYoutubePlaylistsStorageData = File.ReadAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath).ToList();
+
+                // If the file exists but there are no playlists in it (ex: deleted all)
+                // store all the new playlists with status "selected"
                 if (oldYoutubePlaylistsStorageData.Count == 0)
                 {
                     foreach (var playlist in _youtubePlaylistGroupsData)
@@ -174,6 +189,9 @@ public partial class PlaylistsPage : ContentPage
 
                     DisplayedYoutubePlaylists = _youtubePlaylistGroupsData;
                 }
+
+                // Preserve the status of the old stored playlists , remove the deleted ones and add the new
+                // ones  with the status "selected
                 else if (oldYoutubePlaylistsStorageData.Count > 0)
                 {
                     foreach (var playlist in _youtubePlaylistGroupsData)
@@ -201,6 +219,7 @@ public partial class PlaylistsPage : ContentPage
         });
     }
 
+    // Display only playlists that are "selected"
     private void GetDisplayedYoutubePlaylists()
     {
         var playlists = File.ReadAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath).ToList();
