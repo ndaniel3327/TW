@@ -56,7 +56,7 @@ public partial class YoutubePlaylistsPopup : Popup
 
     private void GetAllItemsAndPreselectedItems()
     {
-        var playlists = File.ReadAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath);
+        var playlists = FileStorageHelper.ReadYoutubePlaylistsFile();
 
         foreach (var playlist in playlists)
         {
@@ -81,7 +81,7 @@ public partial class YoutubePlaylistsPopup : Popup
 
     private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var playlists = File.ReadAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath);
+        var playlists = FileStorageHelper.ReadYoutubePlaylistsFile();
 
         var temporaryPlaylistList = new List<string>();
         var items = SelectedItems;
@@ -117,7 +117,8 @@ public partial class YoutubePlaylistsPopup : Popup
                 temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
             }
         }
-        File.WriteAllLines(YoutubeConstants.YoutubePlaylitsFileFullPath, temporaryPlaylistList);
+
+        FileStorageHelper.CreateYoutubePlaylistsFile(temporaryPlaylistList);
     }
 
     private void OnXMarkButtonClicked(object sender, EventArgs e)

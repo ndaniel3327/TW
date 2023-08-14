@@ -28,7 +28,7 @@ public partial class LocalPlaylistsPopup : Popup
     }
     private void GetAllItemsAndPreselectedItems()
     {
-        var playlists = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
+        var playlists = FileStorageHelper.ReadLocalPlaylistsFile();
 
         foreach (var playlist in playlists)
         {
@@ -53,7 +53,7 @@ public partial class LocalPlaylistsPopup : Popup
 
     private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var playlists = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
+        var playlists = FileStorageHelper.ReadLocalPlaylistsFile();
 
         var temporaryPlaylistList = new List<string>();
         var items = SelectedItems;
@@ -89,7 +89,9 @@ public partial class LocalPlaylistsPopup : Popup
                 temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
             }
         }
-        File.WriteAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath, temporaryPlaylistList);
+
+        FileStorageHelper.CreateLocalPlaylistsFile(temporaryPlaylistList);
+
     }
     private void OnXMarkButtonClicked(object sender, EventArgs e)
     {

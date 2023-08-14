@@ -39,9 +39,9 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
     }
     private int GetLocalPlaylists()
     {
-        if (File.Exists(LocalFilesConstants.LocalPlaylistsFileFullPath))
+        if (FileStorageHelper.LocalPlaylitsFileExists())
         {
-            string[] localPlaylists = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
+            var localPlaylists = FileStorageHelper.ReadLocalPlaylistsFile();
             List<PlaylistAndId> playlistsList = new();
             foreach (string localPlaylist in localPlaylists)
             {
@@ -53,12 +53,8 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
             Playlists = playlistsList;
             return Playlists.Count;
         }
-        else
-        {
-            var stream = File.Create(LocalFilesConstants.LocalPlaylistsFileFullPath);
-            stream.Close();
-            return 0;
-        }
+
+        return 0;
     }
 
     private void OnNewPlaylistButtonClicked(object sender, EventArgs e)
@@ -74,6 +70,7 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
             var stream = File.Create(playlistFilePath);
             stream.Close();
         }
+
         string id = Guid.NewGuid().ToString();
         File.AppendAllText(playlistFilePath, "id=" + id + "@name=" + _fileName + "@path=" + _filePath + Environment.NewLine);
         var content = File.ReadAllLines(playlistFilePath);
@@ -86,7 +83,7 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
         string playlistName = ((Entry)sender).Text;
         if (!string.IsNullOrEmpty(playlistName))
         {
-            string fullPath = LocalFilesConstants.LocalPlaylistsFileFullPath;
+            string fullPath = Path.Combine(_mainDirectoryPath, "LocalPlaylistsFile");
             string id = Guid.NewGuid().ToString();
             File.AppendAllText(fullPath, "id=" + id + "@name=" + playlistName +"@selected=true"+ Environment.NewLine);
 
@@ -115,11 +112,12 @@ public partial class PlaylistSelectForLocalFilesPopup : Popup
 
     private void OnDeletePlaylistButtonClicked(object sender, EventArgs e)
     {
-        var playlistNames = File.ReadAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath);
+        var playlistNames = FileStorageHelper.ReadLocalPlaylistsFile();
 
         List<string> temporaryPlaylistNameList = new List<string>(playlistNames);
         temporaryPlaylistNameList.RemoveAt(_selectedItemIndex);
-        File.WriteAllLines(LocalFilesConstants.LocalPlaylistsFileFullPath, temporaryPlaylistNameList.ToArray());
+
+        FileStorageHelper.CreateLocalPlaylistsFile(temporaryPlaylistNameList);
 
         File.Delete(Path.Combine(_mainDirectoryPath, _selectedPlaylistId));
 

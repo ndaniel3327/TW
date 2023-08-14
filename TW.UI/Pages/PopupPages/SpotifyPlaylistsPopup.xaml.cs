@@ -49,7 +49,7 @@ public partial class SpotifyPlaylistsPopup : Popup
 
     private void GetAllItemsAndPreselectedItems()
     {
-        var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
+        var playlists = FileStorageHelper.ReadSpotifyPlaylistsFile();
 
         foreach (var playlist in playlists)
         {
@@ -73,7 +73,7 @@ public partial class SpotifyPlaylistsPopup : Popup
     }
     private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
+        var playlists = FileStorageHelper.ReadSpotifyPlaylistsFile();
 
         var temporaryPlaylistList = new List<string>();
         var items = SelectedItems;
@@ -109,7 +109,7 @@ public partial class SpotifyPlaylistsPopup : Popup
                 temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
             }
         }
-        File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, temporaryPlaylistList);
+        FileStorageHelper.CreateSpotifyPlaylistsFile(temporaryPlaylistList);
     }
 
     private void OnXButtonClicked(object sender, EventArgs e)
