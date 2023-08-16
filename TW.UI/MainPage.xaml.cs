@@ -52,12 +52,8 @@ namespace TW.UI
 
             CheckYoutubeLoginStatus();
             CheckSpotifyLoginStatus();
-
-
             //TODO: test full functionality while having 0 playlists in the Spotify/Youtube account
 
-            //TODO:Delete this
-            //File.Delete(FileStorageHelper.SpotifyPlaylitsFileFullPath);
         }
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)

@@ -25,7 +25,7 @@ namespace TW.UI.Services.Youtube
 
             return new Uri(myUri);
         }
-        public async void GetAuthorizationToken(string authorizationCode)
+        public async Task GetAuthorizationToken(string authorizationCode)
         {
             string myUri = "https://oauth2.googleapis.com/token";
             var content = $"client_id={_clientId}&" +

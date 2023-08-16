@@ -7,6 +7,6 @@ namespace TW.UI.Services.Youtube
         Task<bool> RefreshAccessToken();
         Task<List<PlaylistDisplayGroup>> GetYoutubePlaylists();
         Uri GetAuthorizationLink();
-        void GetAuthorizationToken(string authorizationCode);
+        Task GetAuthorizationToken(string authorizationCode);
     }
 }

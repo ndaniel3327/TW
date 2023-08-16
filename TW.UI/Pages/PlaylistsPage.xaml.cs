@@ -1,6 +1,4 @@
 using CommunityToolkit.Maui.Views;
-using Microsoft.Maui.Foldable;
-using TW.UI.Constants;
 using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Pages.PopupPages;
@@ -12,9 +10,6 @@ namespace TW.UI.Pages;
 
 public partial class PlaylistsPage : ContentPage
 {
-    private string _selected = "true"; //default selected value
-    //private string _deselected = "false";
-
     private readonly ISpotifyService _spotifyService;
     private readonly IYoutubeService _youtubeService;
     private readonly ILocalFilesService _localFilesService;
@@ -94,6 +89,7 @@ public partial class PlaylistsPage : ContentPage
         ILocalFilesService localFilesService)
     {
         BindingContext = this;
+
         InitializeComponent();
 
         //Add the method that will refresh the "selected" playliste in the delegate
@@ -154,7 +150,7 @@ public partial class PlaylistsPage : ContentPage
             {
                 foreach (var playlist in _youtubePlaylistGroupsData)
                 {
-                    youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
+                    youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
                 }
 
                 FileStorageHelper.CreateYoutubePlaylistsFile(youtubePlaylistsStorageData);
@@ -171,7 +167,7 @@ public partial class PlaylistsPage : ContentPage
                 {
                     foreach (var playlist in _youtubePlaylistGroupsData)
                     {
-                        youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
+                        youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
                     }
 
                     FileStorageHelper.CreateYoutubePlaylistsFile(youtubePlaylistsStorageData);
@@ -198,7 +194,7 @@ public partial class PlaylistsPage : ContentPage
                         }
                         if (isNew)
                         {
-                            youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
+                            youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
                         }
                     }
 
@@ -217,8 +213,8 @@ public partial class PlaylistsPage : ContentPage
         List<string> selectedPlaylistsIds = new();
         foreach (var playlist in playlists)
         {
-            string isSelected = FileStorageHelper.ReturnSelected(playlist);
-            if (isSelected == "true")
+            var isSelected = FileStorageHelper.ReturnIsSelected(playlist);
+            if (isSelected)
             {
                 selectedPlaylistsIds.Add(FileStorageHelper.ReturnId(playlist));
             }
@@ -249,7 +245,7 @@ public partial class PlaylistsPage : ContentPage
             {
                 foreach (var playlist in _spotifyPlaylistGroupsData)
                 {
-                    spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
+                    spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
                 }
 
                 FileStorageHelper.CreateSpotifyPlaylistsFile(spotifyPlaylistsStorageData);
@@ -263,7 +259,7 @@ public partial class PlaylistsPage : ContentPage
                 {
                     foreach (var playlist in _spotifyPlaylistGroupsData)
                     {
-                        spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
+                        spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
                     }
 
                     FileStorageHelper.CreateSpotifyPlaylistsFile(spotifyPlaylistsStorageData);
@@ -287,7 +283,7 @@ public partial class PlaylistsPage : ContentPage
                         }
                         if (isNew)
                         {
-                            spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name, _selected));
+                            spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
                         }
                     }
 
@@ -304,8 +300,8 @@ public partial class PlaylistsPage : ContentPage
         List<string> selectedPlaylistsIds = new();
         foreach (var playlist in playlists)
         {
-            string isSelected = FileStorageHelper.ReturnSelected(playlist);
-            if (isSelected == "true")
+            var isSelected = FileStorageHelper.ReturnIsSelected(playlist);
+            if (isSelected)
             {
                 selectedPlaylistsIds.Add(FileStorageHelper.ReturnId(playlist));
             }
@@ -333,8 +329,8 @@ public partial class PlaylistsPage : ContentPage
         List<string> selectedPlaylistsIds = new();
         foreach (var playlist in localPlaylistsData)
         {
-            string isSelected = FileStorageHelper.ReturnSelected(playlist);
-            if (isSelected == "true")
+            var isSelected = FileStorageHelper.ReturnIsSelected(playlist);
+            if (isSelected)
             {
                 selectedPlaylistsIds.Add(FileStorageHelper.ReturnId(playlist));
             }

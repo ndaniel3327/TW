@@ -1,5 +1,4 @@
-﻿using TW.UI.Constants;
-using static TW.UI.Constants.AppConstants;
+﻿using static TW.UI.Constants.AppConstants;
 using TW.UI.Helpers;
 using TW.UI.Models;
 
@@ -15,7 +14,8 @@ namespace TW.UI.Services.Local
             {
                 string playlistId = FileStorageHelper.ReturnId(playlist);
                 string playlistName = FileStorageHelper.ReturnName(playlist);
-                var trackDataArray = File.ReadAllLines(Path.Combine(FileSystem.Current.AppDataDirectory, playlistId));
+                var trackDataArray = FileStorageHelper.RealLocalPlaylistSongsFile(playlistId);
+             
                 List<PlaylistDisplayTrack> trackViewList = new();
                 foreach (string trackData in trackDataArray)
                 {

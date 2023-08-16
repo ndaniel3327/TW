@@ -7,8 +7,10 @@ namespace TW.UI.Helpers
     {
         public static T DeserializeJson<T>(string JSONValue)
         {
-            var options = new JsonSerializerOptions();
-            options.PropertyNameCaseInsensitive = true;
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
             options.Converters.Add(new JsonStringEnumConverter());
 
             return JsonSerializer.Deserialize<T>(JSONValue,options);

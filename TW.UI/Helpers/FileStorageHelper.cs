@@ -1,11 +1,12 @@
-﻿namespace TW.UI.Helpers
+﻿
+namespace TW.UI.Helpers
 {
     public static class FileStorageHelper
     {
-        private static char _separator = '@';
-        private static readonly int _indexOfId = 0;
-        private static readonly int _indexOfName = 1;
-        private static readonly int _indexOfSelected = 2;
+        private const char Separator = '@';
+        private const int IndexOfId = 0;
+        private const int IndexOfName = 1;
+        private const int IndexOfIsSelected = 2;
 
         private readonly static string _mainDirectoryPath;
 
@@ -71,41 +72,65 @@
            return File.ReadAllLines(_localPlaylistsFileFullPath).ToList();
         }
 
-        public static void AddPlaylistToLocalPlaylistsFile(string name)
+        public static List<string> RealLocalPlaylistSongsFile(string fileName)
         {
-
+            var path = Path.Combine(_mainDirectoryPath,fileName);
+            return File.ReadAllLines(path).ToList();
         }
+
+        public static void UpdateLocalPlaylistsFile(string name , bool selected = true)
+        {
+            string id = Guid.NewGuid().ToString();
+
+            var entry = string.Format("id={0}@name={1}@selected={2}{3}", id, name, selected.ToString().ToLower(), Environment.NewLine);
+            File.AppendAllText(_localPlaylistsFileFullPath,entry);
+        }
+
+        public static void UpdateLocalPlaylistSongsFile(string fileName , string name , string path)
+        {
+            string id = Guid.NewGuid().ToString();
+
+            var playlistFilePath = Path.Combine(_mainDirectoryPath, fileName);
+            if (!File.Exists(playlistFilePath))
+            {
+                var stream = File.Create(playlistFilePath);
+                stream.Close();
+            }
+            
+            var entry = string.Format("id={0}@name={1}@path={2}{3}", id, name, path, Environment.NewLine);
+            File.AppendAllText(playlistFilePath,entry);
+        }
+
+        public static void DeleteLocalPlaylistSongsFile(string fileName)
+        {
+            var path = Path.Combine(_mainDirectoryPath, fileName);
+            File.Delete(path);
+        }
+
         public static string ReturnId(string playlist)
         {
-            var contents = playlist.Split(_separator);
-            string id = contents[_indexOfId].Substring(contents[_indexOfId].IndexOf("id=") + 3);
-            return id;
+            var contents = playlist.Split(Separator);
+
+            return contents[IndexOfId];
         }
 
         public static string ReturnName(string playlist)
         {
-            var contents = playlist.Split(_separator);
-            string fullProperty = contents[_indexOfName];
-            string name = fullProperty.Substring(fullProperty.IndexOf("name=") + 5);
-            return name;
+            var contents = playlist.Split(Separator);
+
+            return contents[IndexOfName];
         }
 
-        public static string ReturnSelected(string playlist)
+        public static bool ReturnIsSelected(string playlist)
         {
-            var contents = playlist.Split(_separator);
-            string selected = contents[_indexOfSelected].Substring(contents[_indexOfSelected].IndexOf("selected=") + 9);
-            return selected;
-        }
-        public static string GenerateAndReturnEntry(string id , string name , string selected)
-        {
-            return "id=" + id + "@name=" + name + "@selected="+selected;
+            var contents = playlist.Split(Separator);
+
+            return bool.Parse(contents[IndexOfIsSelected]);
         }
 
-        public class LocalPlatlist
+        public static string GenerateAndReturnEntry(string id , string name , bool isSelected = true)
         {
-            public string Id { get; set; }
-            public string Name { get; set; }
-            public bool IsSelected { get; set; }
+            return $"{id}{Separator}{name}{Separator}{(isSelected ? bool.TrueString : bool.FalseString)}";
         }
     }
 }

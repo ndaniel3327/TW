@@ -49,7 +49,7 @@ namespace TW.UI
                 var code = uriSubstring[0].Substring(uriSubstring[0].IndexOf("=") + 1);
 
                 var youtubeService = ServiceHelper.GetService<IYoutubeService>();
-                youtubeService.GetAuthorizationToken(code);
+                await youtubeService.GetAuthorizationToken(code);
 
                 var mainPage = ServiceHelper.GetService<MainPage>();
                 mainPage.IsYoutubeLoggedIn = true;
