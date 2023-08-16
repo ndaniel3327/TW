@@ -125,6 +125,7 @@ namespace TW.UI.Helpers
         {
             var contents = playlist.Split(Separator);
 
+
             return bool.Parse(contents[IndexOfIsSelected]);
         }
 
