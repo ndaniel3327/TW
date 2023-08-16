@@ -131,6 +131,7 @@ namespace TW.UI.Helpers
 
         public static string GenerateAndReturnEntry(string id , string name , bool isSelected = true)
         {
+
             return $"{id}{Separator}{name}{Separator}{(isSelected ? bool.TrueString : bool.FalseString)}";
         }
     }
