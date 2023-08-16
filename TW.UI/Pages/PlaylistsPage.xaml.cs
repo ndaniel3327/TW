@@ -55,6 +55,7 @@ public partial class PlaylistsPage : ContentPage
     {
         get
         {
+
             return _displayedYoutubePlaylists;
         }
         set
