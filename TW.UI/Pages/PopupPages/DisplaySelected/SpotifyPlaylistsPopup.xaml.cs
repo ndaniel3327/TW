@@ -1,5 +1,4 @@
 using CommunityToolkit.Maui.Views;
-using TW.UI.Constants;
 using TW.UI.Helpers;
 
 namespace TW.UI.Pages.PopupPages;
@@ -49,14 +48,13 @@ public partial class SpotifyPlaylistsPopup : Popup
 
     private void GetAllItemsAndPreselectedItems()
     {
-        var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
+        var playlists = FileStorageHelper.ReadSpotifyPlaylistsFile();
 
         foreach (var playlist in playlists)
         {
             string name = FileStorageHelper.ReturnName(playlist);
             string id = FileStorageHelper.ReturnId(playlist);
-            string selected = FileStorageHelper.ReturnSelected(playlist);
-            bool isSelected = bool.Parse(selected);
+            var isSelected = FileStorageHelper.ReturnIsSelected(playlist);
 
             Playlists.Add(new PlaylistAndId { Name = name, Id = id, IsSelected = isSelected });
         }
@@ -73,7 +71,7 @@ public partial class SpotifyPlaylistsPopup : Popup
     }
     private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var playlists = File.ReadAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath);
+        var playlists = FileStorageHelper.ReadSpotifyPlaylistsFile();
 
         var temporaryPlaylistList = new List<string>();
         var items = SelectedItems;
@@ -90,13 +88,13 @@ public partial class SpotifyPlaylistsPopup : Popup
                 {
                     if (((PlaylistAndId)item).Id == id)
                     {
-                        temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "true"));
+                        temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name));
                         isNotSelected = false;
                     }
                 }
                 if (isNotSelected)
                 {
-                    temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
+                    temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, false));
                 }
             }
         }
@@ -106,10 +104,10 @@ public partial class SpotifyPlaylistsPopup : Popup
             {
                 string id = FileStorageHelper.ReturnId(playlist);
                 string name = FileStorageHelper.ReturnName(playlist);
-                temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, "false"));
+                temporaryPlaylistList.Add(FileStorageHelper.GenerateAndReturnEntry(id, name, false));
             }
         }
-        File.WriteAllLines(SpotifyConstants.SpotifyPlaylitsFileFullPath, temporaryPlaylistList);
+        FileStorageHelper.CreateSpotifyPlaylistsFile(temporaryPlaylistList);
     }
 
     private void OnXButtonClicked(object sender, EventArgs e)

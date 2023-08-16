@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using TW.UI.Constants;
-using TW.UI.Enums;
+using static TW.UI.Constants.AppConstants;
 using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Models.Youtube.Data;
@@ -25,7 +25,7 @@ namespace TW.UI.Services.Youtube
 
             return new Uri(myUri);
         }
-        public async void GetAuthorizationToken(string authorizationCode)
+        public async Task GetAuthorizationToken(string authorizationCode)
         {
             string myUri = "https://oauth2.googleapis.com/token";
             var content = $"client_id={_clientId}&" +
@@ -90,7 +90,7 @@ namespace TW.UI.Services.Youtube
                         TrackId = new Guid().ToString()
                     }) ;
                 }
-                var playlistModel = new PlaylistDisplayGroup(playlist.Id, playlist.PlaylistInfo.Name, tracks,PlaylistSource.Youtube, ImageSource.FromFile("youtubeicon.svg"));
+                var playlistModel = new PlaylistDisplayGroup(playlist.Id, playlist.PlaylistInfo.Name, tracks,PlaylistSourceEnum.Youtube, ImageSource.FromFile("youtubeicon.svg"));
                 playlistsModel.Add(playlistModel);
             }
             return playlistsModel;

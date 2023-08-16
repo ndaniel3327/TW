@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using TW.UI.Enums;
+using static TW.UI.Constants.AppConstants;
 
 namespace TW.UI.Models
 {
@@ -7,10 +7,10 @@ namespace TW.UI.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public PlaylistSource Source { get; set; }
+        public PlaylistSourceEnum Source { get; set; }
         public ImageSource ImageSource { get; set; }
 
-        public PlaylistDisplayGroup(string id, string name, List<PlaylistDisplayTrack> tracks,PlaylistSource source,ImageSource imageSource) : base(tracks)
+        public PlaylistDisplayGroup(string id, string name, List<PlaylistDisplayTrack> tracks,PlaylistSourceEnum source,ImageSource imageSource) : base(tracks)
         {
             Id = id;
             Name = name;

@@ -95,10 +95,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\PopupPages\PlaylistSelectForLocalFilesPopup.xaml.cs">
+	  <Compile Update="Pages\PopupPages\CreateLocalPlaylists\PlaylistSelectForLocalFilesPopup.xaml.cs">
 	    <DependentUpon>PlaylistSelectForLocalFilesPopup.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\PopupPages\SpotifyPlaylistsPopup.xaml.cs">
+	  <Compile Update="Pages\PopupPages\DisplaySelected\SpotifyPlaylistsPopup.xaml.cs">
 	    <DependentUpon>SpotifyPlaylistsPopup.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
@@ -107,22 +107,16 @@
 	  <MauiXaml Update="Pages\PlaylistsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\PopupPages\LocalPlaylistsPopup.xaml">
+	  <MauiXaml Update="Pages\PopupPages\DisplaySelected\LocalPlaylistsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\PopupPages\MoveToMenu.xaml">
+	  <MauiXaml Update="Pages\PopupPages\CreateLocalPlaylists\PlaylistSelectForLocalFilesPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\PopupPages\PlaylistSelectForLocalFilesPopup.xaml">
+	  <MauiXaml Update="Pages\PopupPages\DisplaySelected\SpotifyPlaylistsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\PopupPages\SongMenuPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\PopupPages\SpotifyPlaylistsPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\PopupPages\YoutubePlaylistsPopup.xaml">
+	  <MauiXaml Update="Pages\PopupPages\DisplaySelected\YoutubePlaylistsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
