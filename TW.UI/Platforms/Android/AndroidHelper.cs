@@ -19,6 +19,10 @@ namespace TW.UI
                 popupMenu.Show();
             }
         }
+        public static void ShowPlayerPopup()
+        {
+
+        }
             //var imageButton = (Microsoft.Maui.Controls.ImageButton)sender;
             //var menuPopup = new MoveToMenu();
             //menuPopup.BackgroundColor = Colors.Transparent;

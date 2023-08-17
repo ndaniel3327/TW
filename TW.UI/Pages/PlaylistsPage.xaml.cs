@@ -373,6 +373,9 @@ public partial class PlaylistsPage : ContentPage
 
         if (e.PreviousSelection.Count > 0)
             (e.PreviousSelection[0] as PlaylistDisplayTrack).IsSelected =false;
+#if ANDROID
+        AndroidHelper.ShowPopupPlayer();
+#endif
     }
 
     private void menuButton_Clicked(object sender, EventArgs e)
@@ -383,5 +386,10 @@ public partial class PlaylistsPage : ContentPage
         AndroidHelper.ShowPopup((ImageButton)sender);
 #endif
         var song = SelectedItem;
+    }
+
+    private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(PlayPage));
     }
 }

@@ -63,17 +63,19 @@
                         SelectedItem="{Binding SelectedItem}">
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate  x:DataType="model:PlaylistDisplayGroup">
-                        <HorizontalStackLayout BackgroundColor="LightGray" HeightRequest="50">
-                            <Image Source="{Binding ImageSource}"
+                        
+                    <HorizontalStackLayout BackgroundColor="LightGray" HeightRequest="50">
+                        <Image Source="{Binding ImageSource}"
                                    Margin="10" ></Image>
-                            <Label
+                        <Label
                                VerticalOptions="Center"
                                FontAttributes="Bold"
                                Padding="10"
                                Text="{Binding Name}"></Label>
+                      
 
-                        </HorizontalStackLayout>
-                    </DataTemplate>
+                    </HorizontalStackLayout>
+                </DataTemplate>
                 </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:Name="dataTemplate" x:DataType="model:PlaylistDisplayTrack">

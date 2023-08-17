@@ -55,6 +55,15 @@
 		<MauiImage Update="Resources\Images\menuicon.svg">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</MauiImage>
+		<MauiImage Update="Resources\Images\nextsongbutton.svg">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\playbutton.svg">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\previoussongbutton.svg">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiImage>
 		<MauiImage Update="Resources\Images\spotifyicon.svg">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</MauiImage>
@@ -82,6 +91,9 @@
 	  <None Remove="Resources\Images\checkmark.svg" />
 	  <None Remove="Resources\Images\foldericon.svg" />
 	  <None Remove="Resources\Images\menuicon.svg" />
+	  <None Remove="Resources\Images\nextsongbutton.svg" />
+	  <None Remove="Resources\Images\playbutton.svg" />
+	  <None Remove="Resources\Images\previoussongbutton.svg" />
 	  <None Remove="Resources\Images\spotifyicon.svg" />
 	  <None Remove="Resources\Images\xmark.svg" />
 	  <None Remove="Resources\Images\youtubeicon.svg" />
@@ -105,6 +117,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Pages\PlaylistsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\PlayPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\PopupPages\DisplaySelected\LocalPlaylistsPopup.xaml">

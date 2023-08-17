@@ -8,6 +8,7 @@ namespace TW.UI
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(PlaylistsPage),typeof(PlaylistsPage));
+            Routing.RegisterRoute(nameof(PlayPage),typeof(PlayPage));
         }
     }
 }

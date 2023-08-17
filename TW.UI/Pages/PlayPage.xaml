@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TW.UI.Pages.PlayPage"
+             Title="PlayPage">
+    <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <!--<VerticalStackLayout Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3">
+                <Rectangle 
+                   BackgroundColor="Purple"
+                       MinimumHeightRequest="500"
+                       MinimumWidthRequest="600"
+                   >
+                </Rectangle>
+
+            </VerticalStackLayout>-->
+            <BoxView
+                     Color="Aqua" Grid.ColumnSpan="3"
+                Margin="10">
+            </BoxView>
+        <Label Text="My Image" Grid.ColumnSpan="3"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"></Label>
+
+        <!--<RoundRectangle Fill="LightGray"
+                        Margin="0,"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Scale="0.6"
+                        CornerRadius="100"
+                        HorizontalOptions="Center">
+            
+        </RoundRectangle>-->
+        <ImageButton Grid.Row="1"
+                                    Grid.Column="0"
+                             Padding="15"
+                    Source="previoussongbutton.svg"
+                             VerticalOptions="Center"
+                             MaximumHeightRequest="100"
+                             MaximumWidthRequest="100">
+
+            </ImageButton>
+            <ImageButton Source="playbutton.svg"
+                             Grid.Row="1"
+                                    Grid.Column="1"
+                             Padding="15"
+                         Clicked="ImageButton_Clicked"
+                         
+                             MaximumWidthRequest="100"
+                         MaximumHeightRequest="100"
+                             VerticalOptions="Center"
+
+                         
+                         >
+
+            </ImageButton>
+            <ImageButton Source="nextsongbutton.svg"
+                             Grid.Row="1"
+                                    Grid.Column="2"
+                         Padding="15"
+                             VerticalOptions="Center"
+                             MaximumHeightRequest="100"
+                             MaximumWidthRequest="100">
+
+            </ImageButton>
+
+        </Grid>
+</ContentPage>
