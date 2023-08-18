@@ -22,6 +22,16 @@ public partial class PlaylistsPage : ContentPage
     private Action RefreshYoutubeDisplayedItemsDelegate;
     private Action RefreshLocalDisplayedItemsDelegate;
 
+    private Rect _scrollViewSize;
+
+    public Rect ScrollViewSize
+    {
+        get { return _scrollViewSize; }
+        set { _scrollViewSize = value;
+            OnPropertyChanged(nameof(ScrollViewSize));
+        }
+    }
+
     #region DisplayedPlaylists
 
     //What makes up the displayed list
@@ -92,6 +102,8 @@ public partial class PlaylistsPage : ContentPage
         BindingContext = this;
 
         InitializeComponent();
+
+        ScrollViewSize = new Rect(0, 0, 1, 1);
 
         //Add the method that will refresh the "selected" playliste in the delegate
         //Refresh is done via the DisplayedPlaylists property specific to each service (Youtube/Spotify/Local)
@@ -374,8 +386,11 @@ public partial class PlaylistsPage : ContentPage
         if (e.PreviousSelection.Count > 0)
             (e.PreviousSelection[0] as PlaylistDisplayTrack).IsSelected =false;
 #if ANDROID
-        AndroidHelper.ShowPopupPlayer();
+        //   AndroidHelper.ShowPopupPlayer();
 #endif
+        ScrollViewSize = new Rect(0, 0, 1, 0.80);
+        playerBox.IsVisible = true;
+
     }
 
     private void menuButton_Clicked(object sender, EventArgs e)

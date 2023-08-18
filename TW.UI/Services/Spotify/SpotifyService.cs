@@ -145,7 +145,7 @@ namespace TW.UI.Services.Spotify
 
             foreach (var playlist in playlistList.Playlists)
             {
-                var response = await httpClient.GetAsync($"https://api.spotify.com/v1/playlists/{playlist.Id}/tracks?fields=items(track(name,artists(name)))");
+                var response = await httpClient.GetAsync($"https://api.spotify.com/v1/playlists/{playlist.Id}/tracks?fields=items(track(name,artists(name),album(images)))");
                 var jsonContent = await response.Content.ReadAsStringAsync();
                 var playlistItems = JsonSerializerHelper.DeserializeJson<SpotifyTrackList>(jsonContent);
                 playlistGroupView.Add
@@ -155,6 +155,6 @@ namespace TW.UI.Services.Spotify
             }
 
             return playlistGroupView;
-        }
+            }
     }
 }

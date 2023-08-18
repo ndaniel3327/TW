@@ -11,5 +11,14 @@ namespace TW.UI.Models.Spotify.Data
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
+
+        [JsonPropertyName("album")]
+        public SpotifyAlbum SpotifyAlbum { get; set; }
+    }
+
+    public class SpotifyAlbum
+    {
+        [JsonPropertyName("images")]
+        public List<SpotifyImage> SpotifyImages { get; set; }
     }
 }

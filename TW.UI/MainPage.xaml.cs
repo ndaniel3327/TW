@@ -46,6 +46,17 @@ namespace TW.UI
 
         public MainPage(ISpotifyService spotifyService, IYoutubeService youtubeService)
         {
+            //var uri = new Uri("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322");
+            //var aa = ImageSource.FromUri(uri);
+
+            Uri uri;
+            Uri.TryCreate("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322", UriKind.Absolute, out uri);
+            //Task<ImageSource> result = Task<ImageSource>.Factory.StartNew(() => ImageSource.FromUri(uri));
+            var aa = ImageSource.FromUri(uri);
+
+            mainImage.Source = aa;
+
+
             InitializeComponent();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;

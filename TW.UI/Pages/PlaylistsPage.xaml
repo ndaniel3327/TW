@@ -50,8 +50,14 @@
                     ></Button>
         </Grid>
     </Shell.TitleView>
-    <ScrollView BackgroundColor="White">
+    <AbsoluteLayout>
+
+        <ScrollView  AbsoluteLayout.LayoutBounds="{Binding ScrollViewSize}"
+                 AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="White"
+                ZIndex="0">
         <CollectionView 
+                  
                         x:Name="listView"
                   ItemsSource="{Binding DisplayedPlaylists}"
                   IsGrouped="True"
@@ -65,7 +71,7 @@
                     <DataTemplate  x:DataType="model:PlaylistDisplayGroup">
                         
                     <HorizontalStackLayout BackgroundColor="LightGray" HeightRequest="50">
-                        <Image Source="{Binding ImageSource}"
+                            <Image Source="{Binding GroupImageSource}"
                                    Margin="10" ></Image>
                         <Label
                                VerticalOptions="Center"
@@ -103,4 +109,32 @@
         </CollectionView>
 
     </ScrollView>
+        <Grid AbsoluteLayout.LayoutBounds="0,1,1,0.2"
+                 AbsoluteLayout.LayoutFlags="All"
+              ColumnDefinitions="*,*,*"
+              BackgroundColor="Blue"
+              x:Name="playerBox"
+              ZIndex="1"
+              IsVisible="false"
+              Margin="5">
+            <!--<BoxView 
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                 Color="Gray"
+                 VerticalOptions="End"
+                 HorizontalOptions="Center"
+                 x:Name="playerBox"
+                 ZIndex="1"
+                 IsVisible="false"
+                >
+            </BoxView>-->
+            <Image Source="{Binding SelectedItem.PopupPlayerImage}"
+                                            HeightRequest="60"
+                         WidthRequest="60"
+                   BackgroundColor="Red"
+                   Margin="10">
+                
+            </Image>
+        </Grid>
+    </AbsoluteLayout>
 </ContentPage>
