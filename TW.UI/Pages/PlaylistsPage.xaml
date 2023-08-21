@@ -84,7 +84,7 @@
                 </DataTemplate>
                 </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:Name="dataTemplate" x:DataType="model:PlaylistDisplayTrack">
+                <DataTemplate x:DataType="model:PlaylistDisplayTrack">
                     <Grid ColumnDefinitions="0.9*,0.1*" 
                           MinimumHeightRequest="60"
                           x:DataType="viewmodel:PlaylistsPage" >
@@ -112,7 +112,8 @@
         <Grid AbsoluteLayout.LayoutBounds="0,1,1,0.2"
                  AbsoluteLayout.LayoutFlags="All"
               ColumnDefinitions="*,*,*"
-              BackgroundColor="Blue"
+              RowDefinitions="*,*"
+              BackgroundColor="Gray"
               x:Name="playerBox"
               ZIndex="1"
               IsVisible="false"
@@ -128,13 +129,40 @@
                  IsVisible="false"
                 >
             </BoxView>-->
-            <Image Source="{Binding SelectedItem.PopupPlayerImage}"
-                                            HeightRequest="60"
-                         WidthRequest="60"
-                   BackgroundColor="Red"
+            <Image x:Name="popupPlayerImage"
+                   BackgroundColor="Gray"
+                   Grid.Row="0"
+                   Grid.RowSpan="2"
+
                    Margin="10">
                 
             </Image>
+            <VerticalStackLayout
+                   Padding="10"
+                Spacing="10"
+                   Grid.Row="0"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2">
+                <Label x:Name="popupPlayerName"></Label>
+                <Label x:Name="popupPLayerArtist"></Label>
+                <!--<HorizontalStackLayout Padding="5"
+                                       Spacing="5"
+                                       BackgroundColor="Red"
+                                       Margin="0,0,0,30">
+                    <ImageButton Source="heart.svg" HeightRequest="50"></ImageButton>
+                    <ImageButton Source="smallplaybutton.svg" HeightRequest="50"></ImageButton>
+                </HorizontalStackLayout>-->
+            </VerticalStackLayout>
+            <HorizontalStackLayout Grid.Column="1" Grid.ColumnSpan="2"
+                                   Grid.Row="1"
+                                   BackgroundColor="Red">
+                <ImageButton Source="heart.svg" HeightRequest="40" Grid.Column="1" Grid.Row="1" VerticalOptions="Start"></ImageButton>
+                <ImageButton Source="smallplaybutton.svg" HeightRequest="40" Grid.Column="2" Grid.Row="1"></ImageButton>
+
+            </HorizontalStackLayout>
+            <ImageButton Source="heart.svg" HeightRequest="40" Grid.Column="1" Grid.Row="1" VerticalOptions="Start"></ImageButton>
+            <ImageButton Source="smallplaybutton.svg" HeightRequest="40" Grid.Column="2" Grid.Row="1"></ImageButton>
+
         </Grid>
     </AbsoluteLayout>
 </ContentPage>

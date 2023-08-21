@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using static TW.UI.Constants.AppConstants;
 
 namespace TW.UI.Models
@@ -21,25 +22,22 @@ namespace TW.UI.Models
         }
     }
 
-    public class PlayerImage
-    {
-        public string Url { get; set; }
-        public int Height { get; set; }
-        public int Width { get; set; }
-    }
-
     public class PlaylistDisplayTrack : INotifyPropertyChanged
     {
+        private string _popupPlayerImageUri;
+        public string PopupPlayerImageUri {
+            get { return _popupPlayerImageUri; }
+            set
+            {
+                _popupPlayerImageUri = value;
+                //SetImageSource(new Uri(_popupPlayerImageUri));
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PopupPlayerImageUri)));
 
-
-        private ImageSource _popupPlayerImage;
-
-        public ImageSource PopupPlayerImage
-        {
-            get { return _popupPlayerImage; }
-            set { _popupPlayerImage = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
             }
+        }
+        public  ImageSource PopupPlayerImage
+        {
+            get { return GetImageSource(); }
         }
 
         public string PlaylistsId { get; set; }
@@ -71,6 +69,19 @@ namespace TW.UI.Models
                 _menuIsVisible = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MenuIsVisible))); 
             }
+        }
+
+        private ImageSource GetImageSource()
+        {
+            var client = new HttpClient();
+            if(_popupPlayerImageUri != null)
+            {
+                var stream = Task.Run(async () => await client.GetStreamAsync(_popupPlayerImageUri)).Result;
+                //var stream = await client.getstr(uri);
+                return ImageSource.FromStream(() => stream);
+            }
+            return ImageSource.FromFile("noimage.svg");
+
         }
     }
 }

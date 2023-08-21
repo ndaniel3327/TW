@@ -48,13 +48,7 @@ namespace TW.UI
         {
             //var uri = new Uri("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322");
             //var aa = ImageSource.FromUri(uri);
-
-            Uri uri;
-            Uri.TryCreate("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322", UriKind.Absolute, out uri);
-            //Task<ImageSource> result = Task<ImageSource>.Factory.StartNew(() => ImageSource.FromUri(uri));
-            var aa = ImageSource.FromUri(uri);
-
-            mainImage.Source = aa;
+            SetImageSource();
 
 
             InitializeComponent();
@@ -65,6 +59,16 @@ namespace TW.UI
             CheckSpotifyLoginStatus();
             //TODO: test full functionality while having 0 playlists in the Spotify/Youtube account
 
+        }
+        private async void SetImageSource()
+        {
+
+            Uri uri = new Uri("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322");
+            var client = new HttpClient();
+            var stream = await client.GetStreamAsync(uri);
+            var aa = ImageSource.FromStream(async x => stream);
+
+            mainImage.Source = aa;
         }
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using TW.UI.Models;
 using TW.UI.Models.Spotify.Data;
-using TW.UI.Models.Spotify.View;
 
 namespace TW.Infrastructure.Profiles
 {
@@ -9,12 +8,20 @@ namespace TW.Infrastructure.Profiles
     {
         public MappingProfiles()
         {
-            CreateMap<SpotifyImage, PlayerImage>();
+            //var uri = new Uri("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322");
+            var client = new HttpClient();
+            //var wa = await client.GetStreamAsync(uri);
+
+            //mainImage.Source = ImageSource.FromStream(async (x) => wa);
+
 
             CreateMap<SpotifyTrack, PlaylistDisplayTrack>()
                 .ForMember(destination => destination.Name, action => action.MapFrom(source => source.TrackInfo.Name))
                 .ForMember(destination => destination.ArtistsNames, action => action.MapFrom(source => source.TrackInfo.Artists.Select(c => c.Name)))
-                .ForMember(destination => destination.PopupPlayerImage, action => action.MapFrom(source => ImageSource.FromUri(new Uri(source.TrackInfo.SpotifyAlbum.SpotifyImages[1].Url))));
+                .ForMember(destination => destination.PopupPlayerImageUri, action => action.MapFrom(source =>
+                   source.TrackInfo.SpotifyAlbum.SpotifyImages[1].Url));
+
         }
+
     }
 }

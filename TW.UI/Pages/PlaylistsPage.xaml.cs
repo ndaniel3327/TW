@@ -377,12 +377,20 @@ public partial class PlaylistsPage : ContentPage
         this.ShowPopup(new LocalPlaylistsPopup(RefreshLocalDisplayedItemsDelegate));
     }
 
-    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        SelectedItem.IsSelected = true;
+        //var client = new HttpClient();
+        //var stream = await client.GetStreamAsync(SelectedItem.PopupPlayerImageUri);
+        //SelectedItem.PopupPlayerImage = ImageSource.FromStream(async x => stream);
+
+        //SelectedItem.IsSelected = true;
+        
+        popupPlayerImage.Source = SelectedItem.PopupPlayerImage;
+        popupPlayerName.Text= SelectedItem.Name;
+        popupPLayerArtist.Text = SelectedItem.Artists;
         //e.CurrentSelection as PlaylistDisplayTrack;
         //selecteItem.MenuImageSource = ImageSource.FromFile("menuicon.svg");
-
+       
         if (e.PreviousSelection.Count > 0)
             (e.PreviousSelection[0] as PlaylistDisplayTrack).IsSelected =false;
 #if ANDROID

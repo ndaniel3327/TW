@@ -52,16 +52,25 @@
 		<MauiImage Update="Resources\Images\foldericon.svg">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</MauiImage>
+		<MauiImage Update="Resources\Images\heart.svg">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiImage>
 		<MauiImage Update="Resources\Images\menuicon.svg">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</MauiImage>
 		<MauiImage Update="Resources\Images\nextsongbutton.svg">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</MauiImage>
+		<MauiImage Update="Resources\Images\noimage.svg">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiImage>
 		<MauiImage Update="Resources\Images\playbutton.svg">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</MauiImage>
 		<MauiImage Update="Resources\Images\previoussongbutton.svg">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\smallplaybutton.svg">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</MauiImage>
 		<MauiImage Update="Resources\Images\spotifyicon.svg">
@@ -90,10 +99,13 @@
 	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
 	  <None Remove="Resources\Images\checkmark.svg" />
 	  <None Remove="Resources\Images\foldericon.svg" />
+	  <None Remove="Resources\Images\heart.svg" />
 	  <None Remove="Resources\Images\menuicon.svg" />
 	  <None Remove="Resources\Images\nextsongbutton.svg" />
+	  <None Remove="Resources\Images\noimage.svg" />
 	  <None Remove="Resources\Images\playbutton.svg" />
 	  <None Remove="Resources\Images\previoussongbutton.svg" />
+	  <None Remove="Resources\Images\smallplaybutton.svg" />
 	  <None Remove="Resources\Images\spotifyicon.svg" />
 	  <None Remove="Resources\Images\xmark.svg" />
 	  <None Remove="Resources\Images\youtubeicon.svg" />
