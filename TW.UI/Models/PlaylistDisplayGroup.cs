@@ -9,7 +9,7 @@ namespace TW.UI.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public PlaylistSourceEnum Source { get; set; }
-        //public List<PlayerImage> PlayerImages { get; set; }
+
         public ImageSource GroupImageSource { get; set; }
 
         public PlaylistDisplayGroup(string id, string name, List<PlaylistDisplayTrack> tracks, PlaylistSourceEnum source, ImageSource imageSource) : base(tracks)
@@ -18,7 +18,6 @@ namespace TW.UI.Models
             Name = name;
             Source = source;
             GroupImageSource = imageSource;
-           // PlayerImages = playerImages;
         }
     }
 
@@ -30,8 +29,6 @@ namespace TW.UI.Models
             set
             {
                 _popupPlayerImageUri = value;
-                //SetImageSource(new Uri(_popupPlayerImageUri));
-                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PopupPlayerImageUri)));
 
             }
         }
@@ -53,7 +50,10 @@ namespace TW.UI.Models
 
         public bool IsSelected
         {
-            get { return _isSelected; }
+            get
+            {
+                return _isSelected; 
+            }
             set
             {
                 _isSelected = value;

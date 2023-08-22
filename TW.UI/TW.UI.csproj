@@ -56,7 +56,7 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</MauiImage>
 		<MauiImage Update="Resources\Images\menuicon.svg">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</MauiImage>
 		<MauiImage Update="Resources\Images\nextsongbutton.svg">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

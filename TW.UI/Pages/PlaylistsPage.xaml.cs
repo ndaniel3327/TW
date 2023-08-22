@@ -379,25 +379,40 @@ public partial class PlaylistsPage : ContentPage
 
     private async void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        //var client = new HttpClient();
-        //var stream = await client.GetStreamAsync(SelectedItem.PopupPlayerImageUri);
-        //SelectedItem.PopupPlayerImage = ImageSource.FromStream(async x => stream);
+        bool Execute = false;
 
-        //SelectedItem.IsSelected = true;
-        
+        //For PopupMenu Button
+        SelectedItem.IsSelected = true;
+        if (e.PreviousSelection.Count > 0)
+            (e.PreviousSelection[0] as PlaylistDisplayTrack).IsSelected = false;
+
+#if ANDROID
+        //Show PopupMenu when button is clicked
+        AndroidHelper.ShowPopup(sender as ImageButton);
+#endif
+
+        //PopupPlayer change image , names ,artits
         popupPlayerImage.Source = SelectedItem.PopupPlayerImage;
         popupPlayerName.Text= SelectedItem.Name;
         popupPLayerArtist.Text = SelectedItem.Artists;
-        //e.CurrentSelection as PlaylistDisplayTrack;
-        //selecteItem.MenuImageSource = ImageSource.FromFile("menuicon.svg");
-       
-        if (e.PreviousSelection.Count > 0)
-            (e.PreviousSelection[0] as PlaylistDisplayTrack).IsSelected =false;
-#if ANDROID
-        //   AndroidHelper.ShowPopupPlayer();
-#endif
+
+        //Show PopupPlayer when a song is selected from list
         ScrollViewSize = new Rect(0, 0, 1, 0.80);
         playerBox.IsVisible = true;
+
+        Execute = true;
+
+        Device.StartTimer(TimeSpan.FromMilliseconds(50), () =>
+        {
+            popupPlayerName.TranslationX -= 5f;
+
+            if (Math.Abs(popupPlayerName.TranslationX) > Width)
+            {
+                popupPlayerName.TranslationX = popupPlayerName.Width;
+            }
+
+            return Execute;
+        });
 
     }
 

@@ -109,60 +109,56 @@
         </CollectionView>
 
     </ScrollView>
-        <Grid AbsoluteLayout.LayoutBounds="0,1,1,0.2"
-                 AbsoluteLayout.LayoutFlags="All"
+        <Border Stroke="White"
+                StrokeThickness="5"
+                AbsoluteLayout.LayoutBounds="0,1,1,0.2"
+                 AbsoluteLayout.LayoutFlags="All">
+            <Grid 
               ColumnDefinitions="*,*,*"
               RowDefinitions="*,*"
               BackgroundColor="Gray"
               x:Name="playerBox"
-              ZIndex="1"
+              ZIndex="0"
+              Padding="8"
               IsVisible="false"
-              Margin="5">
-            <!--<BoxView 
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                 Color="Gray"
-                 VerticalOptions="End"
-                 HorizontalOptions="Center"
-                 x:Name="playerBox"
-                 ZIndex="1"
-                 IsVisible="false"
-                >
-            </BoxView>-->
-            <Image x:Name="popupPlayerImage"
+              >
+
+                <Image x:Name="popupPlayerImage"
                    BackgroundColor="Gray"
                    Grid.Row="0"
                    Grid.RowSpan="2"
+                   ZIndex="4">
 
-                   Margin="10">
+                </Image>
+                <!--<BoxView BackgroundColor="Transparent"
+                     Grid.Column="0"
+                   Grid.Row="0"
+                   Grid.RowSpan="2"
+                   ZIndex="3">
                 
-            </Image>
-            <VerticalStackLayout
-                   Padding="10"
-                Spacing="10"
+            </BoxView>-->
+                <VerticalStackLayout 
+                x:Name="popupPlayerTextSection"
+                Spacing="5"
                    Grid.Row="0"
                    Grid.Column="1"
                    Grid.ColumnSpan="2">
-                <Label x:Name="popupPlayerName"></Label>
-                <Label x:Name="popupPLayerArtist"></Label>
-                <!--<HorizontalStackLayout Padding="5"
-                                       Spacing="5"
-                                       BackgroundColor="Red"
-                                       Margin="0,0,0,30">
-                    <ImageButton Source="heart.svg" HeightRequest="50"></ImageButton>
-                    <ImageButton Source="smallplaybutton.svg" HeightRequest="50"></ImageButton>
-                </HorizontalStackLayout>-->
-            </VerticalStackLayout>
-            <HorizontalStackLayout Grid.Column="1" Grid.ColumnSpan="2"
-                                   Grid.Row="1"
-                                   BackgroundColor="Red">
-                <ImageButton Source="heart.svg" HeightRequest="40" Grid.Column="1" Grid.Row="1" VerticalOptions="Start"></ImageButton>
-                <ImageButton Source="smallplaybutton.svg" HeightRequest="40" Grid.Column="2" Grid.Row="1"></ImageButton>
+                    <HorizontalStackLayout>
+                        <BoxView WidthRequest="10" HeightRequest="25" Color="Gray" ZIndex="2"></BoxView>
+                        <Label Margin="10,0,0,0" ZIndex="1" MaxLines="1"   x:Name="popupPlayerName" TextColor="Black"></Label>
+                    </HorizontalStackLayout>
 
-            </HorizontalStackLayout>
-            <ImageButton Source="heart.svg" HeightRequest="40" Grid.Column="1" Grid.Row="1" VerticalOptions="Start"></ImageButton>
-            <ImageButton Source="smallplaybutton.svg" HeightRequest="40" Grid.Column="2" Grid.Row="1"></ImageButton>
+                    <Label Margin="10,0,0,0" x:Name="popupPLayerArtist" TextColor="Black" MaximumHeightRequest="20"></Label>
+                    <HorizontalStackLayout  HeightRequest="50"
+                                        HorizontalOptions="End"
+                                        Spacing="10"
+                                        Margin="0,0,10,0">
+                        <ImageButton Source="heart.svg" HeightRequest="50" WidthRequest="50"></ImageButton>
+                        <ImageButton Source="smallplaybutton.svg" HeightRequest="50" WidthRequest="50"></ImageButton>
 
-        </Grid>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
     </AbsoluteLayout>
 </ContentPage>
