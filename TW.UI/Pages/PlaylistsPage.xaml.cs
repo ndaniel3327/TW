@@ -10,6 +10,8 @@ namespace TW.UI.Pages;
 
 public partial class PlaylistsPage : ContentPage
 {
+   // private bool _execute = true;
+
     private readonly ISpotifyService _spotifyService;
     private readonly IYoutubeService _youtubeService;
     private readonly ILocalFilesService _localFilesService;
@@ -21,6 +23,26 @@ public partial class PlaylistsPage : ContentPage
     private Action RefreshSpotifyDisplayedItemsDelegate;
     private Action RefreshYoutubeDisplayedItemsDelegate;
     private Action RefreshLocalDisplayedItemsDelegate;
+
+    private Action PopupPlayerStarts;
+    private event Action OnPopupPlayerStarted;
+    private bool _popupPlayerIsVisible;
+    public bool PopupPlayerIsVisible
+    {
+        get
+        {
+            return _popupPlayerIsVisible;
+        }
+        set
+        {
+            if (value == true &&_popupPlayerIsVisible!=true)
+            {
+                OnPopupPlayerStarted.Invoke();
+            }
+            _popupPlayerIsVisible = value;
+            OnPropertyChanged(nameof(PopupPlayerIsVisible));
+        }
+    }
 
     private Rect _scrollViewSize;
 
@@ -104,9 +126,13 @@ public partial class PlaylistsPage : ContentPage
         InitializeComponent();
 
         ScrollViewSize = new Rect(0, 0, 1, 1);
+        PopupPlayerIsVisible = false;
 
         //Add the method that will refresh the "selected" playliste in the delegate
         //Refresh is done via the DisplayedPlaylists property specific to each service (Youtube/Spotify/Local)
+        PopupPlayerStarts = MovingText;
+        OnPopupPlayerStarted = PopupPlayerStarts;
+
         RefreshSpotifyDisplayedItemsDelegate = GetDisplayedSpotifyPlaylists;
         RefreshYoutubeDisplayedItemsDelegate = GetDisplayedYoutubePlaylists;
         RefreshLocalDisplayedItemsDelegate = GetDisplayedLocalPlaylists;
@@ -147,6 +173,22 @@ public partial class PlaylistsPage : ContentPage
             localButton.BackgroundColor = Colors.Gray;
         }
         #endregion
+    }
+    private void MovingText()
+    {
+
+            Device.StartTimer(TimeSpan.FromMilliseconds(50), () =>
+            {
+                popupPlayerName.TranslationX -= 5f;
+
+                if (Math.Abs(popupPlayerName.TranslationX) > popupPlayerName.Width)
+                {
+                    popupPlayerName.TranslationX = popupPlayerName.Width+(popupPlayerTextSection.Width-popupPlayerName.Width);
+                }
+
+                return true;
+            });
+        
     }
 
     // Updates local stored data based on spotify account data
@@ -377,7 +419,7 @@ public partial class PlaylistsPage : ContentPage
         this.ShowPopup(new LocalPlaylistsPopup(RefreshLocalDisplayedItemsDelegate));
     }
 
-    private async void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         bool Execute = false;
 
@@ -397,22 +439,12 @@ public partial class PlaylistsPage : ContentPage
         popupPLayerArtist.Text = SelectedItem.Artists;
 
         //Show PopupPlayer when a song is selected from list
-        ScrollViewSize = new Rect(0, 0, 1, 0.80);
-        playerBox.IsVisible = true;
+        ScrollViewSize = new Rect(0, 0, 1, 0.8);
+        PopupPlayerIsVisible = true;
 
         Execute = true;
-
-        Device.StartTimer(TimeSpan.FromMilliseconds(50), () =>
-        {
-            popupPlayerName.TranslationX -= 5f;
-
-            if (Math.Abs(popupPlayerName.TranslationX) > Width)
-            {
-                popupPlayerName.TranslationX = popupPlayerName.Width;
-            }
-
-            return Execute;
-        });
+        //popupPlayerName.TranslationX = popupPlayerName.Width;
+     
 
     }
 

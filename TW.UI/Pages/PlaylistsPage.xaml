@@ -110,45 +110,54 @@
 
     </ScrollView>
         <Border Stroke="White"
-                StrokeThickness="5"
+                StrokeThickness="4"
                 AbsoluteLayout.LayoutBounds="0,1,1,0.2"
-                 AbsoluteLayout.LayoutFlags="All">
+                 AbsoluteLayout.LayoutFlags="All"
+                              x:Name="playerBox"
+                              IsVisible="{Binding PopupPlayerIsVisible}"
+                              BackgroundColor="Gray"
+                ZIndex="0">
             <Grid 
               ColumnDefinitions="*,*,*"
               RowDefinitions="*,*"
               BackgroundColor="Gray"
-              x:Name="playerBox"
               ZIndex="0"
-              Padding="8"
-              IsVisible="false"
+
               >
 
-                <Image x:Name="popupPlayerImage"
-                   BackgroundColor="Gray"
-                   Grid.Row="0"
-                   Grid.RowSpan="2"
-                   ZIndex="4">
-
-                </Image>
-                <!--<BoxView BackgroundColor="Transparent"
-                     Grid.Column="0"
-                   Grid.Row="0"
-                   Grid.RowSpan="2"
-                   ZIndex="3">
-                
-            </BoxView>-->
+                <Border ZIndex="4"
+                        Stroke="DarkGray"
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        StrokeThickness="3">
+                    <Image  x:Name="popupPlayerImage"
+                            ZIndex="4"
+                            BackgroundColor="Gray">
+                    </Image>
+                </Border>
+                <BoxView Color="Gray"
+                         Grid.Column="0"
+                         ZIndex="3"
+                             Grid.Row="0"
+                             Grid.RowSpan="2"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="FillAndExpand">
+                </BoxView>
                 <VerticalStackLayout 
                 x:Name="popupPlayerTextSection"
                 Spacing="5"
                    Grid.Row="0"
                    Grid.Column="1"
                    Grid.ColumnSpan="2">
-                    <HorizontalStackLayout>
-                        <BoxView WidthRequest="10" HeightRequest="25" Color="Gray" ZIndex="2"></BoxView>
-                        <Label Margin="10,0,0,0" ZIndex="1" MaxLines="1"   x:Name="popupPlayerName" TextColor="Black"></Label>
+                    <HorizontalStackLayout HorizontalOptions="StartAndExpand">
+                        <BoxView Margin="0,10,0,0" WidthRequest="10" HeightRequest="25" Color="Gray" ZIndex="4"></BoxView>
+                        <Label Margin="0,10,0,0" ZIndex="1" MaxLines="1"   x:Name="popupPlayerName" TextColor="Black">
+                            <Label.Effects>
+                            </Label.Effects>
+                        </Label>
                     </HorizontalStackLayout>
 
-                    <Label Margin="10,0,0,0" x:Name="popupPLayerArtist" TextColor="Black" MaximumHeightRequest="20"></Label>
+                    <Label Margin="0,0,0,0" x:Name="popupPLayerArtist" TextColor="Black" MaximumHeightRequest="20"></Label>
                     <HorizontalStackLayout  HeightRequest="50"
                                         HorizontalOptions="End"
                                         Spacing="10"
