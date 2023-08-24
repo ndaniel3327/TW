@@ -176,21 +176,20 @@ public partial class PlaylistsPage : ContentPage
     }
     private void MovingText()
     {
-        if (popupPlayerName.Width > popupPlayerTextSection.Width)
-        { 
-            Device.StartTimer(TimeSpan.FromMilliseconds(50), () =>
+        Device.StartTimer(TimeSpan.FromMilliseconds(50), () =>
+            {
+
+
+                popupPlayerName.TranslationX -= 5f;
+
+                if (Math.Abs(popupPlayerName.TranslationX) > popupPlayerName.Width)
                 {
-                    popupPlayerName.TranslationX -= 5f;
+                    popupPlayerName.TranslationX = popupPlayerName.Width + (popupPlayerTextSection.Width - popupPlayerName.Width);
+                }
 
-                    if (Math.Abs(popupPlayerName.TranslationX) > popupPlayerName.Width)
-                    {
-                        popupPlayerName.TranslationX = popupPlayerName.Width + (popupPlayerTextSection.Width - popupPlayerName.Width);
-                    }
+                return true;
+            }); 
 
-                    return true;
-                });
-        }
-        
     }
 
     // Updates local stored data based on spotify account data
@@ -423,8 +422,6 @@ public partial class PlaylistsPage : ContentPage
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        bool Execute = false;
-
         //For PopupMenu Button
         SelectedItem.IsSelected = true;
         if (e.PreviousSelection.Count > 0)
@@ -443,8 +440,7 @@ public partial class PlaylistsPage : ContentPage
         //Show PopupPlayer when a song is selected from list
         ScrollViewSize = new Rect(0, 0, 1, 0.8);
         PopupPlayerIsVisible = true;
-
-        Execute = true;
+        popupPlayerName. = 0;
         //popupPlayerName.TranslationX = popupPlayerName.Width;
      
 
