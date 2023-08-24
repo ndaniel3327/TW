@@ -176,18 +176,20 @@ public partial class PlaylistsPage : ContentPage
     }
     private void MovingText()
     {
-
+        if (popupPlayerName.Width > popupPlayerTextSection.Width)
+        { 
             Device.StartTimer(TimeSpan.FromMilliseconds(50), () =>
-            {
-                popupPlayerName.TranslationX -= 5f;
-
-                if (Math.Abs(popupPlayerName.TranslationX) > popupPlayerName.Width)
                 {
-                    popupPlayerName.TranslationX = popupPlayerName.Width+(popupPlayerTextSection.Width-popupPlayerName.Width);
-                }
+                    popupPlayerName.TranslationX -= 5f;
 
-                return true;
-            });
+                    if (Math.Abs(popupPlayerName.TranslationX) > popupPlayerName.Width)
+                    {
+                        popupPlayerName.TranslationX = popupPlayerName.Width + (popupPlayerTextSection.Width - popupPlayerName.Width);
+                    }
+
+                    return true;
+                });
+        }
         
     }
 

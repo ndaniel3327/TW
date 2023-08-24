@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Android;
+using AutoMapper;
 using TW.UI.Models;
 using TW.UI.Models.Spotify.Data;
 
@@ -22,6 +23,5 @@ namespace TW.Infrastructure.Profiles
                    source.TrackInfo.SpotifyAlbum.SpotifyImages[1].Url));
 
         }
-
     }
 }
