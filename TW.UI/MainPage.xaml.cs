@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Maui.Views;
+using System.Globalization;
 using TW.UI.Constants;
 using TW.UI.Pages;
 using TW.UI.Pages.PopupPages;
+using TW.UI.Services.SpeechToText;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 
@@ -12,8 +14,24 @@ namespace TW.UI
         private readonly ISpotifyService _spotifyService;
         private readonly IYoutubeService _youtubeService;
 
+        private readonly ISpeechToText _speechToText;
+        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
+
         private bool _youtubeIsLoggedIn = false;
         private bool _spotifyIsLoggedIn = false;
+        private Command _listenCommand;
+
+        public Command ListenCommand
+        {
+            get => _listenCommand;
+            set 
+            { 
+                _listenCommand = value;
+                OnPropertyChanged(nameof(ListenCommand));
+            }
+        }
+        public Command ListenCancelCommand { get; set; }
+        public string RecognitionText { get; set; }
 
         public bool IsYoutubeLoggedIn
         {
@@ -29,7 +47,6 @@ namespace TW.UI
 
             }
         }
-
         public bool IsSpotifyLoggedIn
         {
             get
@@ -44,21 +61,61 @@ namespace TW.UI
             }
         }
 
-        public MainPage(ISpotifyService spotifyService, IYoutubeService youtubeService)
+        public MainPage(ISpotifyService spotifyService, 
+            IYoutubeService youtubeService, 
+            ISpeechToText speechToText)
         {
-            //var uri = new Uri("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322");
-            //var aa = ImageSource.FromUri(uri);
-            SetImageSource();
+            BindingContext = this;
+
+            //SetImageSource();
 
 
             InitializeComponent();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
-
+            _speechToText = speechToText;
             CheckYoutubeLoginStatus();
             CheckSpotifyLoginStatus();
             //TODO: test full functionality while having 0 playlists in the Spotify/Youtube account
 
+            ListenCommand = new Command(Listen);
+            ListenCancelCommand = new Command(ListenCancel);
+        }
+        private async void Listen()
+        {
+            var isAuthorized = await _speechToText.RequestPermissions();
+            if (isAuthorized)
+            {
+                try
+                {
+                    RecognitionText = await _speechToText.Listen(CultureInfo.GetCultureInfo("ro-RO"),
+                        new Progress<string>(partialText =>
+                        {
+                            if (DeviceInfo.Platform == DevicePlatform.Android)
+                            {
+                                RecognitionText = partialText;
+                            }
+                            else
+                            {
+                                RecognitionText += partialText + " ";
+                            }
+
+                            OnPropertyChanged(nameof(RecognitionText));
+                        }), _tokenSource.Token);
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error", ex.Message, "OK");
+                }
+            }
+            else
+            {
+                await DisplayAlert("Permission Error", "No microphone access", "OK");
+            }
+        }
+        private void ListenCancel()
+        {
+            _tokenSource?.Cancel();
         }
         private async void SetImageSource()
         {

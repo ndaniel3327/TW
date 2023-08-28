@@ -184,7 +184,17 @@ public partial class PlaylistsPage : ContentPage
 
                 if (Math.Abs(popupPlayerName.TranslationX) > popupPlayerName.Width)
                 {
-                    popupPlayerName.TranslationX = popupPlayerName.Width + (popupPlayerTextSection.Width - popupPlayerName.Width);
+                    if (popupPlayerName.Width > popupPlayerTextSection.Width)
+                    {
+                        popupPlayerName.TranslationX = popupPlayerName.Width + (popupPlayerTextSection.Width - popupPlayerName.Width);
+                    }
+                    if(popupPlayerName.Width < popupPlayerTextSection.Width)
+                    {
+                        popupPlayerName.TranslationX = popupPlayerName.Width+ popupPlayerTextSection.Width;
+                    }
+
+
+                      
                 }
 
                 return true;
@@ -440,7 +450,6 @@ public partial class PlaylistsPage : ContentPage
         //Show PopupPlayer when a song is selected from list
         ScrollViewSize = new Rect(0, 0, 1, 0.8);
         PopupPlayerIsVisible = true;
-        popupPlayerName. = 0;
         //popupPlayerName.TranslationX = popupPlayerName.Width;
      
 

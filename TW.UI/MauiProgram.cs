@@ -3,7 +3,9 @@ using CommunityToolkit.Maui.Core;
 using Mopups.Hosting;
 using System.Reflection;
 using TW.UI.Pages;
+using TW.UI.Platforms.Android;
 using TW.UI.Services.Local;
+using TW.UI.Services.SpeechToText;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 
@@ -33,7 +35,9 @@ namespace TW.UI
             builder.Services.AddSingleton<MainPage>();
             //builder.Services.AddTransient<YoutubePlaylistsPopup>();  ?????
             builder.Services.AddTransient<PlaylistsPage>();
-
+#if ANDROID
+            builder.Services.AddTransient<ISpeechToText, SpeechToText>();
+#endif
             return builder.Build();
         }
     }
