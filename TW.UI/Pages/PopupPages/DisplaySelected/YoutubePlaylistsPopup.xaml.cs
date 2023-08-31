@@ -77,7 +77,12 @@ public partial class YoutubePlaylistsPopup : Popup
         }
     }
 
-    private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void OnXMarkButtonClicked(object sender, EventArgs e)
+    {
+        this.Close();
+    }
+
+    private void OnPopupClosed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
     {
         var playlists = FileStorageHelper.ReadYoutubePlaylistsFile();
 
@@ -117,15 +122,7 @@ public partial class YoutubePlaylistsPopup : Popup
         }
 
         FileStorageHelper.CreateYoutubePlaylistsFile(temporaryPlaylistList);
-    }
 
-    private void OnXMarkButtonClicked(object sender, EventArgs e)
-    {
-        this.Close();
-    }
-
-    private void OnPopupClosed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
-    {
         _action.Invoke();
     }
 }

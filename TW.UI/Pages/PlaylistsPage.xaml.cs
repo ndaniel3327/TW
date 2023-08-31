@@ -2,22 +2,23 @@ using CommunityToolkit.Maui.Views;
 using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Pages.PopupPages;
+using TW.UI.Services.GetDisplayedPlaylists;
 using TW.UI.Services.Local;
 using TW.UI.Services.Spotify;
+using TW.UI.Services.SyncRemoteWithLocalData;
 using TW.UI.Services.Youtube;
 
 namespace TW.UI.Pages;
 
 public partial class PlaylistsPage : ContentPage
 {
-   // private bool _execute = true;
+    // private bool _execute = true;
 
     private readonly ISpotifyService _spotifyService;
     private readonly IYoutubeService _youtubeService;
     private readonly ILocalFilesService _localFilesService;
-
-    private List<PlaylistDisplayGroup> _spotifyPlaylistGroupsData;
-    private List<PlaylistDisplayGroup> _youtubePlaylistGroupsData;
+    private readonly IRefreshLocalDataService _refreshLocalDataService;
+    private readonly IDisplayedPlaylistsService _displayedPlaylistsService;
 
     //When you hit the close button on the popup where you select playlists to display them this delegate is used to refresh the displayed list of playlists 
     private Action RefreshSpotifyDisplayedItemsDelegate;
@@ -35,7 +36,7 @@ public partial class PlaylistsPage : ContentPage
         }
         set
         {
-            if (value == true &&_popupPlayerIsVisible!=true)
+            if (value == true && _popupPlayerIsVisible != true)
             {
                 OnPopupPlayerStarted.Invoke();
             }
@@ -49,7 +50,9 @@ public partial class PlaylistsPage : ContentPage
     public Rect ScrollViewSize
     {
         get { return _scrollViewSize; }
-        set { _scrollViewSize = value;
+        set
+        {
+            _scrollViewSize = value;
             OnPropertyChanged(nameof(ScrollViewSize));
         }
     }
@@ -116,10 +119,12 @@ public partial class PlaylistsPage : ContentPage
     public PlaylistDisplayTrack SelectedItem { get; set; }
 
     public PlaylistsPage(
-        MainPage mainPage, 
-        ISpotifyService spotifyService, 
-        IYoutubeService youtubeService, 
-        ILocalFilesService localFilesService)
+        MainPage mainPage,
+        ISpotifyService spotifyService,
+        IYoutubeService youtubeService,
+        ILocalFilesService localFilesService,
+        IRefreshLocalDataService refreshLocalDataService, 
+        IDisplayedPlaylistsService displayedPlaylistsService)
     {
         BindingContext = this;
 
@@ -133,13 +138,15 @@ public partial class PlaylistsPage : ContentPage
         PopupPlayerStarts = MovingText;
         OnPopupPlayerStarted = PopupPlayerStarts;
 
-        RefreshSpotifyDisplayedItemsDelegate = GetDisplayedSpotifyPlaylists;
-        RefreshYoutubeDisplayedItemsDelegate = GetDisplayedYoutubePlaylists;
+        RefreshSpotifyDisplayedItemsDelegate = GetSpotifyPlaylistData;
+        RefreshYoutubeDisplayedItemsDelegate = GetYoutubePlaylistData;
         RefreshLocalDisplayedItemsDelegate = GetDisplayedLocalPlaylists;
 
         _spotifyService = spotifyService;
         _youtubeService = youtubeService;
         _localFilesService = localFilesService;
+        _refreshLocalDataService = refreshLocalDataService;
+        _displayedPlaylistsService = displayedPlaylistsService;
 
         //Check if the user is logged in so the button to select what playlists to display is enabled/disabled
         #region LoginCheck
@@ -174,6 +181,7 @@ public partial class PlaylistsPage : ContentPage
         }
         #endregion
     }
+
     private void MovingText()
     {
         Device.StartTimer(TimeSpan.FromMilliseconds(50), () =>
@@ -188,232 +196,56 @@ public partial class PlaylistsPage : ContentPage
                     {
                         popupPlayerName.TranslationX = popupPlayerName.Width + (popupPlayerTextSection.Width - popupPlayerName.Width);
                     }
-                    if(popupPlayerName.Width < popupPlayerTextSection.Width)
+                    if (popupPlayerName.Width < popupPlayerTextSection.Width)
                     {
-                        popupPlayerName.TranslationX = popupPlayerName.Width+ popupPlayerTextSection.Width;
+                        popupPlayerName.TranslationX = popupPlayerName.Width + popupPlayerTextSection.Width;
                     }
 
 
-                      
+
                 }
 
                 return true;
-            }); 
+            });
 
     }
 
-    // Updates local stored data based on spotify account data
     private async void GetYoutubePlaylistData()
     {
         await Task.Run(async () =>
         {
-            _youtubePlaylistGroupsData = await _youtubeService.GetYoutubePlaylists();
-            var youtubePlaylistsStorageData = new List<string>();
+            //Get Remote Data
+            var youtubePlaylistGroupsData = await _youtubeService.GetYoutubePlaylists();
 
-            // If you log-in for the first time store all playlists with the status "selected"
+            //Refresh data in local files 
+            _refreshLocalDataService.RefreshYoutubeLocalData(youtubePlaylistGroupsData); 
 
-            if (!FileStorageHelper.YoutubePlaylistsFileExists())
-            {
-                foreach (var playlist in _youtubePlaylistGroupsData)
-                {
-                    youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
-                }
-
-                FileStorageHelper.CreateYoutubePlaylistsFile(youtubePlaylistsStorageData);
-
-                DisplayedYoutubePlaylists = _youtubePlaylistGroupsData;
-            }
-            else
-            {
-                var oldYoutubePlaylistsStorageData = FileStorageHelper.ReadYoutubePlaylistsFile();
-
-                // If the file exists but there are no playlists in it (ex: deleted all)
-                // store all the new playlists with status "selected"
-                if (oldYoutubePlaylistsStorageData.Count == 0)
-                {
-                    foreach (var playlist in _youtubePlaylistGroupsData)
-                    {
-                        youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
-                    }
-
-                    FileStorageHelper.CreateYoutubePlaylistsFile(youtubePlaylistsStorageData);
-
-                    DisplayedYoutubePlaylists = _youtubePlaylistGroupsData;
-                }
-
-                // Preserve the status of the old stored playlists , remove the deleted ones and add the new
-                // ones  with the status "selected
-                else if (oldYoutubePlaylistsStorageData.Count > 0)
-                {
-                    foreach (var playlist in _youtubePlaylistGroupsData)
-                    {
-                        bool isNew = true;
-                        foreach (var oldPlaylist in oldYoutubePlaylistsStorageData)
-                        {
-                            string oldPlaylistId = FileStorageHelper.ReturnId(oldPlaylist);
-                            if (oldPlaylistId == playlist.Id)
-                            {
-                                youtubePlaylistsStorageData.Add(oldPlaylist);
-                                isNew = false;
-                            }
-
-                        }
-                        if (isNew)
-                        {
-                            youtubePlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
-                        }
-                    }
-
-                    FileStorageHelper.CreateYoutubePlaylistsFile(youtubePlaylistsStorageData);
-
-                    GetDisplayedYoutubePlaylists();
-                }
-            }
+            // Display only playlists that are "selected"
+            DisplayedYoutubePlaylists = _displayedPlaylistsService.UpdateDisplayedYoutbePlaylists(youtubePlaylistGroupsData);
         });
-    }
-
-    // Display only playlists that are "selected"
-    private void GetDisplayedYoutubePlaylists()
-    {
-        var playlists = FileStorageHelper.ReadYoutubePlaylistsFile();
-        List<string> selectedPlaylistsIds = new();
-        foreach (var playlist in playlists)
-        {
-            var isSelected = FileStorageHelper.ReturnIsSelected(playlist);
-            if (isSelected)
-            {
-                selectedPlaylistsIds.Add(FileStorageHelper.ReturnId(playlist));
-            }
-        }
-
-        var youtubePlaylistGroupsDisplay = new List<PlaylistDisplayGroup>();
-        foreach (var playlist in _youtubePlaylistGroupsData)
-        {
-            foreach (var id in selectedPlaylistsIds)
-            {
-                if (playlist.Id == id)
-                {
-                    youtubePlaylistGroupsDisplay.Add(playlist);
-                }
-            }
-        }
-        DisplayedYoutubePlaylists = youtubePlaylistGroupsDisplay;
     }
 
     private async void GetSpotifyPlaylistData()
     {
         await Task.Run(async () =>
         {
-            _spotifyPlaylistGroupsData = await _spotifyService.GetPlaylists();
-            var spotifyPlaylistsStorageData = new List<string>();
+            //Get Remote Data
+            var spotifyPlaylistGroupsData = await _spotifyService.GetPlaylists();
 
-            if (!FileStorageHelper.SpotifyPlaylitsFileExists())
-            {
-                foreach (var playlist in _spotifyPlaylistGroupsData)
-                {
-                    spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
-                }
+            //Refresh data in local files
+            _refreshLocalDataService.RefreshSpotifyLocalData(spotifyPlaylistGroupsData);
 
-                FileStorageHelper.CreateSpotifyPlaylistsFile(spotifyPlaylistsStorageData);
+            // Display only playlists that are "selected"
+            DisplayedSpotifyPlaylists = _displayedPlaylistsService.UpdateDisplayedSpotifyPlaylists(spotifyPlaylistGroupsData);
 
-                DisplayedSpotifyPlaylists = _spotifyPlaylistGroupsData;
-            }
-            else
-            {
-                var oldSpotifyPlaylistsStorageData = FileStorageHelper.ReadSpotifyPlaylistsFile();
-                if (oldSpotifyPlaylistsStorageData.Count == 0)
-                {
-                    foreach (var playlist in _spotifyPlaylistGroupsData)
-                    {
-                        spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
-                    }
-
-                    FileStorageHelper.CreateSpotifyPlaylistsFile(spotifyPlaylistsStorageData);
-
-                    DisplayedSpotifyPlaylists = _spotifyPlaylistGroupsData;
-                }
-                else if (oldSpotifyPlaylistsStorageData.Count > 0)
-                {
-                    foreach (var playlist in _spotifyPlaylistGroupsData)
-                    {
-                        bool isNew = true;
-                        foreach (var oldPlaylist in oldSpotifyPlaylistsStorageData)
-                        {
-                            string oldPlaylistId = FileStorageHelper.ReturnId(oldPlaylist);
-                            if (oldPlaylistId == playlist.Id)
-                            {
-                                spotifyPlaylistsStorageData.Add(oldPlaylist);
-                                isNew = false;
-                            }
-
-                        }
-                        if (isNew)
-                        {
-                            spotifyPlaylistsStorageData.Add(FileStorageHelper.GenerateAndReturnEntry(playlist.Id, playlist.Name));
-                        }
-                    }
-
-                    FileStorageHelper.CreateSpotifyPlaylistsFile(spotifyPlaylistsStorageData);
-
-                    GetDisplayedSpotifyPlaylists();
-                }
-            }
         });
-    }
-    private void GetDisplayedSpotifyPlaylists()
-    {
-        var playlists = FileStorageHelper.ReadSpotifyPlaylistsFile();
-        List<string> selectedPlaylistsIds = new();
-        foreach (var playlist in playlists)
-        {
-            var isSelected = FileStorageHelper.ReturnIsSelected(playlist);
-            if (isSelected)
-            {
-                selectedPlaylistsIds.Add(FileStorageHelper.ReturnId(playlist));
-            }
-        }
-
-        var spotifyPlaylistGroupsDisplay = new List<PlaylistDisplayGroup>();
-        foreach (var playlist in _spotifyPlaylistGroupsData)
-        {
-            foreach (var id in selectedPlaylistsIds)
-            {
-                if (playlist.Id == id)
-                {
-                    spotifyPlaylistGroupsDisplay.Add(playlist);
-                }
-            }
-        }
-        DisplayedSpotifyPlaylists = spotifyPlaylistGroupsDisplay;
     }
 
     private void GetDisplayedLocalPlaylists()
     {
+        // Display only playlists that are "selected"
         var localPlaylists = _localFilesService.GetLocalPlaylists();
-
-        var localPlaylistsData = FileStorageHelper.ReadLocalPlaylistsFile();
-        List<string> selectedPlaylistsIds = new();
-        foreach (var playlist in localPlaylistsData)
-        {
-            var isSelected = FileStorageHelper.ReturnIsSelected(playlist);
-            if (isSelected)
-            {
-                selectedPlaylistsIds.Add(FileStorageHelper.ReturnId(playlist));
-            }
-        }
-
-        var displayedLocalPlaylists = new List<PlaylistDisplayGroup>();
-        foreach (var playlist in localPlaylists)
-        {
-            foreach (var id in selectedPlaylistsIds)
-            {
-                if (playlist.Id == id)
-                {
-                    displayedLocalPlaylists.Add(playlist);
-                }
-            }
-        }
-        DisplayedLocalPlaylists = displayedLocalPlaylists;
+        DisplayedLocalPlaylists = _displayedPlaylistsService.UpdateDisplayedLocalPlaylists(localPlaylists);
     }
     private void OnYoutubeButtonClicked(object sender, EventArgs e)
     {
@@ -444,15 +276,12 @@ public partial class PlaylistsPage : ContentPage
 
         //PopupPlayer change image , names ,artits
         popupPlayerImage.Source = SelectedItem.PopupPlayerImage;
-        popupPlayerName.Text= SelectedItem.Name;
+        popupPlayerName.Text = SelectedItem.Name;
         popupPLayerArtist.Text = SelectedItem.Artists;
 
         //Show PopupPlayer when a song is selected from list
         ScrollViewSize = new Rect(0, 0, 1, 0.8);
         PopupPlayerIsVisible = true;
-        //popupPlayerName.TranslationX = popupPlayerName.Width;
-     
-
     }
 
     private void menuButton_Clicked(object sender, EventArgs e)

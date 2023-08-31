@@ -3,10 +3,10 @@ using CommunityToolkit.Maui.Core;
 using Mopups.Hosting;
 using System.Reflection;
 using TW.UI.Pages;
-using TW.UI.Platforms.Android;
 using TW.UI.Services.Local;
 using TW.UI.Services.SpeechToText;
 using TW.UI.Services.Spotify;
+using TW.UI.Services.SyncRemoteWithLocalData;
 using TW.UI.Services.Youtube;
 
 namespace TW.UI
@@ -31,6 +31,7 @@ namespace TW.UI
             builder.Services.AddTransient<ISpotifyService, SpotifyService>();
             builder.Services.AddTransient<IYoutubeService, YoutubeService>();
             builder.Services.AddTransient<ILocalFilesService, LocalFilesService>();
+            builder.Services.AddTransient<IRefreshLocalDataService,RefreshLocalDataService>();
 
             builder.Services.AddSingleton<MainPage>();
             //builder.Services.AddTransient<YoutubePlaylistsPopup>();  ?????

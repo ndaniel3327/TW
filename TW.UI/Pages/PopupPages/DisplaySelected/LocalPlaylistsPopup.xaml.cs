@@ -49,7 +49,12 @@ public partial class LocalPlaylistsPopup : Popup
         }
     }
 
-    private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void OnXMarkButtonClicked(object sender, EventArgs e)
+    {
+        this.Close();
+    }
+
+    private void OnPopupClosed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
     {
         var playlists = FileStorageHelper.ReadLocalPlaylistsFile();
 
@@ -90,14 +95,6 @@ public partial class LocalPlaylistsPopup : Popup
 
         FileStorageHelper.CreateLocalPlaylistsFile(temporaryPlaylistList);
 
-    }
-    private void OnXMarkButtonClicked(object sender, EventArgs e)
-    {
-        this.Close();
-    }
-
-    private void OnPopupClosed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
-    {
         _action.Invoke();
     }
 }

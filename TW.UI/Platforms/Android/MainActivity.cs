@@ -2,14 +2,8 @@
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Views;
-using Android.Widget;
-using AndroidX.AppCompat.View.Menu;
-using Microsoft.Maui.Embedding;
-using Microsoft.Maui.Platform;
 using System.Web;
 using TW.UI.Helpers;
-using TW.UI.Pages;
 using TW.UI.Services.Spotify;
 using TW.UI.Services.Youtube;
 

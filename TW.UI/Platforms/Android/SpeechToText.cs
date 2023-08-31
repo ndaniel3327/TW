@@ -5,7 +5,7 @@ using Android.Speech;
 using System.Globalization;
 using TW.UI.Services.SpeechToText;
 
-namespace TW.UI.Platforms.Android
+namespace TW.UI
 {
     public class SpeechToText : ISpeechToText
     {

@@ -69,7 +69,13 @@ public partial class SpotifyPlaylistsPopup : Popup
             }
         }
     }
-    private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+
+    private void OnXButtonClicked(object sender, EventArgs e)
+    {
+        this.Close();
+    }
+
+    private void OnPopupClosed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
     {
         var playlists = FileStorageHelper.ReadSpotifyPlaylistsFile();
 
@@ -108,15 +114,7 @@ public partial class SpotifyPlaylistsPopup : Popup
             }
         }
         FileStorageHelper.CreateSpotifyPlaylistsFile(temporaryPlaylistList);
-    }
 
-    private void OnXButtonClicked(object sender, EventArgs e)
-    {
-        this.Close();
-    }
-
-    private void OnPopupClosed(object sender, CommunityToolkit.Maui.Core.PopupClosedEventArgs e)
-    {
         _action.Invoke();
     }
 }

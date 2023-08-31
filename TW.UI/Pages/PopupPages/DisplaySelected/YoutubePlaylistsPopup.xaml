@@ -30,7 +30,6 @@
                             HorizontalOptions="StartAndExpand"
                             SelectionMode="Multiple"
                             ItemsSource="{Binding Playlists}"
-                            SelectionChanged="OnCollectionViewSelectionChanged"
                             SelectedItems="{Binding SelectedItems}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodel:PlaylistAndId">
