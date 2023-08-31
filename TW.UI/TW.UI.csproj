@@ -127,6 +127,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiAsset Update="Resources\Raw\AppSecrets.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiAsset>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Pages\PlaylistsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -145,6 +151,12 @@
 	  <MauiXaml Update="Pages\PopupPages\DisplaySelected\YoutubePlaylistsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Services\Nothing.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

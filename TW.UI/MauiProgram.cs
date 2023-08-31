@@ -1,8 +1,12 @@
-﻿using CommunityToolkit.Maui;
+﻿using AutoMapper;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
 using Mopups.Hosting;
 using System.Reflection;
+using TW.UI.Helpers;
 using TW.UI.Pages;
+using TW.UI.Secrets;
+using TW.UI.Services.GetDisplayedPlaylists;
 using TW.UI.Services.Local;
 using TW.UI.Services.SpeechToText;
 using TW.UI.Services.Spotify;
@@ -28,13 +32,23 @@ namespace TW.UI
                 });
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            builder.Services.AddTransient<ISpotifyService, SpotifyService>();
-            builder.Services.AddTransient<IYoutubeService, YoutubeService>();
+            builder.Services.AddTransient<ISpotifyService, SpotifyService>(serviceProvider => new SpotifyService(
+                mapper: serviceProvider.GetRequiredService<IMapper>(),
+                    spotifyClientId:JsonSerializerHelper.DeserializeJsonOpenAppAssetFile<AppSecret>
+                    ("AppSecrets.json").SpotifyId
+                ));
+
+            builder.Services.AddTransient<IYoutubeService, YoutubeService>(
+                serviceProvider => new YoutubeService(
+                    youtubeClientId: JsonSerializerHelper.DeserializeJsonOpenAppAssetFile<AppSecret>
+                    ("AppSecrets.json").YoutubeId
+                )); 
+
             builder.Services.AddTransient<ILocalFilesService, LocalFilesService>();
             builder.Services.AddTransient<IRefreshLocalDataService,RefreshLocalDataService>();
+            builder.Services.AddTransient<IDisplayedPlaylistsService, DisplayedPlaylistsService>();
 
             builder.Services.AddSingleton<MainPage>();
-            //builder.Services.AddTransient<YoutubePlaylistsPopup>();  ?????
             builder.Services.AddTransient<PlaylistsPage>();
 #if ANDROID
             builder.Services.AddTransient<ISpeechToText, SpeechToText>();

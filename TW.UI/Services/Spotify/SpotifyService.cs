@@ -14,13 +14,14 @@ namespace TW.UI.Services.Spotify
     public class SpotifyService : ISpotifyService
     {
         private readonly string _redirectUri = "oauth://localhost:5001/api/Spotify/callback";
-        private readonly string _clientId = "2d84ad5eeb3f4b7c9fcc6cc479ab2d4a";
+        private readonly string _clientId;
         private readonly string _codeChallengeMethod = "S256";
 
         private readonly IMapper _mapper;
 
-        public SpotifyService(IMapper mapper)
+        public SpotifyService(IMapper mapper, string spotifyClientId)
         {
+            _clientId = spotifyClientId;
             _mapper = mapper;
         }
 

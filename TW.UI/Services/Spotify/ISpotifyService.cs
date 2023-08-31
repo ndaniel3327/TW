@@ -1,5 +1,4 @@
 ﻿using TW.UI.Models;
-using TW.UI.Models.Spotify.View;
 
 namespace TW.UI.Services.Spotify
 {

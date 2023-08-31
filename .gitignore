@@ -361,9 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/TW.UI/Nothing.txt
-/TW.UI/Services/Nothing.txt
-/TW.UI/Secrets
-/TW.UI/Resources/Raw/Secrets/AppSecrets.json
-/TW.UI/Resources/Raw/Secrets/AppSecrets.json
 /TW.UI/Resources/Raw/AppSecrets.json

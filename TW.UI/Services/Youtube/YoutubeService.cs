@@ -6,13 +6,19 @@ using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Models.Youtube.Data;
 using TW.UI.Pages;
+using TW.UI.Secrets;
 
 namespace TW.UI.Services.Youtube
 {
     public class YoutubeService
         : IYoutubeService
     {
-        private readonly string _clientId = "829868223814-gn9dbtit6si40k2vd7thblkfi4a1lv4i.apps.googleusercontent.com";
+        private readonly string _clientId;
+
+        public YoutubeService(string youtubeClientId)
+        {
+            _clientId = youtubeClientId; 
+        }
 
         public Uri GetAuthorizationLink()
         {
