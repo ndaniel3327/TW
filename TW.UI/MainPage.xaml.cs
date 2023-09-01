@@ -65,9 +65,6 @@ namespace TW.UI
         {
             BindingContext = this;
 
-            //SetImageSource();
-
-
             InitializeComponent();
             _spotifyService = spotifyService;
             _youtubeService = youtubeService;
@@ -121,7 +118,7 @@ namespace TW.UI
             Uri uri = new Uri("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322");
             var client = new HttpClient();
             var stream = await client.GetStreamAsync(uri);
-            var aa = ImageSource.FromStream(async x => stream);
+            var aa = ImageSource.FromStream(async x => await Task.Run(()=> stream));
 
             mainImage.Source = aa;
         }

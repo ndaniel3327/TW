@@ -119,7 +119,7 @@ public partial class PlaylistsPage : ContentPage
         ISpotifyService spotifyService,
         IYoutubeService youtubeService,
         ILocalFilesService localFilesService,
-        IRefreshLocalDataService refreshLocalDataService, 
+        IRefreshLocalDataService refreshLocalDataService,
         IDisplayedPlaylistsService displayedPlaylistsService)
     {
         BindingContext = this;
@@ -180,10 +180,9 @@ public partial class PlaylistsPage : ContentPage
 
     private void MovingText()
     {
-        Device.StartTimer(TimeSpan.FromMilliseconds(50), () =>
+
+        Dispatcher.StartTimer(TimeSpan.FromMilliseconds(50), () =>
             {
-
-
                 popupPlayerName.TranslationX -= 5f;
 
                 if (Math.Abs(popupPlayerName.TranslationX) > popupPlayerName.Width)
@@ -196,14 +195,9 @@ public partial class PlaylistsPage : ContentPage
                     {
                         popupPlayerName.TranslationX = popupPlayerName.Width + popupPlayerTextSection.Width;
                     }
-
-
-
                 }
-
                 return true;
             });
-
     }
 
     private async void GetYoutubePlaylistData()
@@ -214,7 +208,7 @@ public partial class PlaylistsPage : ContentPage
             var youtubePlaylistGroupsData = await _youtubeService.GetYoutubePlaylists();
 
             //Refresh data in local files 
-            _refreshLocalDataService.RefreshYoutubeLocalData(youtubePlaylistGroupsData); 
+            _refreshLocalDataService.RefreshYoutubeLocalData(youtubePlaylistGroupsData);
 
             // Display only playlists that are "selected"
             DisplayedYoutubePlaylists = _displayedPlaylistsService.UpdateDisplayedYoutbePlaylists(youtubePlaylistGroupsData);
@@ -280,7 +274,7 @@ public partial class PlaylistsPage : ContentPage
         PopupPlayerIsVisible = true;
     }
 
-    private void menuButton_Clicked(object sender, EventArgs e)
+    private void OnMenuButtonClicked(object sender, EventArgs e)
     {
         SelectedItem.MenuIsVisible = !SelectedItem.MenuIsVisible;
 

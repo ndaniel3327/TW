@@ -13,8 +13,8 @@ namespace TW.UI
                 var platfromViewImageButton = imageButton.Handler.PlatformView as AndroidX.AppCompat.Widget.AppCompatImageView;
 
                 var popupMenu = new PopupMenu(MainActivity.Instance, platfromViewImageButton);
-                popupMenu.Menu.Add(Menu.None, 1, 1, "Select");
-                popupMenu.Menu.Add(Menu.None, 2, 2, "Move To:");
+                popupMenu.Menu.Add(IMenu.None, 1, 1, "Select");
+                popupMenu.Menu.Add(IMenu.None, 2, 2, "Move To:");
                 popupMenu.Menu.Add(IMenu.None, 3, 3, "Delete");
                 popupMenu.Show();
             }

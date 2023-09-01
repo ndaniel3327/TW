@@ -97,7 +97,7 @@
                         </VerticalStackLayout>
                         <ImageButton x:DataType="model:PlaylistDisplayTrack"
                                      IsVisible="{Binding IsSelected}"
-                                     Clicked="menuButton_Clicked" 
+                                     Clicked="OnMenuButtonClicked" 
                                      Source="menuicon.svg" 
                                      HeightRequest="70"
                                      Grid.Column="1"

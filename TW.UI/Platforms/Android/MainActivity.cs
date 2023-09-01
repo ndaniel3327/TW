@@ -4,8 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using System.Web;
 using TW.UI.Helpers;
-using TW.UI.Services.Spotify;
-using TW.UI.Services.Youtube;
+using TW.UI.Services;
 
 namespace TW.UI
 {
@@ -25,8 +24,7 @@ namespace TW.UI
     )]
     public class MainActivity : MauiAppCompatActivity
     {
-        MauiContext _mauiContext;
-        public static Activity Instance;
+        public static Activity Instance { get; set; }
 
         protected override async void OnCreate(Bundle savedInstanceState)
         {
