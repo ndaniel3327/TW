@@ -9,7 +9,7 @@ namespace TW.UI.Services
 {
     public interface IRefreshLocalDataService
     {
-        void RefreshSpotifyLocalData(List<PlaylistDisplayGroup> remotePlaylists);
-        void RefreshYoutubeLocalData(List<PlaylistDisplayGroup> remotePlaylists);
+        void RefreshSpotifyLocalData(List<PlaylistDisplayGroupModel> remotePlaylists);
+        void RefreshYoutubeLocalData(List<PlaylistDisplayGroupModel> remotePlaylists);
     }
 }

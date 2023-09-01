@@ -14,13 +14,11 @@ namespace TW.UI
     new[] { Intent.ActionView },
     Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
     DataSchemes = new[] { "com.googleusercontent.apps.829868223814-gn9dbtit6si40k2vd7thblkfi4a1lv4i", "com.googleusercontent.apps.829868223814-gn9dbtit6si40k2vd7thblkfi4a1lv4i:"}
-    // AutoVerify =true
     )]
     [IntentFilter(
     new[] { Intent.ActionView },
     Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
     DataSchemes = new[] { "oauth"}
-    // AutoVerify =true
     )]
     public class MainActivity : MauiAppCompatActivity
     {
@@ -57,8 +55,6 @@ namespace TW.UI
                 var mainPage = ServiceHelper.GetService<MainPage>();
                 mainPage.IsSpotifyLoggedIn= true;
             }
-
-
         }
     }
 }

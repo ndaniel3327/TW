@@ -5,7 +5,7 @@ namespace TW.UI.Services
 {
     public class DisplayedPlaylistsService : IDisplayedPlaylistsService
     {
-        public List<PlaylistDisplayGroup> UpdateDisplayedLocalPlaylists(List<PlaylistDisplayGroup> allPlaylists)
+        public List<PlaylistDisplayGroupModel> UpdateDisplayedLocalPlaylists(List<PlaylistDisplayGroupModel> allPlaylists)
         {
             var localPlaylistsData = FileStorageHelper.ReadLocalPlaylistsFile();
             List<string> selectedPlaylistsIds = new();
@@ -18,7 +18,7 @@ namespace TW.UI.Services
                 }
             }
 
-            var displayedLocalPlaylists = new List<PlaylistDisplayGroup>();
+            var displayedLocalPlaylists = new List<PlaylistDisplayGroupModel>();
             foreach (var playlist in allPlaylists)
             {
                 foreach (var id in selectedPlaylistsIds)
@@ -32,7 +32,7 @@ namespace TW.UI.Services
             return displayedLocalPlaylists;
         }
 
-        public List<PlaylistDisplayGroup> UpdateDisplayedSpotifyPlaylists(List<PlaylistDisplayGroup> allPlaylists)
+        public List<PlaylistDisplayGroupModel> UpdateDisplayedSpotifyPlaylists(List<PlaylistDisplayGroupModel> allPlaylists)
         {
             var playlists = FileStorageHelper.ReadSpotifyPlaylistsFile();
             List<string> selectedPlaylistsIds = new();
@@ -45,7 +45,7 @@ namespace TW.UI.Services
                 }
             }
 
-            var spotifyPlaylistGroupsDisplay = new List<PlaylistDisplayGroup>();
+            var spotifyPlaylistGroupsDisplay = new List<PlaylistDisplayGroupModel>();
             foreach (var playlist in allPlaylists)
             {
                 foreach (var id in selectedPlaylistsIds)
@@ -59,7 +59,7 @@ namespace TW.UI.Services
             return spotifyPlaylistGroupsDisplay;
         }
 
-        public List<PlaylistDisplayGroup> UpdateDisplayedYoutbePlaylists(List<PlaylistDisplayGroup> allPlaylists)
+        public List<PlaylistDisplayGroupModel> UpdateDisplayedYoutbePlaylists(List<PlaylistDisplayGroupModel> allPlaylists)
         {
             var playlists = FileStorageHelper.ReadYoutubePlaylistsFile();
             List<string> selectedPlaylistsIds = new();
@@ -72,7 +72,7 @@ namespace TW.UI.Services
                 }
             }
 
-            var youtubePlaylistGroupsDisplay = new List<PlaylistDisplayGroup>();
+            var youtubePlaylistGroupsDisplay = new List<PlaylistDisplayGroupModel>();
             foreach (var playlist in allPlaylists)
             {
                 foreach (var id in selectedPlaylistsIds)

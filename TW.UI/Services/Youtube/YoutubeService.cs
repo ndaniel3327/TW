@@ -53,7 +53,7 @@ namespace TW.UI.Services
             await SecureStorage.Default.SetAsync(YoutubeConstants.StorageNameTokenExpirationDate, expirationDate.ToString());
         }
 
-        public async Task<List<PlaylistDisplayGroup>> GetYoutubePlaylists()
+        public async Task<List<PlaylistDisplayGroupModel>> GetYoutubePlaylists()
         {
             string accessToken = await SecureStorage.Default.GetAsync("YoutubeAccessToken");
             string tokenType = await SecureStorage.Default.GetAsync("YoutubeTokenType");
@@ -80,7 +80,7 @@ namespace TW.UI.Services
                 playlist.Tracks = deserializedPlaylist.Tracks;
             }
 
-            var playlistsModel = new List<PlaylistDisplayGroup>();
+            var playlistsModel = new List<PlaylistDisplayGroupModel>();
             foreach (var playlist in playlists.Playlists)
             {
                 var tracks = new List<PlaylistDisplayTrack>();
@@ -94,7 +94,7 @@ namespace TW.UI.Services
                         TrackId = new Guid().ToString()
                     }) ;
                 }
-                var playlistModel = new PlaylistDisplayGroup(playlist.Id, playlist.PlaylistInfo.Name, tracks,PlaylistSourceEnum.Youtube, ImageSource.FromFile("youtubeicon.svg"));
+                var playlistModel = new PlaylistDisplayGroupModel(playlist.Id, playlist.PlaylistInfo.Name, tracks,PlaylistSourceEnum.Youtube, ImageSource.FromFile("youtubeicon.svg"));
                 playlistsModel.Add(playlistModel);
             }
             return playlistsModel;

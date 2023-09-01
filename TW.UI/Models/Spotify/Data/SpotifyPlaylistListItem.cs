@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace TW.UI.Models.Spotify.Data
 {
-    public class SpotifyPlaylist
+    public class SpotifyPlaylistLIstItem
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }

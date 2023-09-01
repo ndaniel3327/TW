@@ -6,7 +6,7 @@ namespace TW.UI.Services
     {
         Task<Uri> GetAuthorizationUri();
         Task ExchangeCodeForToken(string code);
-        Task<List<PlaylistDisplayGroup>> GetPlaylists();
+        Task<List<PlaylistDisplayGroupModel>> GetPlaylists();
         Task<bool> RefreshAccessToken();
     }
 }

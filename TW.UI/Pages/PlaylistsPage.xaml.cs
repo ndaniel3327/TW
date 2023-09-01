@@ -8,21 +8,18 @@ namespace TW.UI.Pages;
 
 public partial class PlaylistsPage : ContentPage
 {
-    // private bool _execute = true;
-
     private readonly ISpotifyService _spotifyService;
     private readonly IYoutubeService _youtubeService;
     private readonly ILocalFilesService _localFilesService;
     private readonly IRefreshLocalDataService _refreshLocalDataService;
     private readonly IDisplayedPlaylistsService _displayedPlaylistsService;
 
-    //When you hit the close button on the popup where you select playlists to display them this delegate is used to refresh the displayed list of playlists 
-    private Action RefreshSpotifyDisplayedItemsDelegate;
-    private Action RefreshYoutubeDisplayedItemsDelegate;
-    private Action RefreshLocalDisplayedItemsDelegate;
+    private readonly Action RefreshSpotifyDisplayedItemsAction;
+    private readonly Action RefreshYoutubeDisplayedItemsAction;
+    private readonly Action RefreshLocalDisplayedItemsAction;
 
-    private Action PopupPlayerStarts;
-    private event Action OnPopupPlayerStarted;
+    private readonly Action PopupPlayerStartsAction;
+    private event Action OnPopupPlayerStartedEvent;
     private bool _popupPlayerIsVisible;
     public bool PopupPlayerIsVisible
     {
@@ -34,7 +31,7 @@ public partial class PlaylistsPage : ContentPage
         {
             if (value == true && _popupPlayerIsVisible != true)
             {
-                OnPopupPlayerStarted.Invoke();
+                OnPopupPlayerStartedEvent.Invoke();
             }
             _popupPlayerIsVisible = value;
             OnPropertyChanged(nameof(PopupPlayerIsVisible));
@@ -55,9 +52,8 @@ public partial class PlaylistsPage : ContentPage
 
     #region DisplayedPlaylists
 
-    //What makes up the displayed list
-    private List<PlaylistDisplayGroup> _displayedLocalPlaylists = new();
-    public List<PlaylistDisplayGroup> DisplayedLocalPlaylists
+    private List<PlaylistDisplayGroupModel> _displayedLocalPlaylists = new();
+    public List<PlaylistDisplayGroupModel> DisplayedLocalPlaylists
     {
         get { return _displayedLocalPlaylists; }
         set
@@ -67,8 +63,8 @@ public partial class PlaylistsPage : ContentPage
         }
     }
 
-    private List<PlaylistDisplayGroup> _displayedSpotifyPlaylists = new();
-    public List<PlaylistDisplayGroup> DisplayedSpotifyPlaylists
+    private List<PlaylistDisplayGroupModel> _displayedSpotifyPlaylists = new();
+    public List<PlaylistDisplayGroupModel> DisplayedSpotifyPlaylists
     {
         get
         {
@@ -81,8 +77,8 @@ public partial class PlaylistsPage : ContentPage
         }
     }
 
-    private List<PlaylistDisplayGroup> _displayedYoutubePlaylists = new();
-    public List<PlaylistDisplayGroup> DisplayedYoutubePlaylists
+    private List<PlaylistDisplayGroupModel> _displayedYoutubePlaylists = new();
+    public List<PlaylistDisplayGroupModel> DisplayedYoutubePlaylists
     {
         get
         {
@@ -96,10 +92,9 @@ public partial class PlaylistsPage : ContentPage
         }
     }
 
-    private List<PlaylistDisplayGroup> _displayedPlaylists = new();
+    private List<PlaylistDisplayGroupModel> _displayedPlaylists = new();
 
-    //What is actaully displayed
-    public List<PlaylistDisplayGroup> DisplayedPlaylists
+    public List<PlaylistDisplayGroupModel> DisplayedPlaylists
     {
         get
         {
@@ -129,14 +124,12 @@ public partial class PlaylistsPage : ContentPage
         ScrollViewSize = new Rect(0, 0, 1, 1);
         PopupPlayerIsVisible = false;
 
-        //Add the method that will refresh the "selected" playliste in the delegate
-        //Refresh is done via the DisplayedPlaylists property specific to each service (Youtube/Spotify/Local)
-        PopupPlayerStarts = MovingText;
-        OnPopupPlayerStarted = PopupPlayerStarts;
+        PopupPlayerStartsAction = MovingText;
+        OnPopupPlayerStartedEvent = PopupPlayerStartsAction;
 
-        RefreshSpotifyDisplayedItemsDelegate = GetSpotifyPlaylistData;
-        RefreshYoutubeDisplayedItemsDelegate = GetYoutubePlaylistData;
-        RefreshLocalDisplayedItemsDelegate = GetDisplayedLocalPlaylists;
+        RefreshSpotifyDisplayedItemsAction = GetSpotifyPlaylistData;
+        RefreshYoutubeDisplayedItemsAction = GetYoutubePlaylistData;
+        RefreshLocalDisplayedItemsAction = GetDisplayedLocalPlaylists;
 
         _spotifyService = spotifyService;
         _youtubeService = youtubeService;
@@ -144,7 +137,6 @@ public partial class PlaylistsPage : ContentPage
         _refreshLocalDataService = refreshLocalDataService;
         _displayedPlaylistsService = displayedPlaylistsService;
 
-        //Check if the user is logged in so the button to select what playlists to display is enabled/disabled
         #region LoginCheck
         if (mainPage.IsSpotifyLoggedIn == true)
         {
@@ -204,13 +196,10 @@ public partial class PlaylistsPage : ContentPage
     {
         await Task.Run(async () =>
         {
-            //Get Remote Data
             var youtubePlaylistGroupsData = await _youtubeService.GetYoutubePlaylists();
 
-            //Refresh data in local files 
             _refreshLocalDataService.RefreshYoutubeLocalData(youtubePlaylistGroupsData);
 
-            // Display only playlists that are "selected"
             DisplayedYoutubePlaylists = _displayedPlaylistsService.UpdateDisplayedYoutbePlaylists(youtubePlaylistGroupsData);
         });
     }
@@ -219,13 +208,10 @@ public partial class PlaylistsPage : ContentPage
     {
         await Task.Run(async () =>
         {
-            //Get Remote Data
             var spotifyPlaylistGroupsData = await _spotifyService.GetPlaylists();
 
-            //Refresh data in local files
             _refreshLocalDataService.RefreshSpotifyLocalData(spotifyPlaylistGroupsData);
 
-            // Display only playlists that are "selected"
             DisplayedSpotifyPlaylists = _displayedPlaylistsService.UpdateDisplayedSpotifyPlaylists(spotifyPlaylistGroupsData);
 
         });
@@ -233,43 +219,39 @@ public partial class PlaylistsPage : ContentPage
 
     private void GetDisplayedLocalPlaylists()
     {
-        // Display only playlists that are "selected"
         var localPlaylists = _localFilesService.GetLocalPlaylists();
         DisplayedLocalPlaylists = _displayedPlaylistsService.UpdateDisplayedLocalPlaylists(localPlaylists);
     }
+
     private void OnYoutubeButtonClicked(object sender, EventArgs e)
     {
-        this.ShowPopup(new YoutubePlaylistsPopup(RefreshYoutubeDisplayedItemsDelegate));
+        this.ShowPopup(new YoutubePlaylistsPopup(RefreshYoutubeDisplayedItemsAction));
     }
 
     private void OnSpotifyButtonClicked(object sender, EventArgs e)
     {
-        this.ShowPopup(new SpotifyPlaylistsPopup(RefreshSpotifyDisplayedItemsDelegate));
+        this.ShowPopup(new SpotifyPlaylistsPopup(RefreshSpotifyDisplayedItemsAction));
     }
 
     private void OnLocalButtonClicked(object sender, EventArgs e)
     {
-        this.ShowPopup(new LocalPlaylistsPopup(RefreshLocalDisplayedItemsDelegate));
+        this.ShowPopup(new LocalPlaylistsPopup(RefreshLocalDisplayedItemsAction));
     }
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        //For PopupMenu Button
         SelectedItem.IsSelected = true;
         if (e.PreviousSelection.Count > 0)
             (e.PreviousSelection[0] as PlaylistDisplayTrack).IsSelected = false;
 
 #if ANDROID
-        //Show PopupMenu when button is clicked
         AndroidHelper.ShowPopup(sender as ImageButton);
 #endif
 
-        //PopupPlayer change image , names ,artits
         popupPlayerImage.Source = SelectedItem.PopupPlayerImage;
         popupPlayerName.Text = SelectedItem.Name;
         popupPLayerArtist.Text = SelectedItem.Artists;
 
-        //Show PopupPlayer when a song is selected from list
         ScrollViewSize = new Rect(0, 0, 1, 0.8);
         PopupPlayerIsVisible = true;
     }

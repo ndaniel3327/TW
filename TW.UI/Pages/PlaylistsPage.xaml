@@ -68,7 +68,7 @@
                         VerticalScrollBarVisibility="Always"
                         SelectedItem="{Binding SelectedItem}">
                 <CollectionView.GroupHeaderTemplate>
-                    <DataTemplate  x:DataType="model:PlaylistDisplayGroup">
+                    <DataTemplate  x:DataType="model:PlaylistDisplayGroupModel">
                         
                     <HorizontalStackLayout BackgroundColor="LightGray" HeightRequest="50">
                             <Image Source="{Binding GroupImageSource}"

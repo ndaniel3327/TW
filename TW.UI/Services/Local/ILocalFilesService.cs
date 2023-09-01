@@ -4,6 +4,6 @@ namespace TW.UI.Services
 {
     public interface ILocalFilesService
     {
-        List<PlaylistDisplayGroup> GetLocalPlaylists();
+        List<PlaylistDisplayGroupModel> GetLocalPlaylists();
     }
 }

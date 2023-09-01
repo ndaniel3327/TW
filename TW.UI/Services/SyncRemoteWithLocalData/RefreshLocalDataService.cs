@@ -10,7 +10,7 @@ namespace TW.UI.Services
 {
     public class RefreshLocalDataService : IRefreshLocalDataService
     {
-        public void RefreshSpotifyLocalData(List<PlaylistDisplayGroup> remotePlaylists)
+        public void RefreshSpotifyLocalData(List<PlaylistDisplayGroupModel> remotePlaylists)
         {
             var spotifyPlaylistsStorageData = new List<string>();
 
@@ -70,7 +70,7 @@ namespace TW.UI.Services
             }
         }
 
-        public void RefreshYoutubeLocalData(List<PlaylistDisplayGroup> remotePlaylists)
+        public void RefreshYoutubeLocalData(List<PlaylistDisplayGroupModel> remotePlaylists)
         {
             var youtubePlaylistsStorageData = new List<string>();
 

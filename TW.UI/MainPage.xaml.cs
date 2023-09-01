@@ -13,7 +13,8 @@ namespace TW.UI
         private readonly IYoutubeService _youtubeService;
 
         private readonly ISpeechToText _speechToText;
-        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
+
+        private readonly CancellationTokenSource TokenSource = new ();
 
         private bool _youtubeIsLoggedIn = false;
         private bool _spotifyIsLoggedIn = false;
@@ -96,7 +97,7 @@ namespace TW.UI
                             }
 
                             OnPropertyChanged(nameof(RecognitionText));
-                        }), _tokenSource.Token);
+                        }), TokenSource.Token);
                 }
                 catch (Exception ex)
                 {
@@ -110,17 +111,7 @@ namespace TW.UI
         }
         private void ListenCancel()
         {
-            _tokenSource?.Cancel();
-        }
-        private async void SetImageSource()
-        {
-
-            Uri uri = new Uri("https://i.scdn.co/image/ab67616d00001e025c29a88ba5341ca428f0c322");
-            var client = new HttpClient();
-            var stream = await client.GetStreamAsync(uri);
-            var aa = ImageSource.FromStream(async x => await Task.Run(()=> stream));
-
-            mainImage.Source = aa;
+            TokenSource?.Cancel();
         }
 
         private async void OnSpotifyButtonClicked(object sender, EventArgs e)
@@ -173,7 +164,7 @@ namespace TW.UI
         {
             var audioFileType=new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                {DevicePlatform.Android,new[]{ "audio/mpeg"} }  //audio/mpeg means .mp3 files
+                {DevicePlatform.Android,new[]{ "audio/mpeg"} } 
             });
 
             var result = await FilePicker.PickAsync(new PickOptions
@@ -194,8 +185,8 @@ namespace TW.UI
 
         private async void CheckYoutubeLoginStatus()
         {
-            var expirationDate = await SecureStorage.Default.GetAsync("YoutubeTokenExpirationDate");
-            var refreshToken = await SecureStorage.Default.GetAsync("YoutubeRefreshToken");
+            var expirationDate = await SecureStorage.Default.GetAsync(YoutubeConstants.StorageNameTokenExpirationDate);
+            var refreshToken = await SecureStorage.Default.GetAsync(YoutubeConstants.StorageNameRefreshToken);
 
             if (expirationDate != null && DateTime.Compare(DateTime.Parse(expirationDate), DateTime.Now) > 0)
             {

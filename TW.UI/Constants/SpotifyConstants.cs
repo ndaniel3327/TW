@@ -2,8 +2,6 @@
 {
     public static class SpotifyConstants
     {
-
-
         public const string StorageNameAccessToken = "SpotifyAccessToken";
         public const string StorageNameRefreshToken = "SpotifyRefreshToken";
         public const string StorageNameTokenType = "SpotifyTokenType";

@@ -16,6 +16,7 @@ namespace TW.UI.Helpers
 
             return JsonSerializer.Deserialize<T>(JSONValue,options);
         }
+
         public static T DeserializeJsonOpenAppAssetFile<T>(string fileName) 
         {
             using var stream = Task.Run(async()=> await FileSystem.Current.OpenAppPackageFileAsync(fileName)).Result;

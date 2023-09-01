@@ -6,10 +6,10 @@ namespace TW.UI.Services
 {
     public class LocalFilesService : ILocalFilesService
     {
-        public List<PlaylistDisplayGroup> GetLocalPlaylists()
+        public List<PlaylistDisplayGroupModel> GetLocalPlaylists()
         {
             var playlists = FileStorageHelper.ReadLocalPlaylistsFile();
-            List<PlaylistDisplayGroup> playlistGroups = new();
+            List<PlaylistDisplayGroupModel> playlistGroups = new();
             foreach (string playlist in playlists)
             {
                 string playlistId = FileStorageHelper.ReturnId(playlist);
@@ -22,7 +22,7 @@ namespace TW.UI.Services
                     string trackName = FileStorageHelper.ReturnName(trackData);
                     trackViewList.Add(new PlaylistDisplayTrack() { Name = trackName });
                 }
-                playlistGroups.Add(new PlaylistDisplayGroup(playlistId, playlistName, trackViewList, PlaylistSourceEnum.Local, ImageSource.FromFile("foldericon.svg")));
+                playlistGroups.Add(new PlaylistDisplayGroupModel(playlistId, playlistName, trackViewList, PlaylistSourceEnum.Local, ImageSource.FromFile("foldericon.svg")));
             }
             return playlistGroups;
         }

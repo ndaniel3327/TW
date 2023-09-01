@@ -10,6 +10,6 @@ namespace TW.UI.Models.Spotify.Data
     public class SpotifyPlaylistList
     {
         [JsonPropertyName("items")]
-        public List<SpotifyPlaylist> Playlists { get; set; }
+        public List<SpotifyPlaylistLIstItem> Playlists { get; set; }
     }
 }
