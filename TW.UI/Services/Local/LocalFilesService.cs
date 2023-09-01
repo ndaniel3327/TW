@@ -2,7 +2,7 @@
 using TW.UI.Helpers;
 using TW.UI.Models;
 
-namespace TW.UI.Services.Local
+namespace TW.UI.Services
 {
     public class LocalFilesService : ILocalFilesService
     {

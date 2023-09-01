@@ -1,7 +1,7 @@
 ﻿using TW.UI.Helpers;
 using TW.UI.Models;
 
-namespace TW.UI.Services.GetDisplayedPlaylists
+namespace TW.UI.Services
 {
     public class DisplayedPlaylistsService : IDisplayedPlaylistsService
     {

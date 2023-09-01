@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.IO;
 using static TW.UI.Constants.AppConstants;
 
 namespace TW.UI.Models
@@ -81,7 +80,6 @@ namespace TW.UI.Models
                 return ImageSource.FromStream(() => stream);
             }
             return ImageSource.FromFile("noimage.svg");
-
         }
     }
 }

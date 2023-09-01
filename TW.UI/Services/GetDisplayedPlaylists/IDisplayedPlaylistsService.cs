@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TW.UI.Models;
 
-namespace TW.UI.Services.GetDisplayedPlaylists
+namespace TW.UI.Services
 {
     public interface IDisplayedPlaylistsService
     {

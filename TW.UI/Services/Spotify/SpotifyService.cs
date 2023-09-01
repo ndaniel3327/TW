@@ -9,7 +9,7 @@ using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Models.Spotify.Data;
 
-namespace TW.UI.Services.Spotify
+namespace TW.UI.Services
 {
     public class SpotifyService : ISpotifyService
     {

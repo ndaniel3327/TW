@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace TW.UI.Services.Youtube
+namespace TW.UI.Services
 {
     public class YoutubeTokenDetails
     {

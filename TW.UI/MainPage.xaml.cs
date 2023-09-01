@@ -3,9 +3,7 @@ using System.Globalization;
 using TW.UI.Constants;
 using TW.UI.Pages;
 using TW.UI.Pages.PopupPages;
-using TW.UI.Services.SpeechToText;
-using TW.UI.Services.Spotify;
-using TW.UI.Services.Youtube;
+using TW.UI.Services;
 
 namespace TW.UI
 {

@@ -5,10 +5,8 @@ using static TW.UI.Constants.AppConstants;
 using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Models.Youtube.Data;
-using TW.UI.Pages;
-using TW.UI.Secrets;
 
-namespace TW.UI.Services.Youtube
+namespace TW.UI.Services
 {
     public class YoutubeService
         : IYoutubeService

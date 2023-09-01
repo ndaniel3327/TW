@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TW.UI.Helpers;
 using TW.UI.Models;
 
-namespace TW.UI.Services.SyncRemoteWithLocalData
+namespace TW.UI.Services
 {
     public class RefreshLocalDataService : IRefreshLocalDataService
     {

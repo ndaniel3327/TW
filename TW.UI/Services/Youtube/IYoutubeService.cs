@@ -1,6 +1,6 @@
 ﻿using TW.UI.Models;
 
-namespace TW.UI.Services.Youtube
+namespace TW.UI.Services
 {
     public interface IYoutubeService
     {

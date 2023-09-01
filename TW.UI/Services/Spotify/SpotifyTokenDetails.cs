@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace TW.UI.Services.Spotify
+namespace TW.UI.Services
 {
     public  class SpotifyTokenDetails
     {

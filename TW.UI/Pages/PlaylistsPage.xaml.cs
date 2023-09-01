@@ -2,11 +2,7 @@ using CommunityToolkit.Maui.Views;
 using TW.UI.Helpers;
 using TW.UI.Models;
 using TW.UI.Pages.PopupPages;
-using TW.UI.Services.GetDisplayedPlaylists;
-using TW.UI.Services.Local;
-using TW.UI.Services.Spotify;
-using TW.UI.Services.SyncRemoteWithLocalData;
-using TW.UI.Services.Youtube;
+using TW.UI.Services;
 
 namespace TW.UI.Pages;
 

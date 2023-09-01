@@ -1,6 +1,6 @@
 ﻿using TW.UI.Models;
 
-namespace TW.UI.Services.Spotify
+namespace TW.UI.Services
 {
     public interface ISpotifyService
     {

@@ -6,12 +6,7 @@ using System.Reflection;
 using TW.UI.Helpers;
 using TW.UI.Pages;
 using TW.UI.Secrets;
-using TW.UI.Services.GetDisplayedPlaylists;
-using TW.UI.Services.Local;
-using TW.UI.Services.SpeechToText;
-using TW.UI.Services.Spotify;
-using TW.UI.Services.SyncRemoteWithLocalData;
-using TW.UI.Services.Youtube;
+using TW.UI.Services;
 
 namespace TW.UI
 {
